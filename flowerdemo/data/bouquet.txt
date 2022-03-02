@@ -1,0 +1,22 @@
+C'est le bouquet !...
+
+
+Cette démo illustre la façon dont des gènes contrôlent le déclenchement de la floraison.
+
+Vous avez vu dans la démo ABC que les gènes peuvent avoir plusieurs fonctions, et qu'ils sont exprimés à des endroits spécifiques de la plante. Vous avez vu également que des gènes peuvent influencer l'expression d'autres gènes. Nous retrouvons ici ces aspects, qui se manifestent à l'échelle de la plante entière.
+
+Cette démo est une simplification dans laquelle nous prenons en compte seulement trois gènes, appelés ici :
+    - F pour un gène déclencheur du processus de développement de la fleur
+    - A qui est un gène de la classe A (voir démo ABC), plus un autre qui lui ressemble.
+    - T qui est un gène induisant l'identité de tige.
+
+Tout comme les gènes A et C, les gènes F et T sont antagonistes et se "chassent" l'un l'autre.
+
+De plus nous avons ici le mécanisme suivant : au fur et à mesure de la croissance de la plante, le niveau local des gènes F et T augment progressivement. 
+Initialement (en bas de la plante), c'est T qui "gagne", mais F finit normalement par l'emporter. Pour réussir cela, et engendrer l'apparition de fleurs, F doit réussir à activer A. Les gènes A et F ont besoin l'un de l'autre pour rester actifs.
+Ainsi, on observe (en vrai !) les effets suivants :
+    - si le gène F est muté (rendu inactif), ou T rendu inextinguible, pas de fleur !
+    - à l'inverse, si T est muté ou F inextinguible, plus de tige, et une fleur unique apparaît très tôt.
+    - si A est muté, on peut commencer à faire une fleur, mais sans y parvenir, car F tout seul n'est plus maintenu. Et à force d'essayer, on empile des "petites boules"... C'est le chou-fleur !
+
+

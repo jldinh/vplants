@@ -1,0 +1,16 @@
+Source: vplants-tissue-vmanalysis
+Maintainer: Christophe Pradal <christophe.pradal@cirad.fr>
+Section: python
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3~), python-setuptools (>= 0.6b3), debhelper (>= 7),  python-openalea.deploy, pyqt4-dev-tools
+
+
+Package: python-vplants.vmanalysis
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-openalea, python-openalea.pglviewer,  python-openalea.container, python-vplants.plantgl, python-scipy
+Provides: ${python:Provides}
+Description: set of tools to analyse and display meristems
+ .
+ Libray to regroup all tools to create, analyse and display
+ a meristematic structure.
+ .

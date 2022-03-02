@@ -1,0 +1,29 @@
+# Dressing file for oak trees
+
+SMBPath = ../../SMBFiles
+
+SMBModel node = nentn105
+SMBModel leaf = fchene
+
+Class Z = leaf
+
+LeafClass = Z
+
+
+Phyllotaxy = 144
+
+MinTopDiameter E = 1
+MinBottomDiameter E = 1
+
+MinLength E = 10
+
+DiameterUnit = 10
+LengthUnit = 1
+
+Alpha = Absolute
+
+DefaultEdge = NONE
+DefaultAlpha = 60
+DefaultDistance = 100
+NbPlantsPerLine = 5
+

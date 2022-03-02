@@ -1,0 +1,532 @@
+from openalea.plantgl.all import *
+from math import * 
+from random import *
+
+# Control of the surface details
+sepal_nb_segment = 10
+petal_nb_segment = 20
+stamen_nb_segment = 20
+carpel_nb_segment = 20
+leaf_nb_segment = 20
+
+# General variables
+
+leaf_color = 5
+phylangle = 137.5
+Rmax = 10      # Maximum number of leaves before making a flower
+indiam = 0.04  # Final internode diameter in cm
+inlen = 1.    # Final size of an internode length in cm
+
+receptacleHeight = 0.3 # scaling factor in cm: 
+                   # defines the height of the flower receptacle
+                   # from its basis to the top
+receptacleWidth = 0.3  # scaling factor in cm:
+Ssize = 2.  # scaling factor for the flower organs
+
+
+T = 5.      # time for an apex to produce an internode
+T_IN = 5.   # time for internode growth
+T_F = 2.    # time to produce a flower internode
+dt = 1.     # time resolution (eg. = 1 day)
+eps = 0.0001   # time accuracy (time under eps is considered to be 0)
+
+# values of parameter thresholds that define the flower zones 
+# on the flower receptacle 
+pth=[0.0,.3,.8,.95,1.0] 
+nbwhorls = [1,1,1,1] # nb of whorls in each flower zone
+dp = 0.01 # subdivision unit of the intervalle [0,1] for parameter p
+
+
+# parameters for random noise
+seed(0)
+insert_sepal_mu = 0.    # mean variation of the sepal insertion angle in degrees
+insert_sepal_sigma = 5. # std deviation
+insert_petal_mu = 0. 
+insert_petal_sigma = 5. 
+
+# Some quantities used for the ABC diagram
+step=.1
+diagrWidth= .1 # size param. for the ABC diagram
+diagrLen=1.
+
+
+# p is assumed to be comprised between 0 and 1
+# dp is assumed to be constant increment between 0 and 1
+# the normal is assumed to be orthogonal to p-dp,p+dp
+def computeNormal(curve,p,dp):
+  if p-dp < 0:
+    p2 = p+dp
+    y2 = curve(p2)
+    y = curve(p)
+    tanalpha = (y2-y)/(p2-p)
+  elif p+dp > 1:
+    p1 = p-dp
+    y1 = curve(p1)
+    y = curve(p)
+    tanalpha = (y-y1)/(p-p1)
+  else:
+    p1 = p-dp
+    p2 = p+dp
+    y1 = curve(p1)
+    y2 = curve(p2)
+    tanalpha = (y2-y1)/(p2-p1)
+  alpha = degrees(atan(tanalpha)) # tangent angle wrt p axis
+  normal = alpha+90 # the reference line for this angle is the horizontal line
+  return normal
+
+def petal_scaled_section(p):
+  return petal_section(p)*10.0
+  
+
+# Conventional colors
+ABCcolors= {'A': 9, 'B': 10,'C': 8, 'AB': 13, 'AC': 11, 'BC': 12, 'O': 2}
+# A conversion function
+def whorl2organ(whorlnumber):
+  if whorlnumber == 0 :
+    if GA: orgtype='A'
+    elif GC: orgtype='C'
+    else: orgtype='O'
+  elif whorlnumber == 1 :
+    if GA: 
+      if GB:
+        orgtype='AB'
+      else:
+        orgtype='A'
+    elif GC:
+      if GB:
+        orgtype='BC'
+      else:
+        orgtype='C'
+    else: 
+      orgtype='O'
+  elif whorlnumber ==2 :
+    if GB and GC: orgtype='BC'
+    elif GA and GB and (1-GC): orgtype='AB'
+    elif GC and (1-GB): orgtype='C'
+    elif GA and (1-GB) and (1-GC): orgtype='A'
+    else: orgtype='O'
+  elif whorlnumber == 3:
+    if GC: orgtype='C'
+    elif GA: orgtype='A'
+    else: orgtype='O'
+  
+  return orgtype
+# Depending on genetic background, actual "colors", i.e. organ types
+whorlcolors = [ABCcolors[i] for i in map(whorl2organ,range(4)) ]
+
+marker=0
+deg2rad = 2*3.141592654/360
+
+
+NB_steps = 250
+
+
+def Start():
+    seed(0)
+
+module A, AL, I, I2, FA, FI
+module Sepal, Petal, Stamen, Carpel, Leaf, LeafLet
+module OrgV1, OrgV2, OrgV3, OrgV4
+module diagr, Annulus
+
+##################### AXIOM ###############################################
+Axiom: SectionResolution(50) maybe_diagr 
+
+derivation length: 250
+production:
+
+# ABC diagram displayed above the flower
+maybe_diagr:
+  if REPONSE:
+    produce f(5) diagr(0)
+  else : produce [SetGuide(AxisShape, Rmax*inlen)A(0,T)]
+
+
+## Diagrams 
+diagr(t):
+  global marker
+  if t > 4:
+    produce @M(0,0,0)[SetGuide(AxisShape, Rmax*inlen)A(0,T)]
+  elif t<=1:
+    produce [&(90)f(.001)^(90);(0)@o(diagrLen)];(whorlcolors[0])[@o(t*diagrLen)]diagr(t+step/4.)
+  elif t<=2:
+    nproduce ;(whorlcolors[3])[^(90)f(.002)&(90)@o((t-1.)*diagrLen/2.)]diagr(t+step/4.)
+  elif t<=4 and GB:
+    nproduce [^(90)f(.1)&(90) ;(14) Annulus(30,(t/2.-1.)*diagrLen/2.+diagrLen/4.,((t-step/2.)/2.-1.)*diagrLen/2.+diagrLen/4.)]f(.0001)diagr(t+step/4.)
+
+
+Annulus(N,Radius,radius):
+  alp = 360./N
+  prop = radius/Radius
+  nproduce _(.01)f(radius)+(90-alp/2.) 
+  for i in xrange(N):
+    nproduce +(alp)[{F(Radius*(alp*deg2rad))+(90.+alp/2.)F(Radius*(1.-prop))+(90-alp/2.)F(Radius*(alp*deg2rad)*prop+.001)+(90.-alp/2.)F(Radius*(1.-prop))}]f(Radius*(alp*deg2rad))
+
+
+
+# creates the main stem (leaves + flower)
+A(r,t):  
+  # r = rank, t = time left before producing a new internode
+  # produces a flower apex in state 1 initially
+  if r ==  Rmax or not(stemflag): produce I(0)FA(T_F) 
+  elif t < eps : produce I(0)[EndGuide()/(phylangle*r)AL(0)]A(r+1,T)
+  else: produce A(r,t-dt)
+
+# internode
+I(t):
+  produce I(t+dt)
+
+# axillary leaf
+AL(t):
+  produce AL(t+dt)
+
+FI(state,len,width,t):
+  produce FI(state,len,width,t+dt)
+
+
+decomposition:
+maximum depth: 1
+
+# floral apex = Receptacle internodes + lateral organs. 
+# p corresponds to relative height in the receptacle (flower profile): 
+# (p ranges from 0 to 1)
+# State corresponds to zone (1=sepal,2=petal,3=stamen,4=carpel)
+
+FA(t): 
+  p=0
+  for s in xrange(4): # loop on the states (=zones)
+    zone_size = pth[s+1]-pth[s] # height of the current zone
+    len = zone_size/nbwhorls[s] # length of an internode in this zone
+    for i in xrange(nbwhorls[s]):
+      p=p+len
+      w = receptacleProfile(p) # normalized width
+      len2 = len * receptacleHeight # scaling length
+      w2 = w * receptacleWidth  # and width
+      beta = computeNormal(receptacleProfile,p,dp)
+      #print "beta = ", beta
+      # FI is a receptacle internode
+      nproduce FI(s,len2,w2,0)[SetGuide()
+      if s == 0 and verticille_1 : # sepal only
+        for j in xrange(nb_sepal): 
+          if noise : ran_insert = insert_sepal_mu + random()*insert_sepal_sigma # gauss(insert_sepal_mu,insert_sepal_sigma)
+          else: ran_insert = 0.
+          nproduce /(360/nb_sepal) [ ^(-90) f(w2) ^(90) ^(-beta+opening(p)*360+ran_insert) OrgV1] 
+      if s == 1 and verticille_2: # petals only
+        for j in xrange(nb_petal): 
+          if noise : ran_insert = insert_petal_mu + random()*insert_petal_sigma #gauss(insert_petal_mu,insert_petal_sigma)
+          else: ran_insert = 0.
+          nproduce /(360/nb_petal) [ ^(-90) f(w2) ^(90) ^(-beta+opening(p)*360+ran_insert) OrgV2] 
+      if s == 2 and verticille_3: # stamen only
+        for j in xrange(nb_stamen): 
+          nproduce /(360/nb_stamen) [ ^(-90) f(w2) ^(90) ^(-beta+opening(p)*360) OrgV3] 
+      if s == 3 and verticille_4: # carpel only
+        for j in xrange(nb_carpel): 
+          # print "j = ",j,"beta = ", beta, "p = ", p,"opening = ", opening(p)
+          nproduce /(360/nb_carpel) [ ^(-90) f(w2) ^(90) ^(beta-opening(p)*360) OrgV4]       
+      nproduce ] 
+      if s == 0 and nb_sepal == 1 : nproduce /(phylangle)
+      elif s == 1 and nb_petal == 1 : nproduce /(phylangle)
+      elif s == 2 and nb_stamen == 1 : nproduce /(phylangle)
+      elif s == 3 and nb_carpel == 1 : nproduce /(phylangle)
+      # if a whorl (> 1 organ) shift by Pi/(2*N)
+      elif s == 0 : nproduce /(180/nb_sepal) 
+      elif s == 1 : nproduce /(180/nb_petal) 
+      elif s == 2 : nproduce /(180/nb_stamen) 
+      elif s == 3 : nproduce /(180/nb_carpel) 
+
+
+interpretation:
+maximum depth: 10
+
+# Internodes
+I(t):
+  if t <= T_IN: 
+    percent_growth = t/T_IN
+    if percent_growth != 0.0:
+      produce _(indiam*percent_growth);(leaf_color)F(inlen*percent_growth)
+  else:
+    tt = 1.*(NB_steps-t)/NB_steps
+    produce _(indiam);(leaf_color)F(inlen*internodelen(tt))
+
+AL(t):
+  nproduce SetGuide()
+  if t <= T_IN: 
+    percent_growth = t/T_IN
+    if percent_growth != 0.0:
+      produce ;(leaf_color)-(90)f(indiam*percent_growth)+(90)/(-90)^(-60) Leaf
+  else: produce ;(leaf_color)-(90)f(indiam)+(90)/(-90)^(-60)Leaf
+
+# Internodes composing the receptacle
+FI(state,len,width,t):
+  if show_ABC_colors:
+    orgtype = whorl2organ(state)
+    colo=ABCcolors[orgtype]
+  else :
+    colo = 2
+  produce ;(colo)F(len,width)
+
+# Organ definitions
+Sepal:
+  if sepalflag: 
+    produce ;(2) ParametricSurface(sepal_nerve,sepal_section,sepal_width,sepal_length/10.,sepal_nb_segment,Ssize)
+  
+Petal:
+  if petalflag: 
+    produce ,(3) ParametricSurface(petal_nerve,petal_section,petal_width,petal_length/10.,petal_nb_segment,Ssize)
+    
+Stamen:
+  if stamenflag: 
+    produce ;(4) ParametricSurface(stamen_nerve,None,stamen_width,stamen_length/10.,stamen_nb_segment,Ssize)
+    
+Carpel:
+  if carpelflag: 
+    nproduce ;(5) ParametricSurface(carpel_nerve,None,carpel_width,carpel_length/10.,carpel_nb_segment,Ssize)
+    for i in xrange(10): nproduce _(.001)[\(90)f(.01)]
+
+
+OrgV1 :
+  if GA: produce Sepal
+  elif GC: produce Carpel
+  else: produce None
+OrgV2 :
+  if GA: 
+    if GB:
+      produce Petal
+    else:
+      produce Sepal
+  elif GC:
+    if GB:
+      produce Stamen
+    else:
+      produce Carpel
+  else: produce None
+OrgV3 :
+  if GB and GC: produce Stamen
+  elif GA and GB and (1-GC): produce f(.5)Petal
+  elif GC and (1-GB): produce Carpel
+  elif GA and (1-GB) and (1-GC): produce Sepal
+  else: produce None
+OrgV4 :
+  if GC: produce Carpel
+  elif GA: produce Sepal
+  else: produce None
+
+
+Leaf:
+  if leafflag: 
+    produce F(0.3,0.02)LeafLet
+    #produce F(0.3,0.02)[+(90)LeafLet][-(90)LeafLet]F(0.3,0.02)[+(90)LeafLet][-(90)LeafLet]F(0.3,0.02)LeafLet
+    
+LeafLet --> ParametricSurface(leaf_nerve,leaf_section,leaf_width,leaf_length/10.,leaf_nb_segment,Ssize)
+
+ParametricSurface(axis,section,width,length,nb_segment,size):
+   dx = 1. / nb_segment
+   x = 0
+   nproduce [SetGuide(axis,length*size)  
+   if not section is None: nproduce SetContour(section) 
+   nproduce _(width(0)) StartGC()
+   for i in xrange(nb_segment):
+     x = i*dx
+     nproduce F(size*dx*length,size*width(x+dx))
+   nproduce EndGC()]
+
+
+endlsystem
+###### INITIALISATION ######
+
+__lpy_code_version__ = 1.1
+
+def __initialiseContext__(context):
+	import openalea.plantgl.all as pgl
+	Color_1 = pgl.Material("Color_1" , 		ambient = (28,19,6) , 
+		diffuse = 5.57143 , 
+		specular = (50,50,50) , 
+		emission = (9,9,9) , 
+)
+	Color_1.name = "Color_1"
+	context.turtle.setMaterial(1,Color_1)
+	Color_2 = pgl.Material("Color_2" , 		ambient = (18,37,5) , 
+		diffuse = 2.35135 , 
+)
+	Color_2.name = "Color_2"
+	context.turtle.setMaterial(2,Color_2)
+	Color_3 = pgl.Material("Color_3" , 		ambient = (181,181,181) , 
+		diffuse = 0.41989 , 
+		specular = (42,42,42) , 
+)
+	Color_3.name = "Color_3"
+	context.turtle.setMaterial(3,Color_3)
+	Color_4 = pgl.Material("Color_4" , 		ambient = (84,56,0) , 
+		diffuse = 2.44048 , 
+		specular = (32,32,32) , 
+		emission = (26,26,26) , 
+)
+	Color_4.name = "Color_4"
+	context.turtle.setMaterial(4,Color_4)
+	Color_5 = pgl.Material("Color_5" , 		ambient = (6,61,12) , 
+		diffuse = 0.885246 , 
+		specular = (124,124,124) , 
+)
+	Color_5.name = "Color_5"
+	context.turtle.setMaterial(5,Color_5)
+	Color_6 = pgl.Material("Color_6" , 		ambient = (41,0,0) , 
+		diffuse = 2.36585 , 
+		specular = (92,8,8) , 
+		emission = (45,0,0) , 
+)
+	Color_6.name = "Color_6"
+	context.turtle.setMaterial(6,Color_6)
+	Color_8 = pgl.Material("Color_8" , 		ambient = (254,0,0) , 
+		diffuse = 0.629921 , 
+		specular = (255,0,0) , 
+		emission = (255,0,0) , 
+)
+	Color_8.name = "Color_8"
+	context.turtle.setMaterial(8,Color_8)
+	Color_9 = pgl.Material("Color_9" , 		ambient = (255,255,0) , 
+		diffuse = 0.45098 , 
+		specular = (104,104,104) , 
+		emission = (255,255,0) , 
+)
+	Color_9.name = "Color_9"
+	context.turtle.setMaterial(9,Color_9)
+	Color_10 = pgl.Material("Color_10" , 		ambient = (0,0,255) , 
+		diffuse = 0.627451 , 
+)
+	Color_10.name = "Color_10"
+	context.turtle.setMaterial(10,Color_10)
+	Color_11 = pgl.Material("Color_11" , 		ambient = (255,185,7) , 
+		diffuse = 0 , 
+		specular = (0,0,0) , 
+		emission = (255,3,3) , 
+)
+	Color_11.name = "Color_11"
+	context.turtle.setMaterial(11,Color_11)
+	Color_12 = pgl.Material("Color_12" , 		ambient = (255,0,255) , 
+		diffuse = 0 , 
+		specular = (0,0,0) , 
+)
+	Color_12.name = "Color_12"
+	context.turtle.setMaterial(12,Color_12)
+	Color_13 = pgl.Material("Color_13" , 		ambient = (0,218,0) , 
+		diffuse = 0 , 
+		specular = (0,0,0) , 
+)
+	Color_13.name = "Color_13"
+	context.turtle.setMaterial(13,Color_13)
+	Color_14 = pgl.Material("Color_14" , 		ambient = (0,0,255) , 
+		diffuse = 0 , 
+		specular = (0,0,0) , 
+		transparency = 0.59 , 
+)
+	Color_14.name = "Color_14"
+	context.turtle.setMaterial(14,Color_14)
+	Color_15 = pgl.Material("Color_15" , 		ambient = (0,0,255) , 
+		diffuse = 0 , 
+		specular = (0,0,0) , 
+		emission = (0,0,255) , 
+		transparency = 0.57 , 
+)
+	Color_15.name = "Color_15"
+	context.turtle.setMaterial(15,Color_15)
+	context.options.setSelection('Warning with Turtle inconsistency',0)
+	scalars = [('nb_sepal', 6, 1, 20), ('nb_petal', 3, 1, 20), ('nb_stamen', 5, 1, 30), ('sepal_length', 5, 1, 30), ('petal_length', 7, 1, 30), ('stamen_length', 4, 1, 30), ('carpel_length', 4, 1, 30), ('leaf_length', 6, 1, 100), ('sepalflag', True, False, True), ('petalflag', True, False, True), ('stamenflag', True, False, True), ('carpelflag', True, False, True), ('leafflag', True, False, True), ('noise', True, False, True), ('nb_carpel', 1, 0, 100), ('GA', True, False, True), ('GB', True, False, True), ('GC', True, False, True), ('verticille_1', True, False, True), ('verticille_2', True, False, True), ('verticille_3', True, False, True), ('verticille_4', True, False, True), ('stemflag', True, False, True), ('REPONSE', False, False, True), ('show_ABC_colors', False, False, True)]
+	context["__scalars__"] = scalars
+	for n,v,mnv,mxv in scalars:
+		context[n] = v
+	import openalea.plantgl.all as pgl
+	sepal_width = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.0342648, 1),(0.0549666, 0.231318, 1),(0.510107, 0.163966, 1),(0.917895, 0.180944, 1),(1, 0.0268255, 1)]) , 
+	    )
+	sepal_width.name = "sepal_width"
+	petal_width = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.0865445, 1),(0.209251, 0.30823, 1),(0.473697, 0.419866, 1),(0.736782, 0.435391, 1),(0.953449, 0.38485, 1),(1, 0.0588625, 1),(1, 0.0249496, 1)]) , 
+	    )
+	petal_width.name = "petal_width"
+	carpel_width = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.0148928, 1),(0.314935, 0.0195945, 1),(0.5573, 0.016741, 1),(0.738597, 0.0186869, 1),(0.864667, 0.00214352, 1),(1, 0.0150678, 1)]) , 
+	    )
+	carpel_width.name = "carpel_width"
+	stamen_width = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.00326303, 1),(0.353705, 0.00323103, 1),(0.675292, 0.00559957, 1),(0.76987, 0.00208676, 1),(0.803953, 0.0145622, 1),(0.995983, 0.0120889, 1),(1, 0.00026951, 1)]) , 
+	    )
+	stamen_width.name = "stamen_width"
+	receptacleProfile = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.0118772, 1),(0.0483995, 0.147983, 1),(0.163483, 0.334726, 1),(0.310778, 0.395063, 1),(0.609005, 0.399069, 1),(0.810031, 0.34849, 1),(1, 0.111638, 1),(1, 0.0125388, 1)]) , 
+	    )
+	receptacleProfile.name = "receptacleProfile"
+	leaf_width = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.0557769, 1),(0.165729, 0.301414, 1),(0.53533, 0.298777, 1),(0.805128, 0.302951, 1),(1, 0.0358566, 1)]) , 
+	    )
+	leaf_width.name = "leaf_width"
+	opening = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.0109171, 1),(0.0777129, 0.420641, 1),(0.245081, 0.208734, 1),(0.417176, 0.202829, 1),(0.624831, 0.101988, 1),(0.823187, 0.0238984, 1),(0.929457, 0.0296022, 1),(1, 0.0281283, 1)]) , 
+	    )
+	opening.name = "opening"
+	internodelen = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.00938666, 1),(0.166719, 0.00561404, 1),(0.166719, 0.0116702, 1),(0.189386, 0.0576949, 1),(0.195085, 1.00485, 1),(0.199993, 0.988534, 1),(0.800502, 0.989881, 1),(1, 0.989703, 1)]) , 
+	    )
+	internodelen.name = "internodelen"
+	panel_0 = ({'active': True, 'visible': True, 'name': 'Functions'},[('Function',sepal_width),('Function',petal_width),('Function',carpel_width),('Function',stamen_width),('Function',receptacleProfile),('Function',leaf_width),('Function',opening),('Function',internodelen)])
+	import openalea.plantgl.all as pgl
+	sepal_nerve = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0.00267378, 0.0913267, 1),(0.0350336, 0.00690934, 1),(0.152417, 0.000153156, 1),(0.67911, -0.0374133, 1),(0.739172, -0.182926, 1),(0.800253, -0.291018, 1)]) , 
+	    )
+	sepal_nerve.name = "sepal_nerve"
+	sepal_section = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(-0.582092, 0.169143, 1),(-0.501529, 0.0149526, 1),(-0.164558, 0.00217632, 1),(0.19334, -0.00491485, 1),(0.55411, 0.00959401, 1),(0.593674, 0.167853, 1)]) , 
+	    )
+	sepal_section.name = "sepal_section"
+	petal_section = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(-0.41272, 0.0925189, 1),(-0.207731, -0.00665554, 1),(0.171749, -0.00758484, 1),(0.369546, 0.0855328, 1)]) , 
+	    )
+	petal_section.name = "petal_section"
+	petal_nerve = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(-0.000642917, 0.000642897, 1),(0.182381, -0.00558217, 1),(0.374917, 0.00969822, 1),(0.578238, -0.0445333, 1),(0.671433, -0.16907, 1),(0.865893, -0.367107, 1)]) , 
+	    )
+	petal_nerve.name = "petal_nerve"
+	stamen_nerve = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0.00267378, -0.0026738, 1),(0.133094, 0.0109457, 1),(0.259897, 0.0179014, 1),(0.332213, 0.0409697, 1),(0.399848, 0.0745133, 1)]) , 
+	    )
+	stamen_nerve.name = "stamen_nerve"
+	carpel_nerve = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0.00267378, -0.0026738, 1),(0.0490853, 0.00302744, 1),(0.130466, 0.00251888, 1),(0.677461, 0.0196475, 1),(1.00546, 0.0234969, 1)]) , 
+	    )
+	carpel_nerve.name = "carpel_nerve"
+	leaf_section = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(-0.354412, 0.0971154, 1),(-0.13766, -0.0598824, 1),(0.129801, -0.0536486, 1),(0.370212, 0.0925605, 1)]) , 
+	    )
+	leaf_section.name = "leaf_section"
+	leaf_nerve = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0.00267378, -0.0026738, 1),(0.132394, 0.01432, 1),(0.2452, 0.0352875, 1),(0.397249, 0.00479208, 1),(0.500326, -0.0518791, 1)]) , 
+	    )
+	leaf_nerve.name = "leaf_nerve"
+	AxisShape = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(-0.489325, 0.0330066, 1),(-0.25937, 0.0839531, 1),(0.104972, 0.0174484, 1),(0.409996, 0.0255427, 1)]) , 
+	    )
+	AxisShape.name = "AxisShape"
+	panel_1 = ({'active': True, 'visible': True, 'name': 'Curve2D'},[('Curve2D',sepal_nerve),('Curve2D',sepal_section),('Curve2D',petal_section),('Curve2D',petal_nerve),('Curve2D',stamen_nerve),('Curve2D',carpel_nerve),('Curve2D',leaf_section),('Curve2D',leaf_nerve),('Curve2D',AxisShape)])
+	parameterset = [panel_0,panel_1,]
+	context["__functions__"] = [('sepal_width',sepal_width),('petal_width',petal_width),('carpel_width',carpel_width),('stamen_width',stamen_width),('receptacleProfile',receptacleProfile),('leaf_width',leaf_width),('opening',opening),('internodelen',internodelen),]
+	context["__curves__"] = [('sepal_nerve',sepal_nerve),('sepal_section',sepal_section),('petal_section',petal_section),('petal_nerve',petal_nerve),('stamen_nerve',stamen_nerve),('carpel_nerve',carpel_nerve),('leaf_section',leaf_section),('leaf_nerve',leaf_nerve),('AxisShape',AxisShape),]
+	context["__parameterset__"] = parameterset
+	context["sepal_width"] = pgl.QuantisedFunction(sepal_width)
+	context["petal_width"] = pgl.QuantisedFunction(petal_width)
+	context["carpel_width"] = pgl.QuantisedFunction(carpel_width)
+	context["stamen_width"] = pgl.QuantisedFunction(stamen_width)
+	context["receptacleProfile"] = pgl.QuantisedFunction(receptacleProfile)
+	context["leaf_width"] = pgl.QuantisedFunction(leaf_width)
+	context["opening"] = pgl.QuantisedFunction(opening)
+	context["internodelen"] = pgl.QuantisedFunction(internodelen)
+	context["sepal_nerve"] = sepal_nerve
+	context["sepal_section"] = sepal_section
+	context["petal_section"] = petal_section
+	context["petal_nerve"] = petal_nerve
+	context["stamen_nerve"] = stamen_nerve
+	context["carpel_nerve"] = carpel_nerve
+	context["leaf_section"] = leaf_section
+	context["leaf_nerve"] = leaf_nerve
+	context["AxisShape"] = AxisShape
+__copyright__ = 'Virtual Plants Team'
+__institutes__ = 'INRIA'
+__authors__ = 'C. Godin\nF. Boudon'

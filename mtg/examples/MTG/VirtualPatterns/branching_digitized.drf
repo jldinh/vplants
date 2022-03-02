@@ -1,0 +1,19 @@
+SMBPath = ../../../databases/SMBFiles
+SMBModel entrenoeud = nentn105
+SMBModel Feuille = feui113
+SMBModel Fruit = pommecyl
+
+Class U = entrenoeud
+Class B = entrenoeud
+Class E = entrenoeud
+
+Class Z = Feuille
+
+LeafClass = Z
+
+LeafAlpha = 30 		# inserion angle
+LeafBeta  = 120		# Azimuth on the axis (azimuth ref: Y axis)
+
+MinTopDiameter E = 3    # to give a small thickness to the trunk
+MinBottomDiameter E = 3
+

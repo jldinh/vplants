@@ -1,0 +1,51 @@
+# Construction d'un mvsVoxel à partir d'un objet geom
+# Boite englobante par defaut
+
+dir = "\examples\MSVoxelDataBase\"
+
+#file = "ifs"
+#file = "triangle"
+file = "fractal_tree"
+
+VDepth = 3
+divisionsteps = 3
+
+# Begin
+
+
+g = GeomScene(AMAPMOD_DIR + dir + file +".geom")
+mvs = MSVoxel(g, DivisionSteps->[divisionsteps], Depth->VDepth)
+
+Plot(mvs)
+
+# Display and Save results
+ToArrayReal(_array) = Foreach _i In _array : ToReal(_i)
+Inv(_array) = Foreach _i In _array : 1.0/_i
+LogArray(_array) = Foreach _i In _array : Log(_i)
+ToStringArray(_array) = "" Foreach _i In _array : + ToString(_i)
+
+e1 = Extract(mvs,ScaleVariation->BuilderStats,BuilderStats->ElapsedTime)
+Save(e1,AMAPMOD_DIR + dir + file + "\_" + ToString(VDepth) + "_" + ToString(divisionsteps) + "_ElapsedTime.txt",Format->SpreadSheet)
+
+e2 = ToArrayReal(Extract(mvs,ScaleVariation->BuilderStats,BuilderStats->NbTriangles))
+Save(e2,AMAPMOD_DIR + dir + file + "\_" + ToString(VDepth) + "_" + ToString(divisionsteps) + "_NbTriangles.txt",Format->SpreadSheet)
+
+e3 = ToArrayReal(Extract(mvs,ScaleVariation->Units, Units->Contraction))
+Save(e3,AMAPMOD_DIR + dir + file + "\_" + ToString(VDepth) + "_" + ToString(divisionsteps) + "_Contraction.txt",Format->SpreadSheet)
+Save(LogArray(e3), AMAPMOD_DIR + "\MSVoxelDataBase\" + file + "\_" + ToString(VDepth) + "_" + ToString(divisionsteps) + "_LogInvDelta.txt",Format->SpreadSheet)
+
+e4 = Extract(mvs,ScaleVariation->Units, Units->Volume)
+Save(e4,AMAPMOD_DIR + dir + file + "\_" + ToString(VDepth) + "_" + ToString(divisionsteps) + "_VolumeVoxel.txt",Format->SpreadSheet)
+
+e5 = ToArrayReal(Extract(mvs,ScaleVariation->InterceptedVoxels))
+Save(e5,AMAPMOD_DIR + "\MSVoxelDataBase\" + file + "\_" + ToString(VDepth) + "_" + ToString(divisionsteps) + "_InterceptedVoxels.txt",Format->SpreadSheet)
+Save(LogArray(e5), AMAPMOD_DIR + dir + file + "\_" + ToString(VDepth) + "_" + ToString(divisionsteps) + "_LogInterceptedVoxels.txt",Format->SpreadSheet)
+
+e6 = Extract(mvs,ScaleVariation->Volume)
+Save(LogArray(e6),AMAPMOD_DIR + dir + file + "\_" + ToString(VDepth) + "_" + ToString(divisionsteps) + "_LogVolume.txt",Format->SpreadSheet)
+
+radius = [1:27]
+Save(radius, AMAPMOD_DIR + dir + file + "\_" + ToString(VDepth) + "_" + ToString(divisionsteps) + "_radius.txt",Format->SpreadSheet)
+
+e7 = Extract(mvs,Lacunarity->radius)
+Save(e7,AMAPMOD_DIR + dir + file + "\_" + ToString(VDepth) + "_" + ToString(divisionsteps) + "_Lacunarity.txt",Format->SpreadSheet)

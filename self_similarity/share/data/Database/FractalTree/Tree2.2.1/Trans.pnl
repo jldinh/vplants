@@ -1,0 +1,41 @@
+target: Lsystem
+
+type: SLIDER
+name: T1
+colors: 255,255,255 255,0,0
+origin: 130 92
+min/max: 0 10
+value: 4
+message: d T1 %d 1
+
+type: SLIDER
+name: T2
+colors: 255,255,255 255,0,0
+origin: 130 168
+min/max: 0 10
+value: 3
+message: d T2 %d 1
+
+type: SLIDER
+name: T3
+colors: 255,255,255 255,0,0
+origin: 130 244
+min/max: 0 10
+value: 2
+message: d T3 %d 1
+
+type: SLIDER
+name: T4
+colors: 255,255,255 255,0,0
+origin: 130 320
+min/max: 0 10
+value: 1
+message: d T4 %d 1
+
+type: SLIDER
+name: T5
+colors: 255,255,255 255,0,0
+origin: 130 396
+min/max: 0 10
+value: 1
+message: d T5 %d 1

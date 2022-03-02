@@ -1,0 +1,35 @@
+vplants-aml2py (1.2.0~ppa1) trusty; urgency=medium
+
+  * Port to Trusty  
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Thu, 02 Oct 2014 06:36:29 +0200
+
+vplants-aml2py (1.0.1~ppa9) quantal; urgency=low
+
+  *  Port to Quantal  
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Mon, 10 Dec 2012 17:17:50 +0100
+
+vplants-aml2py (1.0.1~ppa8) precise; urgency=low
+
+  * Rebuild with new PlantGL 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Thu, 06 Dec 2012 14:01:34 +0100
+
+vplants-aml2py (1.0.1~ppa2) precise; urgency=low
+
+  *  Switch to dh_python2 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Wed, 12 Sep 2012 15:42:20 +0200
+
+vplants-aml2py (1.0.1~ppa1) precise; urgency=low
+
+  *  Release 1.0 on precise  
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Sun, 25 Mar 2012 16:34:47 +0200
+
+vplants-aml2py (1.0.0-1) unstable; urgency=low
+
+  * source package automatically created by stdeb 0.6.0+git
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Thu, 12 Jan 2012 18:20:00 +0100

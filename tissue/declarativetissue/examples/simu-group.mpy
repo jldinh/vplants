@@ -1,0 +1,98 @@
+import openalea.tissueshape.grid_tissue as gt
+from openalea.declarativetissue.meshnode import get_cell_nodes, get_nodes
+from random import random, uniform, randint
+from openalea.tissueview import draw_scalar_prop, MeshView2D
+from openalea.pglviewer import SceneView,ColorScaleGUI
+from vplants.plantgl.ext.color import JetMap
+from openalea.tissueshape import tovec
+from openalea.plantgl.all import Material
+
+sc = SceneView()
+cmap = JetMap(0.,1.,outside_values=True)
+viewer.add_world(sc)
+viewer.add_gui(ColorScaleGUI("auxin",cmap,"%.2f") )
+
+def redraw (tissuedb) :
+    mesh = tissuedb.get_topology("mesh_id")
+    pos = tissuedb.get_property("position")
+    prop = tissuedb.get_property("gene1")
+    lsc = draw_scalar_prop(mesh,pos,2,prop,10,cmap)
+    sc.clear(False)
+    sc.merge(lsc)
+    lsc = MeshView2D(mesh,pos,1,0,Material((255,0,0)),1)
+    lsc.redraw()
+    sc.merge(lsc._scene)
+
+
+def init():
+    db = gt.regular_grid((5,5))
+    db.set_property("position",tovec(db.get_property("position") ) )
+    for n in get_nodes(db):
+      if n.degree == 2:
+        if len(list(n.neighbors())) <= 3:
+            n.set(label = 'A', gene1 = 0.5, gene2 = 0)
+        else:
+            n.set(label = 'A', gene1 = 0, gene2 = 0)
+      elif n.degree == 1:
+        n.label = 'W'
+      elif n.degree == 0:
+        n.label = 'P'
+    db.set_description('label','label associated with each cell')
+    redraw(db)
+    return db
+
+def EndEach(iter,tissuedb): 
+    print '*** t = ',dt*(iter+1),', gene1 = ', sum([n.gene1 for n in get_cell_nodes(tissuedb)])
+    #print [n for n in get_nodes(tissuedb)]
+            
+    redraw(tissuedb)
+    
+    SetGroup(iter % 5 == 0)
+
+ratio = 0.01
+dr = 0.01
+
+def sigmoid(x,p = 5., theta = 0.5):
+    return x ** p / ( theta ** p + x ** p )
+
+DEC = [.1, .05] # decay rate
+DIFF = [.1, .1] # diffusion rate
+dt = 0.01 #time step
+CREATION = 0.2
+
+nbiterations = 200 
+rules:
+
+
+A(node) :
+    ngbs = list(node.neighbors())
+    ca = node.gene1
+    ta = sum([n.gene1-ca for n in ngbs])
+    node.gene1 = ca + (ta + CREATION)*dt 
+    
+    #c1, c2 = node.gene1, node.gene2
+    #t1 = sum([n.gene1-c1 for n in node.neighbors()])
+    #t2 = sum([n.gene2-c2 for n in node.neighbors()])
+    #node.gene1 = c1 + ( t1*DIFF[0] - DEC[0] * c1 + sigmoid(c2) + 0.001 ) * dt 
+    #node.gene2 = c2 + ( t2*DIFF[1] - DEC[1] * c2 + (1 - sigmoid(c1)) + 0.001 ) * dt
+    if node.gene1 > 0.6:
+        node.label = 'B'
+    
+B(node) :
+    print 'divide',node.id
+    result = node.divide(node.centroid(),(1,1), {0:'P',1:'W',2:'A'})
+    print result
+    print len(result)
+    for old,news in result.items():
+        for n in news:
+            if n.degree == 0:
+                n.position *= 1.01
+            elif n.degree == 2:
+                n.set(gene1=old.gene1/2,gene2=old.gene2/2)
+
+group 1:
+
+P(node) :
+    node.position*=1.01
+
+    

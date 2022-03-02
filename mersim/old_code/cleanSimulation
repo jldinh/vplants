@@ -1,0 +1,4 @@
+rm *.pov
+rm *.scene
+rm *.camera
+rm *.png

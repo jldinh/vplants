@@ -1,0 +1,140 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="description_files/style.css" />
+  <link rel="stylesheet" type="text/css" href="description_files/SyntaxHighlighter.css" />
+  <title>global expansion</title>
+</head>
+<body>
+<div id="info">
+	<ul>
+	<li> version : 1.0.0 </li>
+	<li> license : Cecill-C </li>
+	<li> authors : Jerome Chopard </li>
+	<li> url : <a href="www.vplants.com/tissue/simulation/global_expansion">www.vplants.com/tissue/simulation/global_expansion</a> </li>
+	<li> institutes : INRIA </li>
+	</ul>
+</div>
+<div id="title">Global field of expansion</div>
+<div id="summary">
+This package is an example package that perform the expansion of a tissue using a field defined globaly in every region of space
+</div>
+<div id="dependencies">
+Direct dependencies :
+	<ul>
+	<li svn="6666"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:plantgl:plantgl">plantgl</a></li>
+	<li svn="1000"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:celltissue">celltissue</a></li>
+	<li svn="6666"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:pglviewer">pglviewer</a></li>
+	<li svn="6666"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:svgdraw">svgdraw</a></li>
+	<li svn="6666"><a href="http://www.scipy.org/">scipy</a></li>
+	</ul>
+</div>
+<div id="description">
+	<div id="general">
+	<h1>Description</h1>
+	<p>This package provides a simple description of tissue expansion using a global field. To simplify its definition, this field is not a speed field (meaning, the definition of speed in each point of space). Rather, points are given a specific coordinate in space and the user defines how space change throughout time. That kind of definition match what happen when some cells are marked and their positions are followed throughout time on an expanding tissue. When ink's dots are deposited on a growing leaf for example. To follow their trajectories give a reasonable clue on the underlying expansion field of the leaf. Here, dots do not move relatively to the tissue, it's rather the tissue (the space) that expand throughout time.</p>
+	<img src="description_files/leaf_dvlpt.png" alt="leaf expansion field" />
+	</div>
+	<div id="algo">
+	<h1>Algorithms</h1>
+	
+	<h2>Field definition</h2>
+	<p>The field is defined graphically as a sequence of 2D patch (surface). Each patch represent the geometry of the underlying space (e.g. a leaf) at one time. In this tutorial, 2D nurbs are used to interpolate a set of lines into a regular patch. Hence, each point of the space inside the patch is represented by a couple of coordinates (u,v). The sequence of patches is itself interpolated throughout time. The expansion field, then, is a 3D nurbs volume. Each point of the leaf is represented by three coordinates (u,v,t), two coordinates of space and one coordinate of time.</p>
+	
+	<h2>Tissue definition</h2>
+	<p>The tissue is drawn directly on the first patch of the above field. A set of dots represent the vertices of the tissue and connectors between these dots stand for the walls of the cells. As for the <a href="www.vplants.com/tissue/simulation/tissue drawing">tissue drawing</a>, information about points and connector are directly read in the svg file to construct a mesh structure that will correspond to the geometry of the tissue.</p>
+	
+	<h2>Finding points coordinates</h2>
+	<p>The position of the points of the mesh defined above are defined in the cartesian coordinate system of the svg file. However, we need to express them in the (u,v) coordinates at time 0 of the field defined above. At time 0, the field is a 2DNurbsPatch. This object do not define any method that transform a cartesian coordinate into the local (u,v) one. Still, the opposite method exists. We can ask for the cartesian position of any (u,v) coordinates. To inverse this function we use a opitmization function from the scipy package</p>
+	<textarea name="code" class="python:nogutter:nocontrols">
+	from scipy.optimize import fmin
+	</textarea>
+	<p>We must first define an error function. Here, we use the cartesian distance between the guessed point (v) and the real one (vec)
+	<textarea name="code" class="python:nogutter:nocontrols">
+	def err (coords) :
+		v = patch.getPointAt(coords[0],coords[1])
+		return norm(v-vec)
+	</textarea>
+	Then we can use fmin to find the (u,v) coordinates that approach best the given point
+	<textarea name="code" class="python:nogutter:nocontrols">
+	res = fmin(err,(0.,0.),disp=0)
+	</textarea>
+	where (0.,0.) is a first estimate of the (u,v) coordinates. Since the function can really fall into local minima, a good practice consists in walking roughly through the space to find a first approximation of the coordinates.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	err_list = []
+	for i in xrange(11) :
+		u = i/10.
+		for j in xrange(11) :
+			v = j/10.
+			err_list.append( (err( (u,v) ), (u,v) ) )
+	err_list.sort()
+	guess = err_list[0][1]
+	</textarea>
+	and use this guess in place of the crude (0.,0.) used above.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	res = fmin(err,guess,disp=0)
+	</textarea>
+	</p>
+	<h2>Evolution</h2>
+	<p>Once the (u,v) coordinates of each point si known, the expansion of the tissue follow directly the modification of space. (u,v) coordinates of points stay constant throughout time. We just need to recompute the cartesian position of point from the (u,v) coordinates and the nurbs patch that describe the space at a given time.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	def expand (time, dt) :
+		patch = field.getUPatch(time)
+		for pid,uv in uvpos.iteritems() :
+			pos[pid] = patch.getPointAt(*uv)
+	</textarea>
+	</p>
+	</div>
+	<div id="exec">
+	<h1>Simulation</h1>
+	<p>All above operations have been written in <a href="simu.py">simu.py</a>, the main simulation file. However, first, you must launch <a href="create_field.py">create_field.py</a> to generate the expansion field from the svg draw. The script will produce an expansion_field.txt file that contains a pickled representation of the volumetric nurbs.</p>
+	<div class="command">
+	user@computer:$ python create_field.py
+	</div>
+	<p>Then you must launch <a href="create_tissue.py">create_tissue.py</a> to read the svg file once again and produce the tissue.zip file that contains a representation of the tissue with a mesh.</p>
+	<div class="command">
+	user@computer:$ python create_tissue.py
+	</div>
+	<p>Last launch <a href="simu.py">simu.py</a> to display the expansion of the tissue throughout time.</p>
+	<div class="command">
+	user@computer:$ python simu.py
+	</div>
+	<img src="description_files/global_expansion.png" alt="simulation result" />
+	</div>
+	</div>
+	<div id="exercice">
+	<h1>Exercices</h1>
+	To go further :
+	<ul>
+		<li>Open the svg file (using <a href="http://www.inkscape.org/">Inkscape</a> for example) and modify the expansion field, either by moving the points on the existing curve, or by adding some time step. Each new time step correspond to a new layer. Do not forget to rerun <a href="create_field.py">create_field.py</a> to reconstruct the expansion field.</li>
+		<li>You can change the initial tissue for another one. A good start might be to use the one obtained with the <a href="www.vplants.com/tissue/simulation/tissue drawing">tissue drawing</a> tutorial or just open the svg file (using <a href="http://www.inkscape.org/">Inkscape</a> for example) and modify the tissue inside. Just be carefull that the tissue points must be inside the patch at t=0 otherwise space will not be defined for these points and results might be artistic.</li>
+		<li>Try to change the visualisation to fill the inside of cells with a color depending on their surface. Hence, you'll see where the field tends to expand the tissue.</li>
+	</ul>
+	</div>
+</div>
+<div id="bugs_disclaimer">
+<h1>Bugs</h1>
+If you experience bugs, feel free to report them on <a href="http://gforge.inria.fr/tracker/?atid=2598&group_id=79&func=browse">gforge</a> or send a mail to the author. Thanks
+</div>
+<div id="files">
+<h1>files</h1>
+<ul>
+	<li><a href="simu.py">simu.py</a> : main simulation file </li>
+	<li><a href="simu_view.py">simu_view.py</a> : description of the visualization </li>
+	<li><a href="simu_gui.py">simu_gui.py</a> : description of user interaction with the simulation </li>
+	<li><a href="create_tissue.py">create_tissue.py</a> : create a tissue file tissue.zip from the svg file </li>
+	<li><a href="create_field.py">create_tissue.py</a> : create an expansion field from svg file </li>
+	<li><a href="expansion.svg">expansion.svg</a> : Drawing that contains the expansion field plus the geometrical representation of the tissue </li>
+	<li>description.html : this file </li>
+	<li>description_files dir : location of external files for this html page </li>
+</ul>
+</div>
+
+<!-- syntax highlighting -->
+<script language="JavaScript" src="description_files/shCore.js" type="text/javascript"></script>
+<script language="JavaScript" src="description_files/shBrushPython.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">dp.SyntaxHighlighter.HighlightAll('code');</script>
+
+</body>
+</html>

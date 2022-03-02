@@ -1,0 +1,78 @@
+# Dressing file for apple trees
+
+SMBPath = ../../../databases/SMBFiles
+
+Appearance = mat.app
+
+SMBModel entrenoeud = nentn105
+SMBModel entrenoeud2 = nentn104
+SMBModel Feuille = feui113
+SMBModel Fruit = pommecyl
+
+Class U = entrenoeud
+Class B = entrenoeud
+Class E = entrenoeud
+
+Class Z = Feuille
+Class A = Fruit
+
+#SymbolPattern entrenoeud : nentn105
+#SymbolPattern entrenoeud2 : nentn104
+#SymbolPattern Feuille : feui113
+#SymbolPattern Fruit : abricot
+
+#Symbol U = entrenoeud
+#Symbol B = entrenoeud
+#Symbol E = entrenoeud
+
+#Symbol Z = Feuille
+#Symbol A = Fruit
+
+
+LeafClass = Z
+FruitClass = A
+
+LeafAlpha = 45
+LeafBeta  = 120
+LeafLength = 100	# les diametres sont tous divises par 10
+LeafTopDiameter = 1000
+LeafBottomDiameter = 1000
+
+FruitTopDiameter = 1800	# pour jouer sur la taille des fruits
+FruitBottomDiameter = 1800	# les deux quantites sont importantes (topdia et botdia)
+FruitLength = 90	#  Pour un rapport de 1/1 entre longueur et diametre du pattern
+			#il faut mettre LeafTopDia = 2*LeafLength
+
+Phyllotaxy = 150
+
+MinTopDiameter I = 50
+MinBottomDiameter I = 50
+
+MinTopDiameter U = 500
+MinBottomDiameter U = 500
+
+MinTopDiameter E = 500
+MinBottomDiameter E = 500
+
+MinTopDiameter B = 1
+MinBottomDiameter B = 1
+
+MinLength C = 5   
+MinLength E = 1
+MinLength F = 0
+MinLength B = 5
+MinLength I = 5
+MinLength U = 5
+
+
+DiameterUnit = 10
+LengthUnit = 1
+
+Alpha = Relative
+
+DefaultEdge = NONE
+DefaultTrunkCategory = -1
+DefaultAlpha = 30
+DefaultDistance = 10000
+NbPlantsPerLine = 5
+

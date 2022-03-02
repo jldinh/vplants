@@ -1,0 +1,16 @@
+Source: vplants-tissue-tissueview
+Maintainer: Christophe Pradal <christophe.pradal@cirad.fr>
+Section: python
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3~), python-setuptools (>= 0.6b3), debhelper (>= 7),  python-openalea.deploy
+
+
+Package: python-vplants.tissueview
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-openalea, python-openalea.container, python-vplants.plantgl, python-openalea.pglviewer, python-vplants.tissueshape
+Provides: ${python:Provides}
+Description: basic functions to deal with tissue display
+ .
+ contains a set of functions that manipulate meshes
+ to display tissue shapes
+ .

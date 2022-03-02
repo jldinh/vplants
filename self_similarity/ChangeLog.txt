@@ -1,0 +1,71 @@
+************
+*** 2009 ***
+************
+
+  ** JANUARY **
+
+09/01/14: creation
+
+09/01/16 (09:16:18): Add self-similarity package to vplants
+09/01/16 (15:49:13): add datafiles, update documentation and add an example
+
+
+  ** APRIL **
+
+09/04/28 (23:32:55): update dag compression
+09/04/28 (23:44:08): digitised walnut tree
+
+09/04/29 (23:12:19): fix bugs, add examples, modify walnut encodage
+
+
+  ** MAY **
+
+09/05/01 (01:26:45): Add fast approximative reduction
+09/05/01 (02:47:28): add geometry compression v1
+09/05/01 (23:49:20): add small mtg (part of apple tree)
+
+09/05/04 (02:47:28): add geometry x,y,z and walnut distmatrix
+09/05/04 (22:51:45): add computation of geometric parameters
+
+09/05/07 (00:03:08): delete distmatrix.txt
+09/05/07 (00:04:51): geometry update
+09/05/07 (18:30:23): first version of geometry. pb with relative orientation
+
+09/05/08 (17:15:17): add relative orientation using quaternion
+09/05/08 (18:03:39): Modify examples
+09/05/08 (22:05:22): Run geometry compression
+
+09/05/22 (22:48:06): examples update, add approx examples, add geometry view
+09/05/22 (22:50:54): add parameter_manipulator, improve parameter computing
+
+09/05/25 (18:05:32): correct import error
+
+
+  ** OCTOBER **
+09/10/15 (16:09:49): update examples
+
+************
+*** 2010 ***
+************
+
+** JANUARY **
+
+2010/01/14 (00:52:43): entropy dans exemples
+2010/01/14 (01:03:55): add ex boutdenoylum
+
+
+** FEBRUARY **
+10/02/09 (07:42:56): Merged release_0.8.0 changes r7524:7837 into the trunk (package self similarity).
+
+
+** MARCH **
+2010/03/10 (03:33:00): del matrices, update geometry, add examples walnut
+
+
+************
+*** 2014 ***
+************
+
+** JULY **
+
+2014/07/03: update to new mtg 

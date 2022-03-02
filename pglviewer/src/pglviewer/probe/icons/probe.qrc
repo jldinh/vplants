@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/image" >
+        <file>activate.png</file>
+        <file>manip.png</file>
+        <file>side_view.png</file>
+        <file>straighten_view.png</file>
+        <file>visible.png</file>
+    </qresource>
+</RCC>

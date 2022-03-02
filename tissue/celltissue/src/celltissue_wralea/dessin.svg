@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="dessin.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective3239"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.85764706"
+     inkscape:cx="170.70323"
+     inkscape:cy="503.82933"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1279"
+     inkscape:window-height="949"
+     inkscape:window-x="0"
+     inkscape:window-y="25" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       sodipodi:nodetypes="cssc"
+       id="path3273"
+       d="M 133.5048,523.0069 C 142.83265,520.67494 164.48515,501.74048 167.90124,496.18934 C 172.56516,488.61047 186.55693,412.23873 184.80796,406.40882 C 183.05899,400.57892 140.50069,401.16191 136.41975,401.16191"
+       style="fill:#ffff00;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:nodetypes="ccsssc"
+       id="path3271"
+       d="M 148.07956,526.50484 C 146.33058,548.07548 255.34978,547.49251 400.5144,547.4925 C 403.42936,540.49661 413.92319,525.33886 408.09328,520.09195 C 402.26338,514.84504 306.06996,514.84504 294.41015,514.26205 C 282.75034,513.67906 187.72291,504.35121 178.97805,507.84915 C 170.2332,511.34709 154.49246,523.58989 148.07956,526.50484 z"
+       style="fill:#ffff00;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       id="path3269"
+       d="M 415.67215,539.33063 C 546.84498,539.33062 564.9177,541.0796 554.42387,521.25793 C 546.262,516.59401 541.59808,510.7641 534.0192,510.7641 C 526.44033,510.7641 433.74486,512.51307 426.16598,518.92597 C 418.58711,525.33886 422.08505,528.83681 415.67215,539.33063 z"
+       style="fill:#ffff00;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       sodipodi:nodetypes="ccssc"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:nodetypes="csssc"
+       id="path3267"
+       d="M 559.08779,367.34847 C 552.09191,370.84641 536.93416,374.34435 536.35117,379.59126 C 535.76818,384.83818 544.23078,426.81834 543.93004,436.14133 C 543.34705,454.21404 534.0192,485.11253 533.43621,497.93831 C 532.99801,507.57857 546.262,498.52131 554.42387,503.76822"
+       style="fill:#ffff00;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:nodetypes="ccssssc"
+       id="path3265"
+       d="M 556.75583,360.93557 C 556.17283,331.78605 466.39232,340.53092 318.31276,339.36493 C 322.97668,346.36081 325.30864,358.60361 332.30453,360.93557 C 339.30041,363.26753 416.83813,360.35258 430.24691,360.35258 C 443.65569,360.35258 514.30913,359.94324 522.94239,362.10155 C 529.93827,363.85052 527.00093,370.26342 534.6022,370.26342 C 542.18107,370.26342 548.01098,363.26753 556.75583,360.93557 z"
+       style="fill:#ffff00;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:nodetypes="ccssc"
+       id="path3263"
+       d="M 307.81893,339.94792 C 137.00274,341.6969 122.42798,356.27165 135.83676,389.5021 C 153.90946,390.08509 165.56928,393.58303 181.31002,393.00004 C 197.8806,392.38632 299.65706,369.68043 306.65295,360.93557 C 313.64883,352.19071 309.5679,349.85875 307.81893,339.94792 z"
+       style="fill:#ffff00;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <image
+       y="606.30182"
+       x="115.9324"
+       id="image3241"
+       height="319"
+       width="425"
+       sodipodi:absref="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/vegetal cell.jpg"
+       xlink:href="vegetal cell.jpg" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#0000ff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 135.83676,389.5021 C 153.90946,390.08509 165.56928,393.58303 181.31002,393.00004 C 197.8806,392.38632 299.65706,369.68043 306.65295,360.93557 C 313.64883,352.19071 309.5679,349.85875 307.81893,339.94792"
+       id="path3245"
+       sodipodi:nodetypes="cssc"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#0000ff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 318.31276,339.36493 C 322.97668,346.36081 325.30864,358.60361 332.30453,360.93557 C 339.30041,363.26753 416.83813,360.35258 430.24691,360.35258 C 443.65569,360.35258 514.30913,359.94324 522.94239,362.10155 C 529.93827,363.85052 527.00093,370.26342 534.6022,370.26342 C 542.18107,370.26342 548.01098,363.26753 556.75583,360.93557"
+       id="path3247"
+       sodipodi:nodetypes="cssssc"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#0000ff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 559.08779,367.34847 C 552.09191,370.84641 536.93416,374.34435 536.35117,379.59126 C 535.76818,384.83818 544.23078,426.81834 543.93004,436.14133 C 543.34705,454.21404 534.0192,485.11253 533.43621,497.93831 C 532.99801,507.57857 546.262,498.52131 554.42387,503.76822"
+       id="path3249"
+       sodipodi:nodetypes="csssc"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#0000ff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 554.42387,521.25793 C 546.262,516.59401 541.59808,510.7641 534.0192,510.7641 C 526.44033,510.7641 433.74486,512.51307 426.16598,518.92597 C 418.58711,525.33886 422.08505,528.83681 415.67215,539.33063"
+       id="path3251"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#0000ff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 400.5144,547.4925 C 403.42936,540.49661 413.92319,525.33886 408.09328,520.09195 C 402.26338,514.84504 306.06996,514.84504 294.41015,514.26205 C 282.75034,513.67906 187.72291,504.35121 178.97805,507.84915 C 170.2332,511.34709 154.49246,523.58989 148.07956,526.50484"
+       id="path3253"
+       sodipodi:nodetypes="csssc"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#0000ff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 133.5048,523.0069 C 142.83265,520.67494 164.48515,501.74048 167.90124,496.18934 C 172.56516,488.61047 186.55693,412.23873 184.80796,406.40882 C 183.05899,400.57892 140.50069,401.16191 136.41975,401.16191"
+       id="path3255"
+       sodipodi:nodetypes="cssc"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#0000ff;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 197.05075,404.07686 C 189.47188,418.65162 172.56516,482.78057 180.72702,499.10429 C 185.15928,507.96882 250.68587,503.76822 261.1797,504.35121 C 271.67353,504.9342 380.69273,511.93008 391.76955,511.34709 C 402.84636,510.7641 515.13716,508.85337 523.52538,497.35533 C 538.47528,476.86297 541.72458,391.84231 524.69136,377.84229 C 507.10336,363.38629 340.02417,367.42651 320.06173,370.26342 C 300.134,373.0954 208.12757,395.332 197.05075,404.07686 z"
+       id="path3257"
+       sodipodi:nodetypes="cssssssc"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:nodetypes="csscczcc"
+       id="path3259"
+       d="M 396.45327,506.68317 C 406.81145,506.138 511.81725,504.35123 519.66127,493.59913 C 533.64128,474.43625 536.67978,394.93141 520.7516,381.83966 C 512.52813,375.08058 469.35646,372.64557 425.90725,372.23193 L 416.21179,414.00661 C 416.21179,414.00661 365.5841,404.88811 363.37505,432.46167 C 361.2588,458.87684 406.14873,463.74251 406.14873,463.74251 L 396.45327,506.68317 z"
+       style="fill:#00ff00;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:nodetypes="csscczccsc"
+       id="path3261"
+       d="M 203.44013,406.26886 C 196.32752,419.94018 180.46089,480.09397 188.12063,495.40584 C 192.28022,503.72089 253.77564,499.78067 263.6239,500.32753 C 273.47215,500.87437 375.78454,507.4366 386.17992,506.88975 L 393.56985,473.17308 C 393.56985,473.17308 345.45939,461.93815 353.15457,427.7966 C 360.78931,393.92318 408.3497,405.73975 408.3497,405.73975 L 415.73963,372.02308 C 372.13445,371.60816 328.25071,373.22087 318.88354,374.5514 C 300.18175,377.20784 213.83551,398.06607 203.44013,406.26886 z"
+       style="fill:#ff0000;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path3275"
+       sodipodi:cx="197.05075"
+       sodipodi:cy="366.76547"
+       sodipodi:rx="8.1618652"
+       sodipodi:ry="8.1618652"
+       d="M 205.21262,366.76547 A 8.1618652,8.1618652 0 1 1 188.88889,366.76547 A 8.1618652,8.1618652 0 1 1 205.21262,366.76547 z"
+       transform="matrix(1.7142857,0,0,1.7142857,-140.75054,-261.97535)"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path3277"
+       sodipodi:cx="197.05075"
+       sodipodi:cy="366.76547"
+       sodipodi:rx="8.1618652"
+       sodipodi:ry="8.1618652"
+       d="M 205.21262,366.76547 A 8.1618652,8.1618652 0 1 1 188.88889,366.76547 A 8.1618652,8.1618652 0 1 1 205.21262,366.76547 z"
+       transform="translate(240.19206,-17.48969)"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path3279"
+       sodipodi:cx="197.05075"
+       sodipodi:cy="366.76547"
+       sodipodi:rx="8.1618652"
+       sodipodi:ry="8.1618652"
+       d="M 205.21262,366.76547 A 8.1618652,8.1618652 0 1 1 188.88889,366.76547 A 8.1618652,8.1618652 0 1 1 205.21262,366.76547 z"
+       transform="translate(359.12209,68.79287)"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path3281"
+       sodipodi:cx="197.05075"
+       sodipodi:cy="366.76547"
+       sodipodi:rx="8.1618652"
+       sodipodi:ry="8.1618652"
+       d="M 205.21262,366.76547 A 8.1618652,8.1618652 0 1 1 188.88889,366.76547 A 8.1618652,8.1618652 0 1 1 205.21262,366.76547 z"
+       transform="translate(293.82716,159.73937)"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path3283"
+       sodipodi:cx="197.05075"
+       sodipodi:cy="366.76547"
+       sodipodi:rx="8.1618652"
+       sodipodi:ry="8.1618652"
+       d="M 205.21262,366.76547 A 8.1618652,8.1618652 0 1 1 188.88889,366.76547 A 8.1618652,8.1618652 0 1 1 205.21262,366.76547 z"
+       transform="matrix(1.5714286,0,0,1.5714286,-43.807563,-48.674928)"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path3285"
+       sodipodi:cx="197.05075"
+       sodipodi:cy="366.76547"
+       sodipodi:rx="8.1618652"
+       sodipodi:ry="8.1618652"
+       d="M 205.21262,366.76547 A 8.1618652,8.1618652 0 1 1 188.88889,366.76547 A 8.1618652,8.1618652 0 1 1 205.21262,366.76547 z"
+       transform="matrix(2,0,0,2,-237.86008,-283.98085)"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path3287"
+       sodipodi:cx="197.05075"
+       sodipodi:cy="366.76547"
+       sodipodi:rx="8.1618652"
+       sodipodi:ry="8.1618652"
+       d="M 205.21262,366.76547 A 8.1618652,8.1618652 0 1 1 188.88889,366.76547 A 8.1618652,8.1618652 0 1 1 205.21262,366.76547 z"
+       transform="matrix(2.4285715,0,0,2.4285715,-199.88242,-446.99596)"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path3289"
+       sodipodi:cx="197.05075"
+       sodipodi:cy="366.76547"
+       sodipodi:rx="8.1618652"
+       sodipodi:ry="8.1618652"
+       d="M 205.21262,366.76547 A 8.1618652,8.1618652 0 1 1 188.88889,366.76547 A 8.1618652,8.1618652 0 1 1 205.21262,366.76547 z"
+       transform="matrix(2.5714286,0,0,2.5714286,-46.139532,-500.55701)"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 211.04251,379.9577 L 258.84774,425.0312"
+       id="path3291"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3275"
+       inkscape:connection-end="#path3287"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 298.49109,443.59315 L 439.57475,442.68875"
+       id="path3293"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3287"
+       inkscape:connection-end="#path3289"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 455.31549,421.56656 L 439.28328,357.43765"
+       id="path3295"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3289"
+       inkscape:connection-end="#path3277"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 481.55006,441.01854 L 548.01098,436.15555"
+       id="path3297"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3289"
+       inkscape:connection-end="#path3279"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 548.01098,429.63699 L 445.40468,355.19713"
+       id="path3299"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3279"
+       inkscape:connection-end="#path3277"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 298.49109,431.91466 L 429.08095,354.13689"
+       id="path3301"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3287"
+       inkscape:connection-end="#path3277"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 429.08095,349.87009 L 211.04251,365.74664"
+       id="path3303"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3277"
+       inkscape:connection-end="#path3275"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 190.15339,380.75722 L 164.28833,433.22636"
+       id="path3305"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3275"
+       inkscape:connection-end="#path3285"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 172.56515,461.1851 L 253.01783,518.52904"
+       id="path3307"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3285"
+       inkscape:connection-end="#path3283"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 278.66941,527.60437 L 482.71605,526.54713"
+       id="path3309"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3283"
+       inkscape:connection-end="#path3281"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 496.73771,518.34298 L 550.31304,443.72021"
+       id="path3311"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3281"
+       inkscape:connection-end="#path3279"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 487.93057,518.34298 L 468.14128,463.54187"
+       id="path3313"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3281"
+       inkscape:connection-end="#path3289"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 439.57475,451.72846 L 278.66941,522.06434"
+       id="path3315"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3289"
+       inkscape:connection-end="#path3283"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 267.80312,514.84504 L 275.6411,463.54189"
+       id="path3317"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3283"
+       inkscape:connection-end="#path3287"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/celltissue/src/celltissue_wralea/path3319.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M 258.84774,444.6641 L 172.56515,448.77278"
+       id="path3319"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#path3287"
+       inkscape:connection-end="#path3285"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+  </g>
+</svg>

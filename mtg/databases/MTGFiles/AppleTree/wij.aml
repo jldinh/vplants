@@ -1,0 +1,391 @@
+##################################################
+#
+#     WIJICK Basis (101 Hybrid Trees)
+#
+#     Database: E. Costes  (costes@ensam.inra.fr)
+#
+##################################################
+
+amapmod_dir= "../../.."
+
+mtg = MTG(amapmod_dir + "databases/MTGFiles/AppleTree/wij.mtg")
+
+mtg10 = MTG(amapmod_dir + "databases/MTGFiles/AppleTree/wij10.mtg")
+
+plants = VtxList(Scale->1)
+shoots = VtxList(Scale->2)
+gus = VtxList(Scale->3)
+
+
+plant(_i) = (Foreach _v In plants: Select(_v, Index(_v)==_i))@1
+
+#############################################
+#
+#  Exploration functions
+#
+#############################################
+
+# 1. sampling function
+# number of internodes per entity
+
+innb(_x) = Size(Components(_x, Scale->4))
+
+# 2. Sample
+# set of growth units for a given order and year
+
+gus_o(_order, _year) = Foreach _x In gus : Select(_x, Order(_x) == _order And Index(Complex(_x)) == _year)
+
+# Iteration : construction of the sample of values
+
+sample_innb_gu(_order, _index) = Foreach _x In gus_o(_order, _index) : innb(_x)
+
+(# 
+gus_oc(_order, _year, _cycle) = Foreach _x In gus : \
+  Select(_x, Order(_x) == _order And \
+             Index(Complex(_x)) == _year And Index(_x) == _cycle)
+
+sample_innb_guc(_order, _index, _cycle) = Foreach _x In gus_oc(_order, _index, _cycle) : innb(_x)
+
+h90 = Histogram(sample_innb_guc(0,90,1))
+h91 = Histogram(sample_innb_guc(0,91,1))
+h92 = Histogram(sample_innb_guc(0,92,1))
+
+Plot(h90,h91,h92) 
+#)
+
+as_oy(_order, _year) = Foreach _x In shoots : \
+  Select(_x, Order(_x) == _order And Index(_x) == _year)
+
+sample_innb_as(_order, _index) = Foreach _x In as_oy(_order, _index) : innb(_x)
+
+h90 = Histogram(sample_innb_as(0,90))
+h91 = Histogram(sample_innb_as(0,91))
+h92 = Histogram(sample_innb_as(0,92))
+
+h290 = Cluster(h90,"Step",2)
+h291 = Cluster(h91,"Step",2)
+h292 = Cluster(h92,"Step",2)
+
+h91_1 = Histogram(sample_innb_as(1,91))
+h91_2 = Histogram(sample_innb_as(2,91))
+
+h291_1 = Cluster(h91_1,"Step",2)
+h291_2 = Cluster(h91_2,"Step",2)
+
+h92_1 = Histogram(sample_innb_as(1,92))
+h92_2 = Histogram(sample_innb_as(2,92))
+
+h292_1 = Cluster(h92_1,"Step",2)
+h292_2 = Cluster(h92_2,"Step",2)
+
+##############################
+#
+#  Histogram extraction
+#
+##############################
+
+# Histogram of the number of internodes for gus order 0 and year 90
+
+histo_nb_gu0_90 = Histogram(sample_innb_gu(0,90))
+Plot(histo_nb_gu0_90)
+
+h909192 = Foreach _i In [90:92] : Histogram(sample_innb_gu(0,_i))
+
+Plot(h909192@1, h909192@2, h909192@3)
+
+(# Detail des histogrammes fonction des ordres
+Foreach _a In [90:92] : Plot(Histogram(sample_innb_gu(0,_a)))
+Foreach _a In [90:92] : Plot(Histogram(sample_innb_gu(1,_a)))
+Foreach _a In [91:92] : Plot(Histogram(sample_innb_gu(2,_a)))
+#)
+
+h90_1 = ValueSelect(h909192@1, 0,31)
+h91_1 = ValueSelect(h909192@2, 0,31)
+h92_1 = ValueSelect(h909192@3, 0,31)
+
+Plot(h90_1, h91_1, h92_1)
+
+(#
+h90_2 = ValueSelect(h909192@1, 32,100)
+h91_2 = ValueSelect(h909192@2, 32,100)
+h92_2 = ValueSelect(h909192@3, 32,100)
+
+Plot(h90_2, h91_2, h92_2)
+#)
+
+# Are the two distributions identical ?
+ComparisonTest(W, h90_1, h91_1)
+
+# Mixtures
+
+mixt1 = Estimate(histo_nb_gu0_90, "MIXTURE", "NB", "NB")
+Plot(mixt1)
+
+###########################
+#
+#  Extraction of sequences
+#
+###########################
+
+is_branching(_x) = If Size(Sons(_x, EdgeType->'+')) != 0 Then 1 Else 0
+seq_branch(_plant) = Foreach _x In Trunk(_plant, Scale->4) : is_branching(_x)
+
+seq_wij = Sequences(Foreach _x In plants : seq_branch(_x))
+# Plot(seq_wij, "Intensity")
+
+
+#######################################
+#
+#  Geometric representation
+#
+#######################################
+
+
+p10 = plant(10)
+dr1 = DressingData(amapmod_dir + "databases/MTGFiles/AppleTree/wij.drf")
+
+####################################################
+# 1. Coarse representation (scale of annual shoots)
+####################################################
+
+f1 = PlantFrame(p10, Scale -> 2, DressingData-> dr1)
+Plot(f1)
+
+
+##################################################
+# 2. Measured diameters can be taken into account
+##################################################
+
+botdiam(_x) = Feature(_x,"diabase") 	# value on gus in 1/100 mm
+topdiam(_x) = Feature(_x,"diasom") 	# value on gus in 1/100 mm
+length(_x) = Feature(_x,"longueur") 	# value on gus in 1/10 mm
+nbfruit(_x) = Feature(_x, "nbfruit")  	# value on gus
+
+botdiam_as(_x) = botdiam(Components(_x)@1)
+topdiam_as(_x) = topdiam(Components(_x)@1)
+len_as(_x) = length(Components(_x)@1)
+
+botdiam_gu(_u) =  If Class(_u) == 'I' \
+             Then 13 \
+             Else If Father(_u) != Undef \
+                  Then If Class(Father(_u)) == 'I' \
+                       Then 4 \
+                       Else Undef \
+                  Else Undef
+topdiam_gu(_u) =  If Class(_u) == 'I' \
+             Then 13 \
+             Else If Size(Sons(_u,EdgeType->'<')) != 0 \
+                  Then If (Class(Sons(_u,EdgeType->'<')@1)=='I') \
+                       Then 4 \
+                       Else Undef \
+                  Else Undef 
+len_gu(_u) =  If Class(_u) == 'I' Then 4 Else Undef
+
+botdiam_in(_e) =  If Class(Complex(_e)) == 'I' \
+             Then 2000 \
+             Else If Father(_e) != Undef \
+                  Then If Class(Complex(Father(_e))) == 'I' \
+                       Then 400 \
+                       Else Undef \
+                  Else Undef
+topdiam_in(_e) =  If Class(Complex(_e)) == 'I' \
+             Then 2000 \
+             Else If Size(Sons(_e,EdgeType->'<')) != 0 \
+                  Then If (Class(Complex(Sons(_e,EdgeType->'<')@1))=='I') \
+                       Then 400 \
+                       Else Undef \
+                  Else Undef
+len_in(_e) =  If Class(Complex(_e)) == 'I' Then 400 Else Undef
+
+
+# Multiscale functions
+
+bottom_diameter(_x) = \
+  Switch Scale(_x)  \
+  Case 2 : botdiam_as(_x) \
+  Case 3 : botdiam_gu(_x) \
+  Case 4 : botdiam_in(_x) \
+  Default : Undef
+
+top_diameter(_x) = \
+  Switch Scale(_x) \
+  Case 2 : topdiam_as(_x) \
+  Case 3 : topdiam_gu(_x) \
+  Case 4 : topdiam_in(_x) \
+  Default : Undef
+
+len(_x) = \
+  Switch Scale(_x) \
+  Case 2 : len_as(_x) \
+  Case 3 : len_gu(_x) \
+  Case 4 : len_in(_x) \
+  Default : Undef
+
+alpha(_x) = \
+  Switch Scale(_x) \
+  Case 3 : (If Class(Father(_x)) == 'I' Then 5 Else Undef) \
+  Default : Undef
+
+
+# Geometry (top and bot diam, length) is only measured at the scale of shoots 
+
+f2 = PlantFrame(p10, Scale->2, DressingData-> dr1, Length->len, \
+                TopDiameter->top_diameter, BottomDiameter -> bottom_diameter)
+f3 = PlantFrame(p10, Scale->3, DressingData-> dr1, Length->len, \
+                TopDiameter->top_diameter, BottomDiameter->bottom_diameter)
+f4 = PlantFrame(p10, Scale->4, DressingData-> dr1, Length->len, \
+                TopDiameter->top_diameter, BottomDiameter->bottom_diameter)
+
+Plot(f2) # annual shoots
+Plot(f3) # growth units
+Plot(f4) # internodes
+
+#######################################
+#
+#  Predicates 
+#
+#######################################
+
+has_geom(_x) = bottom_diameter(_x) != Undef Or top_diameter(_x) != Undef Or len(_x) != Undef 
+has_allgeom(_x) = bottom_diameter(_x) != Undef And top_diameter(_x) != Undef And len(_x) != Undef 
+has_fruits(_x) = nbfruit(_x) != Undef
+
+#######################################
+#
+#  Coloring plants
+#
+#######################################
+
+color_order(_v) = \
+  Switch Order(_v) \
+  Case 0 : Green \
+  Case 1 : Red \ 
+  Case 2 : Blue \
+  Case 3 : Yellow \ 
+  Case 4 : Violet \
+  Default : White
+
+color_fruits(_x) = \
+  If Class(Complex(_x, Scale->3)) == 'I' \
+  Then \
+    Switch Index(Complex(_x, Scale->2)) \
+    Case 92 : LightBlue \
+    Case 93 : Violet \
+    Default : Black \
+  Else Green 
+
+color_index(_x) =  \
+  Switch Index(Complex(_x, Scale->2)) \
+  Case 90 : Black \
+  Case 91 : Green \
+  Case 92 : Red \
+  Case 93 : Violet \
+  Default : Yellow
+                  
+color_bourse_index(_x) = \ 
+  If  Class(Complex(_x, Scale->3)) == 'I' \
+  Then Switch Index(Complex(_x, Scale->2)) \
+       Case 90 : LightBlue\
+       Case 91 : Green \
+       Case 92 : Red \
+       Case 93 : Violet \
+       Default : Yellow \
+  Else Black
+                  
+color_class(_x) = \
+  If Class(Complex(_x, Scale->3)) == 'I' \
+  Then Violet \
+  Else \
+    Switch Class(_x) \
+    Case 'B' : Black\
+    Case 'C' : Green \
+    Case 'E' : Red \
+    Default : Yellow
+
+color_bourse_order(_v) = \
+  If Class(Complex(_v, Scale->3)) == 'I' \
+  Then Switch Order(_v) \
+       Case 0 : Green \
+       Case 1 : Red \ 
+       Case 2 : Blue \ 
+       Case 3 : Violet \ 
+       Default : Yellow \
+  Else Black
+
+color_height(_x) =  \
+  If Scale(_x) >2 \
+  Then Switch Height(Complex(_x, Scale->3)) \
+       Case 0 : Yellow\
+       Case 1 : Violet \
+       Case 2 : LightBlue \
+       Case 3 : Red \
+       Case 4 : Green \
+       Case 5 : Blue \
+       Default : Black \
+  Else Black
+
+color_measured_shoots(_x) = \
+  If has_fruits(Complex(_x, Scale->3))\
+  Then Red \
+  Else \
+    If has_geom(Complex(_x, Scale->2)) \
+    Then Green \
+    Else Black
+
+
+Plot(f4, Color -> color_fruits)    
+Plot(f4, Color -> color_order)
+Plot(f4, Color -> color_index)
+Plot(f4, Color -> color_class)
+Plot(f4, Color -> color_height)
+Plot(f4, Color -> color_bourse_order)    
+Plot(f4, Color -> color_bourse_index)    
+Plot(f4, Color -> color_measured_shoots)
+
+###################################
+#
+#  Displaying a set of plants
+#
+###################################
+
+
+i_in_ancestors(_x) = Size(Foreach _v In Ancestors(_x) : Select(_v, _v != _x And Class(_v) == 'I')) != 0 
+ii(_x) = If Class(Complex(_x)) == 'I' And Index(Complex(_x, Scale -> 2)) == 93 \
+         Then If i_in_ancestors(Complex(_x)) Then True Else False \
+         Else False
+i92(_x) = Class(Complex(_x)) == 'I' And Index(Complex(_x, Scale -> 2)) == 92 
+i93(_x) = Class(Complex(_x)) == 'I' And Index(Complex(_x, Scale -> 2)) == 93
+color_II(_x) = If ii(_x) \
+               Then Red \ 
+               Else If i92(_x) Then Yellow Else If i93(_x) Then Violet Else Green
+
+color_bourse_regul(_x) = \
+  If  Class(Complex(_x, Scale->3)) == 'I' \
+  Then If ii(_x) \
+       Then Red \ 
+       Else If i92(_x) \
+            Then Yellow \
+            Else If i93(_x) \
+                 Then Violet \
+                 Else Black \
+  Else Green
+
+# Virtual orchard : 3D Visualization of an orchard of apple trees
+
+inflo_ram(_u) = (Size(Foreach _v In Descendants(_u) : Select(_u, _v != _u And Class(_v) == 'I')) != 0)
+
+I92 = Foreach _u In gus : Select(_u, Index(Complex(_u)) == 92 And Class(_u) == 'I')
+I93 = Foreach _u In gus : Select(_u, Index(Complex(_u)) == 93 And Class(_u) == 'I')
+pI92 = Sort(ToSet(Foreach _u In I92 : Select(Complex(_u,Scale->1), True)))
+pI93 = Sort(ToSet(Foreach _u In I93 : Select(Complex(_u,Scale->1), True)))
+pII = Sort(ToSet(Foreach _u In I92 : Select(Complex(_u,Scale->1), inflo_ram(_u) == True)))
+
+f_pII = PlantFrame(pII, Scale->4, DressingData-> dr1, Length->len, TopDiameter->top_diameter, BottomDiameter->bottom_diameter, TrunkDist->10000)
+
+# particular coloring of fruit locations 92 (yellow), 93 fruit (violet)
+# location of consecutive fruiting (92 and 93) (red)
+
+Plot(f4, Color -> color_bourse_regul)    
+Plot(f_pII, Color -> color_bourse_regul)
+
+

@@ -1,0 +1,84 @@
+# test du calcul des longueurs dans le cas d'un MTG ayant
+# des coordonnees
+
+CODE:	FORM-A			
+
+
+CLASSES:				
+SYMBOL	SCALE	DECOMPOSITION	INDEXATION	DEFINITION
+$	0	FREE	FREE	IMPLICIT
+P 	1	CONNECTED	FREE	EXPLICIT
+U 	2	FREE	FREE	EXPLICIT
+E 	3	NONE	FREE	EXPLICIT
+
+DESCRIPTION :				
+LEFT	RIGHT	RELTYPE	MAX	
+
+U	U	<	1	
+U	U	+	?
+E	E	<	1	
+E	E	+	?
+
+
+
+FEATURES:			
+NAME	TYPE		
+
+XX	REAL		
+YY	REAL		
+ZZ	REAL		
+AA	REAL
+BB	REAL
+CC	REAL
+TopDia	REAL
+BotDia	REAL
+Length	INT
+
+MTG:
+
+TOPO			XX	YY	ZZ	AA	BB	CC	TopDia	BotDia	Length	
+
+# branche avec des coordonnees de temps em temps
+
+/P1/U1			0	0	0				10
+^/E1
+^<E2			0	0	20				10
+	# Branche sans coordonnees
+	+U1/E1					
+	^<E2
+	^<E5
+	^<E15
+	^<E17
+	^<E30
+	^<E39	
+^<E3<<E20			0	0	100					
+	# Branche dont le vertex initial a un index plus petit que celui du porteur
+	# avec un seul vertex renseigne
+	+U1/E1					
+	^<E2
+	^<E5
+	^<E15		20	0	120
+	^<E17
+	^<E30
+	^<E39	
+^<E21<<E25			0	0	150					
+	# Branche dont le vertex initial a un index plus petit que celui du porteur
+	+U1/E1					
+	^<E27
+	^<E35
+	^<E45		20	0	220
+	^<E47
+	^<E50		30	0	230		
+	^<E59	
+^<E26<<E27			0	0	250					
+	# Branche dont le vertex initial a un index plus petit que celui du porteur
+	+U1/E28					
+	^<E29
+	^<E35
+	^<E45		20	0	320
+	^<E47
+	^<E10		30	0	330	# decroissance de l'index	
+	^<E19	
+
+
+

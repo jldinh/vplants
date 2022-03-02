@@ -1,0 +1,16 @@
+Source: vplants-tissue-tissueedit
+Maintainer: Christophe Pradal <christophe.pradal@cirad.fr>
+Section: python
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3~), python-setuptools (>= 0.6b3), debhelper (>= 7),  python-openalea.deploy, pyqt4-dev-tools
+
+
+Package: python-vplants.tissueedit
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-openalea,  python-vplants.plantgl, python-vplants.celltissue, python-openalea.pglviewer, python-vplants.tissueedit
+Provides: ${python:Provides}
+Description: basic functions to deal with tissue edition
+ .
+ contains a set of functions that manipulate tissue
+ properties
+ .

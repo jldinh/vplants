@@ -1,0 +1,31 @@
+/*************************************************************************
+ * reech4x4.c -
+ *
+ * $Id: reech4x4.end,v 1.2 2001/12/10 08:45:17 greg Exp $
+ *
+ * Copyright©INRIA 1999
+ *
+ * AUTHOR:
+ * Gregoire Malandain (greg@sophia.inria.fr)
+ * 
+ * CREATION DATE: 
+ *
+ *
+ * ADDITIONS, CHANGES
+ *	
+ *	
+ *	
+ *
+ */
+
+
+void Reech4x4_verbose ( )
+{
+  _VERBOSE_ = 1;
+}
+
+void Reech4x4_noverbose ( )
+{
+  _VERBOSE_ = 0;
+}
+

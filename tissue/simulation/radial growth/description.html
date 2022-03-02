@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="description_files/style.css" />
+  <link rel="stylesheet" type="text/css" href="description_files/SyntaxHighlighter.css" />
+  <title>growth</title>
+</head>
+<body>
+<div id="info">
+	<ul>
+	<li> version : 1.0.0 </li>
+	<li> license : Cecill-C </li>
+	<li> authors : Jerome Chopard </li>
+	<li> url : <a href="www.vplants.com/tissue/simulation/radial_growth">www.vplants.com/tissue/simulation/radial_growth</a> </li>
+	<li> institutes : INRIA </li>
+	</ul>
+</div>
+<div id="title">Tissue growth simulation</div>
+<div id="summary">
+This package is an example package that perform both a global expansion of the tissue and the division of cells
+</div>
+<div id="dependencies">
+Direct dependencies :
+	<ul>
+	<li svn="6666"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:plantgl:plantgl">plantgl</a></li>
+	<li svn="1000"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:celltissue">celltissue</a></li>
+	<li svn="1000"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:tissueshape">tissueshape</a></li>
+	<li svn="6666"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:pglviewer">pglviewer</a></li>
+	</ul>
+</div>
+<div id="description">
+	<div id="general">
+	<h1>Description</h1>
+	This package provide a complete simple description of tissue growth. Tissue growth is a combination of several processes mainly tissue expansion and cell division. Each of these processes have been demonstrated individualy in other tutorials (<a href="www.vplants.com/tissue/simulation/global_expansion">www.vplants.com/tissue/simulation/global_expansion</a> and <a href="www.vplants.com/tissue/simulation/radial_growth">www.vplants.com/tissue/simulation/radial_growth</a>). Here a simple global expansion field is used to increase the size of the cells. Then, when a cell reach a threshold volume, it is divided in two daughter cells. The division plan pass through the centroid of the cell and is oriented perpendicularly to the main axis of the cell.
+	<img src="description_files/field_division.png" alt="expansion field cell division" />
+	</div>
+	<div id="algo">
+	<h1>Algorithms</h1>
+	
+	<h2>Expansion</h2>
+	Since the geometry of the tissue is contained in the topological description of the mesh, tissue expansion deals with the modification of points positions only. Here a simple radial expansion is used. Point speed is a linear function of the distance of this point to a given center.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	expand_center = Vector2()
+	expand_speed = 0.1 #(mum.s-1)
+	
+	def expand (time, dt) :
+		for pid,vec in pos.iteritems() :
+			pos[pid] = vec + (vec-expand_center)*expand_speed*dt
+	</textarea>
+	With this definition, all the parts of the tissue grow in size at the same speed.
+	
+	<h2>Cell division</h2>
+	Cell division occurs when the volume of a cell is higher than a given threshold. Since the simulation is 2D, here, cell volume is the surface of the polygone representing the cell.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	from openalea.tissueshape import face_surface_2D
+	Vmax = 1.
+	shrink_factor = 0.7
+	
+	def divide () :
+		for cid in list(mesh.wisps(2)) :
+			V = face_surface_2D(mesh,pos,cid)
+			if V > Vmax :
+				divide_cell(cid,shrink_factor)
+	</textarea>
+	The effective division is performed by the "divide_cell" function defined directly in the simulation file. This function is directly documented in the script. Using a local function simplify the processus of maintaining the properties associated with the tissue. In this tutorial, the only property is the age of each cell.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	def divide_cell (cid, shrink_factor) :
+		.
+		.
+		#create daughter cells
+		daughter = [mesh.add_wisp(2) for i in xrange(2)]
+		for did in daughter :#update cell property
+			cell_age[did] = 0.
+		.
+		.
+		#remove old cell
+		t.remove_element(cid)
+		del cell_age[cid]#update cell property
+		.
+		.	
+	</textarea>
+	
+	<h2>Update properties</h2>
+	In this simulation, the only considered property is the age of each cell since it's creation. This age is updated at each step.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	def update_age (time, dt) :
+		for cid,age in cell_age.iteritems() :
+			cell_age[cid] = age + dt
+	</textarea>
+	
+	<h2>Simulation loop</h2>
+	All the actions are chained in a loop, and each step is repeted to run the simulation.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	simu = InfiniteSimu(0.,0.1)
+	simu.add_process(expand,"expand")
+	simu.add_process(divide,"divide")
+	simu.add_process(update_age,"update_age")
+	simu.add_process(redraw,"redraw")
+	</textarea>
+	</div>
+	<div id="exec">
+	<h1>Simulation</h1>
+	All above operations have been written in <a href="simu.py">simu.py</a>, the main simulation file. First launch <a href="create_tissue.py">create_tissue.py</a> to create a single hexagonal cell tissue the first time.
+	<div class="command">
+	user@computer:$ python create_tissue.py
+	</div>
+	You must then launch <a href="initialize_tissue.py">initialize_tissue.py</a> to add the required properties to the tissue.
+	<div class="command">
+	user@computer:$ python initialise_tissue.py
+	</div>
+	Last launch <a href="simu.py">simu.py</a> to display the evolution of the tissue during growth.
+	<div class="command">
+	user@computer:$ python simu.py
+	</div>
+	<img src="description_files/growth.png" alt="tissue growth" />
+	</div>
+	<div id="exercice">
+	<h1>Exercices</h1>
+	To go further :
+	<ul>
+		<li>Change the value of the shrinking factor to observe the modification of the overall shape of each cell</li>
+		<li>Change the expansion field, either by playing with the constants (expand_center,expand_speed) or by defining a new type of expansion field (change expand(time,dt) function)</li>
+		<li>You can change the initial tissue for another one. A good start might be to use the one obtained with the <a href="www.vplants.com/tissue/simulation/tissue drawing">tissue drawing</a> tutorial. Do not forget to rerun <a href="initialize_tissue.py">initialize_tissue.py</a> to add the required properties to this new tissue</li>
+	</ul>
+	</div>
+</div>
+<div id="bugs_disclaimer">
+<h1>Bugs</h1>
+If you experience bugs, feel free to report them on <a href="http://gforge.inria.fr/tracker/?atid=2598&group_id=79&func=browse">gforge</a> or send a mail to the author. Thanks
+</div>
+<div id="files">
+<h1>files</h1>
+<ul>
+	<li><a href="simu.py">simu.py</a> : main simulation file </li>
+	<li><a href="simu_view.py">simu_view.py</a> : description of the visualization </li>
+	<li><a href="simu_gui.py">simu_gui.py</a> : description of user interaction with the simulation </li>
+	<li><a href="initialize_tissue.py">initialize_tissue.py</a> : add the required set of properties to the tissue </li>
+	<li><a href="create_tissue.py">create_tissue.py</a> : create <a href="tissue.zip">tissue.zip</a> from scratch </li>
+	<li>description.html : this file </li>
+	<li>description_files dir : location of external files for this html page </li>
+</ul>
+</div>
+
+<!-- syntax highlighting -->
+<script language="JavaScript" src="description_files/shCore.js" type="text/javascript"></script>
+<script language="JavaScript" src="description_files/shBrushPython.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">dp.SyntaxHighlighter.HighlightAll('code');</script>
+
+</body>
+</html>

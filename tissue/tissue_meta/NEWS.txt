@@ -1,0 +1,6 @@
+This package is used to simplify the installation of all the tissue packages.
+
+It specifies:
+  - the tissue packages, 
+  - their dependencies, 
+  - and add an icon for the tissue package in Visualea.

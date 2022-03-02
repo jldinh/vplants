@@ -1,0 +1,43 @@
+# Dressing file for oak trees
+  SMBPath = /home/chris/devlp/AMAPmod/databases/SMBFiles
+
+  SMBModel internode = nentn105
+  SMBModel leaf = fchene
+
+ # For real symbols
+
+  Class A = internode
+  Class B = internode
+  Class R = internode
+  Class D = internode
+  Class W = internode
+  Class U = internode
+  Class F = internode
+  Class C = internode
+  Class L = leaf
+
+
+  DefaultAlpha = 30
+  DefaultTeta = 0
+  DefaultPhi = 90
+  DefaultPsi = 180
+
+# For virtual symbols
+  LeafClass = L
+
+  Alpha = Relative
+  LeafAlpha = 59.7
+  LeafBeta = 144
+  LeafLength = 7.5
+  LeafTopDiameter = 3.7
+  LeafBottomDiameter = 3.7
+
+# For a vertical Trunk: DefaultTrunkCategory = -1
+  DefaultTrunkCategory = -1
+  Phyllotaxy = 144
+
+  DiameterUnit = 1
+  LengthUnit = 1
+
+  DefaultDistance = 200
+  NbPlantsPerLine = 5

@@ -1,0 +1,34 @@
+# -*-python-*-
+
+import os
+bn = os.path.basename
+
+Import( "env" )
+
+exe_env = env.Clone()
+
+# Import/Export symbols for windows
+if exe_env['compiler'] == 'mingw':
+    LINKFLAGS=["-enable-stdcall-fixup",
+               "-enable-auto-import",
+               "-enable-runtime-pseudo-reloc",
+               "-s"]
+    exe_env.AppendUnique(LINKFLAGS=LINKFLAGS)
+
+
+sources1 = ["reech3d.c"]
+programs1 = "reech3d"
+
+sources2 = ["recfilters.c"]
+programs2 = "recfilters"
+
+#sources = ["morpho.c"]
+#programs = "morpho"
+
+LIBRARIES = list( exe_env['LIBS'] )
+LIBRARIES.extend( ["basic", "io", "vt", "m"] )
+
+
+exe_env.ALEAProgram(programs1, sources1, LIBS=LIBRARIES)
+exe_env.ALEAProgram(programs2, sources2, LIBS=LIBRARIES)
+

@@ -1,0 +1,73 @@
+# -*-python-*-
+#import os, re
+
+Import( "env" )
+
+lib_env= env.Clone()
+
+includes= lib_env.ALEAGlob('*.h')
+lib_env.ALEAIncludes( "fractalysis/engine", includes )
+
+dirs=lib_env.ALEAGlob('SConscript','*') 
+
+
+# 1. Select and install the headers
+SConscript( dirs, exports = { "env" : lib_env } )
+
+ 
+#include_dir = str(env.Dir( "../include" ).srcnode())
+#h_pattern = re.compile( r".*\.(h|hpp)$" )
+#includes = [ "../include/%s" % ( s, ) for s in os.listdir(include_dir) if h_pattern.match( s ) ]
+ 
+#env.ALEAIncludes( "fractalysis", includes )
+ 
+# Select recursively the sources
+sources= lib_env.ALEAGlob('*.cpp',dir = '*')
+sources+= lib_env.ALEAGlob('*.cpp')
+
+
+# Add defines to export symbols on Windows
+DEFINES= list(env['CPPDEFINES'])
+DEFINES.append('BCM_MAKEDLL')
+
+# Link with the following libraries
+LIBRARIES= list(lib_env['LIBS'])
+LIBRARIES.extend(['pgltool','pglmath','pglsg', 'pglgui', 'pglalgo']) #with qt3, pglgui3 instead of pglgui
+
+lib_env.ALEALibrary( "engine",
+                     sources, 
+                     CPPDEFINES = DEFINES, 
+                     LIBS = LIBRARIES )
+
+
+# 2. Build shared libraries
+
+# WARNING: we are waiting a proper PLANTGL installation in OpenAlea.
+# Before that we need to write a little hack....
+# To be corrected as soon as ...
+
+# 2.1 PlantGL ( a.k.a. GEOM, TOOLS ) include path
+# 2.2 PlantGL ( a.k.a. GEOM, TOOLS ) lib path
+#amapmod_dir= '/home/ddasilva/dev/AMAPmod'
+#geom_libdir=amapmod_dir+"/build-linux/lib"
+#amapmod_src= amapmod_dir+"/src/"
+#tools_dir= amapmod_src+"Tools/"
+#geom_dir= amapmod_src+"GEOM/"
+#
+#libpath= [ geom_libdir]
+#libs= [ 'tools','geom','geomext','qhull','octree']
+#inc= [ amapmod_src, tools_dir, geom_dir ]
+#
+#env.AppendUnique( CPPPATH= inc )
+#env.AppendUnique( LIBPATH= libpath )
+#env.AppendUnique( LIBS= libs )
+#env.Append( RPATH= geom_libdir )
+
+# Build first library
+#sources= "pgl_compute.cpp"
+#target= "pglcompute"
+ 
+ 
+# Build the library
+#lib = env.ALEALibrary( target, sources, CPPDEFINES=DEFINES )
+

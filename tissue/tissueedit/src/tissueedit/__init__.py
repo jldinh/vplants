@@ -1,0 +1,5 @@
+from prop_edit import FilePropEditGUI,TissuePropEditGUI
+from scalar_prop_edit import ScalarPropEditGUI
+#from tensorial_prop_edit import TensorialPropEditGUI
+
+

@@ -1,0 +1,80 @@
+#-----------------------------------------------------------------------#
+#
+# Author : Fred Boudon
+# Computation of a Macroscopic Geometry from a microscopic one.
+#
+#-----------------------------------------------------------------------#
+# Path Variable.
+
+mtg_dir = AMAPMOD_DIR + "/databases/MTGFiles/AppleTree/"
+
+#-----------------------------------------------------------------------#
+# Computation of a representation of 
+# an appletree at the scale of internodes.
+
+g = MTG(  mtg_dir +"agraf.mtg")
+dr = DressingData("agraf.drf")
+f = PlantFrame(1, Scale->3, DressingData->dr)
+lt = Plot(f)
+
+#-----------------------------------------------------------------------#
+# Give all the possible geometric class name for quotiented geometry.
+# Except NONE which mean no geometry. B* mean Bounding Model.
+# It depend only of AMAPmod version.
+
+Extract(lt,Info->ClassName)
+
+# Give all the possible appearances for quotiented geometry.
+# It depend of the dressing data.
+
+Extract(lt,Info->Appearance)
+
+#-----------------------------------------------------------------------#
+# Computation of geometry at a macro scale.
+# The groups use are those defined by the scale 2.
+
+Plot(lt,Quotient->2) 
+
+#-----------------------------------------------------------------------#
+# Display only macroscopic geometry with ellipoid.
+# Possible values : MacroOnly, MicroOnly, All, HIDE
+
+Plot(lt,Quotient->2, Display->MacroOnly) 
+
+#-----------------------------------------------------------------------#
+# Use of bounding SPHERE.
+
+geom(_m) =  "BSPHERE"
+
+Plot(lt,Quotient->2,QuotientGeometry->geom, Display->MacroOnly) 
+
+
+#-----------------------------------------------------------------------#
+# New scale : Function to compute a quotiented geometry
+# The groups use are those defined by the quotient function :
+# The quotien function give true for al roots of the new groups.
+
+dist = 50
+
+tagg(_e) = If (Height(_e) == dist) Then True \
+ Else False 
+
+geom(_m) = "BELLIPSOID"
+
+Plot(lt,Quotient->tagg,QuotientGeometry->geom,Display->MacroOnly) 
+
+#-----------------------------------------------------------------------#
+
+# Definition of the appearance for the quotiented geometries.
+
+app(_m) = If(Height(_m) == dist) Then "mat_other" Else "mat_extrusion" 
+
+# Some appearances named mat_other and mat_extrusion
+# must be defined in a geom file
+# read in the dressing file in section :
+# Appearance = mat.geom
+
+Plot(lt,Quotient->tagg,QuotientGeometry->geom, \
+  QuotientAppearance->app,Display->MacroOnly) 
+
+#-----------------------------------------------------------------------#

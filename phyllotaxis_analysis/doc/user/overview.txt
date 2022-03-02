@@ -1,0 +1,3 @@
+Phyllotaxis Analysis is a package to analyze perturbations in measured sequences of divergence angles. More precisely, this package provides methods to detect perturbations which are due to permutations of successive organs.
+
+

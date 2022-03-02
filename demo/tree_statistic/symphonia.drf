@@ -1,0 +1,11 @@
+SMBPath = .
+SMBModel entrenoeud = nentn105
+SMBModel Feuille = feui113 # feuipom
+SMBModel Fruit = nentn105
+Class e = entrenoeud
+Class A = entrenoeud
+Class U = entrenoeud
+LeafClass = e
+LeafAlpha = 45 
+LeafBeta = 180 
+Phyllotaxy = 107

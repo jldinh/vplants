@@ -1,0 +1,137 @@
+#
+# Log File : July 20 2001 
+# Author : Fred Boudon
+#
+# This AML code test the Linetree and its functions
+# such as computing macroscopic geometry.
+#
+
+amapmod_dir = "../../../"
+home = amapmod_dir + "databases/MTGFiles/AppleTree/"
+
+
+#
+# Load an mtg
+#
+g  = MTG(home + "agraf.mtg")
+
+#
+# Load a Dressing File
+#
+dr1 = DressingData( home + "agraf.drf")
+
+#
+# Compute a Geometric Representation.
+#
+f1 = PlantFrame(1, Scale->3, DressingData->dr1)
+
+# 
+# Plot the Linetree
+#
+lt = Plot(f1)
+
+#############################################################
+# Fonctions du LineTree
+#############################################################
+
+#
+# Save The LineTree in AMAP format
+#
+#Save(lt,Format->AMAP,File->pomdig)
+
+#
+# Save The LineTree in GEOM format
+#
+#Save(lt,Format->GEOM,File->pomdig.geom)
+
+#
+# Save The LineTree in PovRay format
+#
+#Save(lt,Format->PovRay,File->pomdig.pov)
+
+#
+# Save The LineTree in VEGEStar format
+#
+#Save(lt,Format->VGStar,File->pomdig.pov)
+
+#
+# Display the Linetree
+#
+#Display(lt)
+
+#############################################################
+# Fonctions Macroscopiques du LineTree
+#############################################################
+
+#
+# Compute a Geometry at scale 2 using Geometry compute at scale 3.
+#
+#Plot(lt,Quotient->2)
+
+#
+# This function define the geometric class to use.
+#
+#geomclass(_x) = "CYLINDER"
+
+#Plot(lt,Quotient->2, QuotientGeometry->geomclass)
+
+
+#
+# This function define the appearance to use.
+#
+#app(_x) = "BLUE"
+
+#
+# Compute a Geometry at scale 2 using Geometry compute at scale 3,
+# the geometric class defined in geomclass and the appearance define in app.
+#
+#Plot(lt,Quotient->1, QuotientGeometry->geomclass ,QuotientAppearance->app)
+
+
+#############################################################
+# Fonction de Quotientement du LineTree
+#############################################################
+
+#
+# This function is a quotientement predicat.
+#
+trunk(_e) = If Order(_e)!=0 Then \
+   If Order(Father(_e)) == 0 Then True \
+   Else False \
+ Else \
+   If Father(_e) == Undef Then True \
+   Else False
+
+#
+# Compute The geometry of the quotiented MTG
+#
+Plot(lt,Quotient->trunk,View->All)
+
+graph = Extract(lt,Data->QuotientedGraph)
+
+quotient_root = Foreach _i In [1:Size(graph)] : Select((graph@_i)@1,Size(graph@_i)>300)
+
+new_quotiented_root(_e) = Select(_e,Pos(quotient_root,_e)!=Undef Or Father(_e)==Undef)
+
+Plot(lt,Quotient->new_quotiented_root)
+
+geomclass(_x) = If (_x == 3) Then "CONVEXHULL" \
+  Else "ELLIPSOID"
+
+Plot(lt,Quotient->new_quotiented_root,QuotientGeometry->geomclass,View->MacroOnly)
+
+#
+# Using a new Geometric Class
+#
+#Plot(lt,Quotient->trunk,QuotientGeometry->geomclass)
+
+geomclass(_x) = "CYLINDER"
+
+etage(_e) = If Order(_e)!=0 Then  False \
+ Else \
+   If Rank(_e) Mod 50 == 0 Then True \
+   Else False
+
+Plot(lt,Quotient->etage,QuotientGeometry->geomclass,View->All)
+
+Display(lt,View->MacroOnly)

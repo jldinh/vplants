@@ -1,0 +1,50 @@
+# Dressing file for apple trees
+SMBPath = .
+
+SMBModel entrenoeud = nentn105
+SMBModel pomme = pommecyl
+
+BranchPattern applebranch  = wij.crv
+
+Class U = entrenoeud
+Class I = entrenoeud
+Class B = entrenoeud
+
+Class T = entrenoeud
+Class Y = entrenoeud
+Class P = pomme
+
+# For virtual symbols
+
+FruitClass = P
+LeafClass = Z
+
+LeafAlpha = 80 
+LeafBeta  = 144
+LeafLength = 50
+LeafTopDiameter = 50
+LeafBottomDiameter = 50
+
+# For branch forms 
+
+#Form 1 = apple22 # form 1 n'est utilise que si DefaultTrunkCategory = 1
+#Form 1 = apple12 # tronc de la plante 100
+
+#Form 2 = apple22  # axes retombants
+#Form 2 = apple222 # axes retombants fortement
+#Form 2 = apple23  # axes plagiotropes 
+#Form 3 = apple2
+
+Form 1 = apple2 # axes 2 ortho
+
+# For a vertical Trunk: DefaultTrunkCategory = -1
+DefaultTrunkCategory = -1
+
+Phyllotaxy = 144
+
+DiameterUnit = 1000
+LengthUnit = 100
+
+DefaultDistance = 10000
+NbPlantsPerLine = 5
+

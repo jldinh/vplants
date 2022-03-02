@@ -1,0 +1,9 @@
+This meta package provides a set of libraries dedicated to tissue simulation and analysis. It is composed of different sub-packages and propose:
+ - a core data structure called tissue in `celltissue <../../../../celltissue/doc/_build/html/user/autosum.html>`_ package that extend data structures in `openalea.container <http://openalea.gforge.inria.fr/doc/vplants/container/doc/_build/html/contents.html>`_
+ - a set of algorithms to deal with tissue geometry in `tissueshape <../../../../tissueshape/doc/_build/html/user/autosum.html>`_
+ - some functions and objects to display tissues in `tissueview <../../../../tissueview/doc/_build/html/user/autosum.html>`_ in conjonction with both `vplants.plantgl <http://openalea.gforge.inria.fr/doc/vplants/PlantGL/doc/_build/html/contents.html>`_ and `openalea.pglviewer <http://openalea.gforge.inria.fr/doc/openalea/pglviewer/doc/_build/html/contents.html>`_
+ - algorithms dedicated to tissue simulation in `growth <../../../../growth/doc/_build/html/user/autosum.html>`_. Other means to simulate tissue may be found in external packages (e.g. `numpy <http://numpy.scipy.org/>`_ to integrate ode or `openalea.mechanics <http://openalea.gforge.inria.fr/doc/vplants/mechanics/doc/_build/html/contents.html>`_ to compute mechanical state of a tissue)
+ - ways to analyse tissue structure and properties from real confocal images in `vmanalysis <../../../../vmanalysis/doc/_build/html/user/autosum.html>`_
+
+
+A good way to start your own tissue simulations is to follow the tutorials that can be found in :ref:`tissue_user`

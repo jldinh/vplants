@@ -1,0 +1,41 @@
+#				
+# test de la geometrie
+#				
+CODE:	FORM-A			
+
+
+CLASSES:				
+SYMBOL	SCALE	DECOMPOSITION	INDEXATION	DEFINITION
+$	0	FREE	FREE	IMPLICIT
+P 	1 	FREE	FREE	EXPLICIT
+U	2 	FREE	FREE	EXPLICIT
+E 	3 	FREE	FREE	EXPLICIT
+
+DESCRIPTION :				
+LEFT	RIGHT	RELTYPE	MAX	
+U	U	<	10	
+U	U	+	?
+E	E	<	1
+E	E	+	1
+
+FEATURES:													
+NAME	TYPE												
+
+XX	INT
+YY	INT
+ZZ	INT
+
+
+MTG:													
+
+ENTITY-CODE				XX	YY	ZZ
+
+/P1				
+	/U1			0	0	0
+	^/E1			
+	^<E2			
+	^<E3			0	00	300
+		+U1		
+		^/E1
+		^<E2		0	50	400
+	^<E4			0	0	400

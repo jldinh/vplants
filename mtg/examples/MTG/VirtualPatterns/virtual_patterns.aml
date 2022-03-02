@@ -1,0 +1,543 @@
+#####################################################
+#
+#    Virtual Patterns: 
+#
+#    		Adding leaves to a small axis   
+#
+#####################################################
+
+
+##############################################
+##############################################
+# adding virtual leaves on two internodes
+##############################################
+##############################################
+amap = AMAPMOD_DIR
+#amap = "C:\Documents and Settings\fred\Mes documents\Develop\AMAPmod\"
+
+Cd(amap+"/examples/MTG/VirtualPatterns")
+g2  = MTG("axis_2i.mtg")
+
+g(_x) = 4
+
+dr1 = DressingData("axis_1.drf")
+f1 = PlantFrame(1, Scale->4, DressingData->dr1)
+
+# Bug au moment du Plot si PatternNumber n'est pas utilisée !!!!!
+leaf_color(_x) = Green
+
+alpha(_e) = 90
+gamma(_e) = 45
+phyllo(_e) = 45
+w(_e) = 1
+
+leaves1=VirtualPattern("Leaf",WhorlSize->w,PatternNumber->g, \
+			Alpha->alpha,Phyllotaxy->phyllo,Gamma->gamma,\
+			Color->leaf_color)
+
+lt = Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+
+#Save(lt,File->"essai.lig",Format->AMAP)
+
+vv = Extract(lt, Data->VirtualVertices)
+
+# conversion de degres en radians
+toRad(_x) = 2*Pi*_x/360
+
+# et reciproquement
+toDeg(_x) = If _x <= Pi Then (180/Pi) * _x Else (180/Pi) * (_x-2*Pi)
+rad_to_deg(_a) = Foreach _e In _a : toDeg(_e)
+
+euler(_x) = rad_to_deg(EulerAngles(lt,_x))
+
+dirs(_x) = [PDir(lt,_x),SDir(lt,_x)]
+
+euler(6)
+dirs(6)
+
+##############################################
+##############################################
+# Adding more leaves : creation of virtual nodes
+# 
+# Whorl          controls the number of leaves per "virtual node"
+# PatternNumber  controls the total number of leaves per bearing entity
+##############################################
+##############################################
+
+g(_x) = 6          # 
+w(_x) = 3         # change the max nb of leaves on a node to 2
+
+dr1 = DressingData("axis_1.drf")
+f1 = PlantFrame(1, Scale->4, DressingData->dr1)
+
+leaves1=VirtualPattern("Leaf",PatternNumber->g, WhorlSize -> w, Color->leaf_color)
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+
+
+##########################################
+# adding virtual leaves on 20 internodes
+##########################################
+
+g20  = MTG("axis_20i.mtg")
+
+dr1 = DressingData("axis_1.drf")
+f2 = PlantFrame(1, Scale->4, DressingData->dr1)
+leaves1=VirtualPattern("Leaf",PatternNumber->g, Color->leaf_color)
+Plot(f2,VirtualLeaves->leaves1,DressingData->dr1)
+
+##########################################
+##########################################
+# Changing the number of leaves per node
+#
+# Whorl          controls the number of leaves per "virtual node"
+# PatternNumber  controls the total number of leaves per bearing entity
+##########################################
+##########################################
+
+g30  = MTG("axis_30i.mtg")
+
+g(_x) = Rank(_x) / 6
+w(_x) = g(_x)          
+
+f3 = PlantFrame(1, Scale->4, DressingData->dr1)
+leaves3=VirtualPattern("Leaf",PatternNumber->g, WhorlSize -> w, Color->leaf_color)
+Plot(f3,VirtualLeaves->leaves3,DressingData->dr1)
+
+
+##############################################
+##############################################
+#              Global changes
+##############################################
+##############################################
+
+g2  = MTG("axis_2i.mtg")
+g(_x) = 1
+leaves1=VirtualPattern("Leaf",PatternNumber->g, Color->leaf_color)
+
+##############################################
+# Changing the insertion angle (global change)
+##############################################
+
+dr2 = DressingData("axis_2.drf")
+f2 = PlantFrame(1, Scale->4, DressingData->dr2)
+Plot(f2,VirtualLeaves->leaves1,DressingData->dr2)
+
+##############################################
+# Changing the azimuth angle (global change)
+##############################################
+
+dr3 = DressingData("axis_3.drf")
+f3 = PlantFrame(1, Scale->4, DressingData->dr3)
+Plot(f3,VirtualLeaves->leaves1,DressingData->dr3)
+
+
+##############################################
+##############################################
+#              Local changes
+##############################################
+##############################################
+
+##############################################
+# Changing the insertion angle (local change)
+##############################################
+
+g20  = MTG("axis_20i.mtg")
+
+dr1 = DressingData("axis_1.drf")
+g(_x) = 2
+#!!! si 180 bug (la valeur 0 n'est pas bien acceptée par le viewer)
+insertion(_x) = 170 - (Rank(_x) * 180 / 30)
+f2 = PlantFrame(1, Scale->4, DressingData->dr1)
+leaves3=VirtualPattern("Leaf", PatternNumber->g, Alpha -> insertion, Color->leaf_color)
+Plot(f2,VirtualLeaves->leaves3,DressingData->dr1)
+
+##############################################
+# Changing the azimuth angle (local change)
+##############################################
+
+azimuth(_x) = ((Rank(_x)/2) Mod 4) * 30
+f2 = PlantFrame(1, Scale->4, DressingData->dr1)
+leaves4=VirtualPattern("Leaf", PatternNumber->g, Beta -> azimuth, Color->leaf_color)
+Plot(f2,VirtualLeaves->leaves4,DressingData->dr1)
+
+
+
+
+
+
+(# Creates a core dump ...
+
+fruit_color(_v)= Green
+nbfruits(_v)=If Order(_v) > 0 Then 1 Else 0
+fruit1=VirtualPattern("Fruit",WhorlSize->verticille, PatternNumber->nbfruits,Color->fruit_color)
+Plot(f4,VirtualFruits->fruit1,DressingData->dr1)
+
+#)
+
+
+#####################################################
+#
+#    Virtual Patterns: 
+#
+#        Adding leaves to a small branching system 
+#
+#####################################################
+
+g  = MTG("small_branching.mtg")
+
+dr1 = DressingData("small_branching.drf")
+f1 = PlantFrame(1, Scale->4, DressingData->dr1)
+
+ltopdia(_v)= 5
+lbotdia(_v)= 5
+llength(_v)= 5
+
+nbleaves(_v)= 1 
+verticille(_v)=1
+lalpha(_v)= 90     # This angle is relative to the bearer
+
+leaf_color(_v)=Green
+
+leaves1=VirtualPattern(\
+  "Leaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  Alpha->lalpha,\
+  Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+
+#####################################################
+#
+#          Using a small digitized tree
+#
+#####################################################
+
+g  = MTG("small_branching_digitized.mtg")
+
+dr1 = DressingData("small_branching_digitized.drf")
+f1 = PlantFrame(1, Scale->4, DressingData->dr1)
+
+ltopdia(_v)= 30
+lbotdia(_v)= 30
+llength(_v)= 30
+
+nbleaves(_v)= 1 
+verticille(_v)=1
+lalpha(_v)= 90     # This angle is relative to the bearer
+
+leaf_color(_v)=Green
+
+leaves1=VirtualPattern(\
+  "Leaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  Alpha->lalpha,\
+  Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+
+####################################################
+# Changing the azimuth with respect to the bearer
+####################################################
+
+lbeta(_x) = 90
+#lbeta(_x) = Rank(_x) * 45
+
+f1 = PlantFrame(1, Scale->4, DressingData->dr1)
+leaves1=VirtualPattern(\
+  "Leaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  Alpha->lalpha,\
+  Beta->lbeta,\
+  Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+
+####################################################
+# Controling the orientation of the leaf explicitly
+####################################################
+
+f1 = PlantFrame(1, Scale->4, DressingData->dr1)
+xx(_x) = Coord(f1, _x)@1
+yy(_x) = Coord(f1, _x)@2
+zz(_x) = Coord(f1, _x)@3
+
+azimuth(_x) = 0.0
+elevation(_x) = -Pi/6  # a positive elevation bends the leaf towards the soil
+roling(_x)= 0
+
+leaves1=VirtualPattern(\
+  "DigitizedLeaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  XX -> xx,\
+  YY -> yy,\
+  ZZ -> zz, \
+  AA -> azimuth, \
+  BB -> elevation, \
+  CC -> roling, \  
+  Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+
+
+
+#####################################################
+#
+#    Virtual Patterns: 
+#
+#        Adding leaves to a bigger branching system 
+#
+#####################################################
+
+g  = MTG("branching.mtg")
+
+dr1 = DressingData("branching.drf")
+f1 = PlantFrame(1, Scale->4, DressingData->dr1)
+
+ltopdia(_v)= 30
+lbotdia(_v)= 30
+llength(_v)= 30
+
+nbleaves(_v)= 1 
+verticille(_v)=1
+lalpha(_v)= 90     # This angle is relative to the bearer
+
+leaf_color(_v)=Green
+
+leaves1=VirtualPattern(\
+  "Leaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  Alpha->lalpha,\
+  Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+
+#####################################################
+#
+#              Using a digitized tree
+#
+#####################################################
+
+g  = MTG("branching_digitized.mtg")
+
+dr1 = DressingData("branching_digitized.drf")
+f1 = PlantFrame(1, Scale->4, DressingData->dr1)
+
+ltopdia(_v)= 30
+lbotdia(_v)= 30
+llength(_v)= 30
+
+nbleaves(_v)= 1 
+verticille(_v)=1
+lalpha(_v)= 90     # This angle is relative to the bearer
+
+leaf_color(_v)=Green
+
+leaves1=VirtualPattern(\
+  "Leaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  Alpha->lalpha,\
+  Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+
+######################################################################
+#
+#    A digitized Apple Tree
+#
+#    Adding virtual leaves (not digitized) using allometric relations
+#
+# Database credits : E. Coste and H. Sinoquet
+#
+#######################################################################
+
+
+amapmod_dir = "../../../"
+
+g  = MTG(amapmod_dir + "databases/MTGFiles/AppleTree/agraf.mtg")
+
+dr1 = DressingData("agraf.drf")
+f1 = PlantFrame(1, Scale->3, DressingData->dr1)
+# Plot(f1)
+# Plot(f1, Interpol->Height)
+
+leaf_dia(_x) = 6*ToInt(If Length(f1,_x) < 10 Then 100 Else If Length(f1,_x) > 30 Then 300 Else Length(f1,_x)*10)
+# leaf_dia(_x) = 6* Length(f1,_x)*10
+
+# leaf_len(_x) = If Length(f1,_x) > 30 Then leaf_dia(_x)/40 Else leaf_dia(_x)/10
+leaf_len(_x) = leaf_dia(_x)/10
+
+nbleaves(_v)=  If (Index(Complex(_v,Scale->2))==96) Then 1 Else 0
+verticille(_v)=1
+leaf_color(_v)=Green
+
+leaves1=VirtualPattern("Leaf",\
+                        WhorlSize->verticille, \
+                        PatternNumber->nbleaves, \
+                        Color->leaf_color, \
+                        TopDiameter->leaf_dia, \
+                        Length->leaf_len)
+
+filter(_x) = If Defined(_x) Then False Else True
+
+# Genere une erreur de segmentation sur Suse 7.2 au niveaude GL (et pas sur RedHat)
+lt = Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+# lt = Plot(f1,VirtualLeaves->leaves1,DressingData->dr1, Show->filter)
+
+vv = Extract(lt, Data->VirtualVertices)
+
+virtual_offset = Min(Foreach _i In vv : ToInt(_i))  
+
+app(_x) = If ToInt(_x) >= virtual_offset Then RED3 Else Undef
+     
+
+Plot(lt, Appearance->app) 
+
+#######################################################################
+# Adding of digitized leaves: Young Oak Trees
+#
+# Only the basis of the petiol was digitized (corresponds
+# to the top of the bearing internode), holding the 3D mouse plane
+# oriented in the leaf plane (to measure the orientation
+# of the leaf surface by Euler angles)
+#
+# The surface (diam / length) of the leaf is obtained using
+# allometric relationships.
+#
+# Data base credits: Laetitia Farque
+#
+#######################################################################
+
+amapmod_dir = "../../../"
+
+g = MTG(amapmod_dir + "databases/MTGFiles/OakTree/young_oaktree.mtg")
+
+dr = DressingData("oaktree.drf")
+
+
+###########################################
+#  General tool functions
+###########################################
+
+# conversion de degres en radians
+toRad(_x) = 2*Pi*_x/360
+
+# et reciproquement
+todeg(_x) = If _x <= Pi Then (360/(2*Pi)) * _x Else (360/(2*Pi)) * (_x-2*Pi)
+
+
+###########################################
+#  Attributes
+###########################################
+
+label(_x) = List(Class(_x),Index(_x))
+
+xx(_x) = Feature(_x,"XX")
+yy(_x) = Feature(_x,"YY")
+zz(_x) = - Feature(_x,"ZZ")
+
+teta(_x) = toRad(Feature(_x,"AA"))      # azimuth
+phi(_x) = toRad(Feature(_x,"BB"))
+psi(_x) = toRad(Feature(_x,"CC"))
+
+(# To test the effect of these functions
+ # CARE ! values of these functions are in Radians !!!! not in degrees.
+
+# teta(_x) = 0.0
+# phi(_x) = -Pi/12.0
+# psi(_x) = 0.0
+
+#)
+
+topdia(_x)=Feature(_x,"diam")
+longFeu(_x) = Feature(_x,"long")
+largFeu(_x) = Feature(_x,"larg")
+
+nben(_x) = Feature(_x,"NbEn")
+apex(_x) = Feature(_x,"apex")           # V alive, C Broken, M dead
+
+typeFeu(_x) = Feature(_x,"typeF")       # 0 cataph, 1 ok, 2 none, 3 fallen
+prodaxe(_x) = Feature(_x,"prodax")      # 1 bud, 5 branch ...
+rem(_x) = Feature(_x,"rem")
+
+
+
+###########################################
+#  3D representation of the wooden part
+###########################################
+
+# Origine d'une plante
+
+coords(_v) = [xx(_v),yy(_v),zz(_v)]
+origine(_p) = If (_p == Undef) Then Undef Else coords(Trunk(_p,Scale->4)@1)
+
+xx_c(_v) = xx(_v) - (origine(Complex(_v,Scale->1))@1)
+yy_c(_v) = yy(_v) - (origine(Complex(_v,Scale->1))@2)
+zz_c(_v) = zz(_v) - (origine(Complex(_v,Scale->1))@3)
+
+f = PlantFrame(1,Scale->5,XX->xx_c, YY->yy_c,ZZ->zz_c,DressingData->dr)
+
+# color = Rank of internode
+
+color_rank(_x) = Switch Rank(_x) Mod 5 Case 0 : Red Case 1 : Blue Case 2 : Green Case 3 : Yellow Case 4 : LightBlue Default : White
+
+Plot(f, Color -> color_rank)
+
+color_order(_x) = Switch Order(_x) Mod 5 Case 0 : Red Case 1 : Blue Case 2 : Green Case 3 : Yellow Case 4 : LightBlue Default : White
+
+###########################################
+#  Adding Virtual leaves
+###########################################
+
+
+# calcul des dimensions du symbole graphique d'une feuille
+
+nbleaves(_v)=  If typeFeu(_v) == 1 Then 1 Else 0
+leaf_len(_x) = longFeu(_x)
+leaf_dia(_x) = 10 * largFeu(_x) # since diameters are divided by 10
+
+leaves_c=VirtualPattern("DigitizedLeaf",\
+  PatternNumber->nbleaves,\
+  TopDiameter->leaf_dia, \
+  BottomDiameter->leaf_dia, \
+  Length->leaf_len, \
+  Color -> color_rank, \
+  XX-> xx_c,\
+  YY-> yy_c,\
+  ZZ-> zz_c,\
+  AA-> teta,\
+  BB-> phi,\
+  CC->psi \
+)
+
+Plot(f,VirtualLeaves->leaves_c,DressingData->dr) 	  
+
+# removes the wooden part
+filter1(_x) = If Defined(_x) Then If Class(_x) != 'E' Then True Else False Else True
+
+Plot(f,VirtualLeaves->leaves_c,Filter->filter1) 
+
+

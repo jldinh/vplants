@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="diffusion.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow1Send"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Send"
+       style="overflow:visible;">
+      <path
+         id="path3690"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.2) rotate(180) translate(6,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Sstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Sstart"
+       style="overflow:visible">
+      <path
+         id="path3687"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.2) translate(6,0)" />
+    </marker>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+    <inkscape:perspective
+       id="perspective2469"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.46991211"
+     inkscape:cx="566.95209"
+     inkscape:cy="745.10767"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:window-width="1279"
+     inkscape:window-height="949"
+     inkscape:window-x="0"
+     inkscape:window-y="25" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g2475"
+       transform="matrix(1.731215,0,0,1.731215,-470.36038,-482.38884)"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/diffusion reaction/description_files/work/diffusion.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <g
+         id="g4973">
+        <rect
+           style="fill:#00ff00;fill-opacity:1;stroke:#000000;stroke-width:2.88814497;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect3153"
+           width="259.80649"
+           height="185.36754"
+           x="67.140999"
+           y="363.43713" />
+        <rect
+           y="363.43713"
+           x="380.95218"
+           height="185.36754"
+           width="259.80649"
+           id="rect3155"
+           style="fill:#005600;fill-opacity:1;stroke:#000000;stroke-width:2.88814497;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      </g>
+      <path
+         sodipodi:nodetypes="czzzzzzs"
+         id="path3159"
+         d="M 426.77398,399.30687 L 412.69084,399.30687 C 410.75919,405.67856 411.67926,412.05024 401.78346,412.05024 C 391.88766,412.05024 395.84442,386.5635 382.65003,386.5635 C 369.45563,386.5635 376.71099,412.05024 363.5166,412.05024 C 350.3222,412.05024 357.57756,386.5635 344.38316,386.5635 C 331.18877,386.5635 338.44413,412.05024 325.24973,412.05024 C 312.05533,412.05024 316.01209,386.5635 306.1163,386.5635 C 296.2205,386.5635 297.14057,392.93519 295.20892,399.30687 L 281.12569,399.30687"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.73288703;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#Arrow1Sstart);marker-end:url(#Arrow1Send);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.73288703;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#Arrow1Sstart);marker-end:url(#Arrow1Send);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         d="M 426.77398,455.39667 L 412.69084,455.39667 C 410.75919,461.76836 411.67926,468.14004 401.78346,468.14004 C 391.88766,468.14004 395.84442,442.6533 382.65003,442.6533 C 369.45563,442.6533 376.71099,468.14004 363.5166,468.14004 C 350.3222,468.14004 357.57756,442.6533 344.38316,442.6533 C 331.18877,442.6533 338.44413,468.14004 325.24973,468.14004 C 312.05533,468.14004 316.01209,442.6533 306.1163,442.6533 C 296.2205,442.6533 297.14057,449.02499 295.20892,455.39667 L 281.12569,455.39667"
+         id="path4977"
+         sodipodi:nodetypes="czzzzzzs" />
+      <path
+         sodipodi:nodetypes="czzzzzzs"
+         id="path4979"
+         d="M 426.77398,511.48642 L 412.69084,511.48642 C 410.75919,517.85811 411.67926,524.22979 401.78346,524.22979 C 391.88766,524.22979 395.84442,498.74305 382.65003,498.74305 C 369.45563,498.74305 376.71099,524.22979 363.5166,524.22979 C 350.3222,524.22979 357.57756,498.74305 344.38316,498.74305 C 331.18877,498.74305 338.44413,524.22979 325.24973,524.22979 C 312.05533,524.22979 316.01209,498.74305 306.1163,498.74305 C 296.2205,498.74305 297.14057,505.11474 295.20892,511.48642 L 281.12569,511.48642"
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1.73288703;stroke-linecap:butt;stroke-linejoin:miter;marker-start:url(#Arrow1Sstart);marker-end:url(#Arrow1Send);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <image
+       y="7.2545109"
+       x="690.52905"
+       id="image2471"
+       height="600"
+       width="800"
+       sodipodi:absref="/home/chopard/dvlpt/vplants/tissue/simulation/diffusion reaction/description_files/work/diffusion_evolution.png"
+       xlink:href="diffusion_evolution.png"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/diffusion reaction/description_files/work/diffusion.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+  </g>
+</svg>

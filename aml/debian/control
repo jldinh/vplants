@@ -1,0 +1,13 @@
+Source: vplants-aml
+Maintainer: Christophe Pradal <christophe.pradal@cirad.fr>
+Section: python
+Priority: optional
+Build-Depends: python-setuptools (>= 0.6b3), python-dev (>= 2.6.6-3~), debhelper (>= 7),  libvplants-tool, python-vplants.plantgl, libvplants-amlobj, libvplants-mtg, python-vplants.stattool, python-vplants.sequenceanalysis,libvplants-treematching,  python-openalea.deploy, python-openalea.sconsx, libqt4-dev, libqt4-opengl-dev, libboost-python-dev, libreadline-dev, pkg-config, bison, flex, freeglut3-dev
+
+
+Package: python-vplants.aml
+Architecture: any
+Depends: ${misc:Depends}, ${python:Depends}, ${shlibs:Depends}, gnuplot, libvplants-treematching, python-vplants.sequenceanalysis
+Provides: ${python:Provides}
+Description: aml and amlPy libraries
+

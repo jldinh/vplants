@@ -1,0 +1,82 @@
+<ui version="4.0" >
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>357</width>
+    <height>281</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" />
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>357</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuRoot" >
+    <property name="title" >
+     <string>Root</string>
+    </property>
+    <addaction name="actionDisplayBaseCells" />
+    <addaction name="actionDisplayWalls" />
+    <addaction name="actionDisplayPumps" />
+    <addaction name="separator" />
+    <addaction name="separator" />
+   </widget>
+   <addaction name="menuRoot" />
+  </widget>
+  <widget class="QStatusBar" name="statusbar" />
+  <action name="actionDisplayBaseCells" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="root.qrc" >:/images/icons/displaybasecell.png</iconset>
+   </property>
+   <property name="text" >
+    <string>display base cells</string>
+   </property>
+  </action>
+  <action name="actionDisplayWalls" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>false</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="root.qrc" >:/images/icons/displaywall.png</iconset>
+   </property>
+   <property name="text" >
+    <string>display walls</string>
+   </property>
+  </action>
+  <action name="actionDisplayPumps" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="icon" >
+    <iconset resource="root.qrc" >:/images/icons/displaypumps.png</iconset>
+   </property>
+   <property name="text" >
+    <string>display pumps</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="root.qrc" />
+ </resources>
+ <connections/>
+</ui>

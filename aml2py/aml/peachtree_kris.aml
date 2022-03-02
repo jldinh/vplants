@@ -1,0 +1,144 @@
+###############################################################################
+# variable 'num' should be declared with a value in [1,4]
+# to specifie which peachtree should be used
+###############################################################################
+
+output_dir_geom = "Geom/"
+If(Exists(output_dir_geom,Type->Directory)==False)Then Mkdir(output_dir_geom) Else True
+
+num = If(num == "num") Then 1 Else num
+
+g = MTG("MTG/peachtree"+ToString(num)+".mtg")
+
+###############################################################################
+vtxlist = VtxList(Scale->3)
+
+xx(_e) = -Feature(_e,"XX")
+yy(_e) = -Feature(_e,"YY")
+zz(_e) = -Feature(_e,"ZZ")
+aa(_e) = -Feature(_e,"AA")
+bb(_e) = -Feature(_e,"BB")
+cc(_e) = -Feature(_e,"CC")
+
+is_first_component_test(_e,_c) = If _c == Undef Then False Else If ComponentRoots(_c)@1 == _e Then True Else False
+is_first_component(_e) = is_first_component_test(_e,Complex(_e))
+
+#diameter specified in the MTG
+MIN_DIAM = 0.001
+bot_dia(_e) = Feature(_e,"BottomDiameter")
+diam_not_null(_v) = If _v == Undef Then Undef Else If _v < MIN_DIAM Then Undef Else _v
+diam(_e) = diam_not_null(bot_dia(_e))
+
+#heuristic for diameter
+diam_h(_e) = 2.0 / Order(_e)
+diam_h_not_null(_d) = If _d == Undef Then 2 Else _d
+diam_heuristik(_e) = diam_h_not_null(diam_h(_e))
+
+diam = diam_heuristik
+
+dr = DressingData("MTG/peachtree.drf")
+p = PlantFrame(VtxList(Scale->1)@1,Scale->3, \
+		XX->xx,YY->yy,ZZ->zz, \
+		AA->aa,BB->bb,CC->cc, \
+		BottomDiameter->diam, \
+		DressingData->dr)
+
+# PlantFrame containing the wood part
+lt = Plot(p)
+
+###############################################################################
+# Reconstruction of leaves as Virtual Pattern with allometric relationships
+###############################################################################
+
+length(_p) = Sum(Foreach _s In Components(_p) :Length(p,_s))
+
+nbLeafGL(_p) = ToInt(0.52*length(_p)+3.5)
+2nbLeafD(_p) = 4
+nbLeafShoot(_p) = Switch Class(_p) \
+	 Case 'G' : nbLeafGL(_p) \
+	 Case 'L' : nbLeafGL(_p) \
+	 Case 'D' : nbLeafD(_p) \
+	 Default : 0 
+
+foliarSurfaceGL(_p) = 16*length(_p)
+foliarSurfaceD(_p) = 57
+foliarSurfaceShoot(_p) = Switch Class(_p) \
+	 Case 'G' : foliarSurfaceGL(_p) \
+	 Case 'L' : foliarSurfaceGL(_p) \
+	 Case 'D' : foliarSurfaceD(_p) \
+	 Default : 0 
+
+foliarSurfaceLeafGL(_e) = foliarSurfaceGL(_e) / \
+			  nbLeafGL(_e)
+foliarSurfaceLeafD(_e) = foliarSurfaceD(_e) / \
+			nbLeafD(_e)
+foliarSurfaceLeafShoot(_e) = foliarSurfaceShoot(_e) / \
+			     nbLeafShoot(_e)
+
+lengthLeafGL(_e) = Sqrt(foliarSurfaceLeafGL(_e)/0.192)
+lengthLeafD(_e) = Sqrt(foliarSurfaceLeafD(_e)/0.216)
+
+lengthLeafShoot(_p) = Switch Class(_p) \
+	 Case 'G' : lengthLeafGL(_p) \
+	 Case 'L' : lengthLeafGL(_p) \
+	 Case 'D' : lengthLeafD(_p) \
+	 Default : 0 
+
+lengthLeaf(_e) = lengthLeafShoot(Complex(_e))
+
+widthLeafGL(_e) = lengthLeafGL(_e)*0.28
+widthLeafD(_e) = lengthLeafD(_e)*0.28
+
+widthLeafShoot(_p) = Switch Class(_p) \
+	 Case 'G' : widthLeafGL(_p) \
+	 Case 'L' : widthLeafGL(_p) \
+	 Case 'D' : widthLeafD(_p) \
+	 Default : 0 
+
+widthLeaf(_e) = widthLeafShoot(Complex(_e))*5
+
+pnGL(_e) = ToInt(0.52*Length(p,_e)+3.5)
+
+pnDp(_e,_n) = If(_n == Undef Or _n == 0) Then 0 \
+	      Else If _n == 1 Then 4 \
+	      Else If _n == 2 Then 2 \
+	      Else If _n == 3 Then If is_first_component(_e) Then 2 Else 1 \
+	      Else If _n == 4 Then 1 \
+	      Else 0
+
+pnD(_e) = pnDp(_e,Size(Components(Complex(_e))))
+
+pn(_e) = Switch Class(Complex(_e)) \
+	 Case 'G' : pnGL(_e) \
+	 Case 'L' : pnGL(_e) \
+	 Case 'D' : pnD(_e) \
+	 Default : 0 
+
+
+widths = Foreach _v In vtxlist : [widthLeaf(_v)]
+
+diam_l(_e) = (widths@(Pos(vtxlist,_e)))@1
+
+whorlsize(_e) = 1
+phyllo(_e) = 144
+beta(_e) = 144*Height(_e) Mod 360
+
+vleaves = VirtualPattern("Leaf", PatternNumber->pn, WhorlSize->whorlsize, \
+			 Length->lengthLeaf,BottomDiameter-> diam_l, \
+			 Beta->phyllo, TopDiameter->diam_l)
+
+
+show(_e) = If(Defined(_e)== False) Then True Else False
+
+# Only leaves
+lt = Plot(p,VirtualLeaves->vleaves,Filter->show)
+
+###############################################################################
+# Microscopic representation
+###############################################################################
+
+app(_e) = If(Defined(_e)== False) Then "c_green" Else "c_brown"
+
+Plot(lt,Appearance->app)
+Save(lt,File->output_dir_geom+"peachtree"+ToString(num)+".bgeom",Format->"BGEOM")
+

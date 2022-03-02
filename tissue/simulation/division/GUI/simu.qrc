@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/icons" >
+        <file>icons/display_fixed.png</file>
+        <file>icons/display_load.png</file>
+        <file>icons/display_pid.png</file>
+        <file>icons/display_top.png</file>
+    </qresource>
+</RCC>

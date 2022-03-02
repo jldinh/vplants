@@ -1,0 +1,167 @@
+import random 
+
+# Parameters #
+##############
+
+alpha = 137.5  # phylotaxie angle
+
+# coding; O: alpha | 1: 2 alpha | 2: -alpha | 3: 3 alpha.
+
+# model
+p_init = [1, 0, 0, 0]   # initial probabilities
+P=[[0.8, 0.2, 0,   0],  # transition probability matrix
+   [0.4, 0.1, 0.5, 0], 
+   [0,   0.8, 0,   0.2], 
+   [0,   0,   1,   0]]
+   
+S = [alpha, 2*alpha, -alpha, 3*alpha]
+
+# simulation
+nbsteps = 50
+du = 1
+dx = 0.1
+
+# geometry
+internode_length = 1
+l = 5         # branch length
+phi = 60      # angle between branch and internode
+
+# leaf drawing parameters
+nb_vertical_segments = 8
+length = 0.5   # in some units (= cm for example)
+scaling = 2    # to dilate/contract the leaf
+
+# stores simulated sequence for post-processing
+output = []  
+
+
+# functions #
+#############
+# return the next state for a given state 's'
+def transition(s):  
+  proba = P[s]            # select the transition distribution for state 's'
+  return draw(proba)
+  
+# draw of the next state
+def draw(proba):  
+  unif = random.uniform(0,1)
+  if unif < proba[0]:
+    return 0
+  elif unif < proba[0] + proba[1]:
+    return 1
+  elif unif < proba[0] + proba[1] + proba[2]:
+    return 2
+  else:
+    return 3
+
+# for the output (see section "Re-estimated Markov chain parameters from simulated sequences")
+def EndEach(lstring):
+  if getIterationNb() == nbsteps - 1:
+    from openalea.aml import *
+    seq = Sequences([output])
+    mc1 = Estimate(seq, "VARIABLE_ORDER_MARKOV", "Ordinary", Order=1)
+    Display(mc1)
+
+
+# Simulation #
+##############
+s0 = draw(p_init) # draw of initial state s0
+
+Axiom: A(s0)
+
+derivation length: nbsteps
+production:
+
+# A -> I R L A
+A(s) :
+  new_s = transition(s)     # next state
+  theta = S[s]              # associated angle theta to state s
+  output.append(new_s)      # store the states for output
+  produce I R(theta) L(l,theta) A(new_s)  # add IRL triplet and a new A(ppex)
+
+   
+# ** rendering: convert IRL list to lpy rendering primitives **
+# -------------------------------------------------------------
+interpretation:
+maximum depth: 3
+
+# displacement between plants
+# Move:    produce MoveRel(5,0,0)
+
+# build of an internode and a node
+I : produce ,(1)F(internode_length),(0)F(internode_length/5.)
+
+# make the rotation
+R(theta): produce \(theta)
+
+# build the leaf with color c depending on angle 
+L(x,theta) : 
+  c = int(round(theta/alpha))
+  if c == 1:    c = 2      #   alpha: green
+  elif c == 2:  c = 3      # 2 alpha: red
+  elif c == -1: c = 5      #  -alpha: blue
+  else:         c = 6      # 3 alpha: pink
+  
+  produce [,(c)^(phi)Leaf(x)]
+
+A(m) --> ,(2)F(0.2)@O
+
+
+# draw a leaf as a parametric surface
+# -----------------------------------
+Leaf(x) --> ParametricSurface(nerve,section,width,length,nb_vertical_segments,x)
+ParametricSurface(axis,section,width,length,nb_segment,size):
+   dx = 1. / nb_segment
+   x = 0
+   nproduce [SetGuide(axis,length*size)  
+   if not section is None: nproduce SetContour(section) 
+   nproduce _(width(0)) StartGC()
+   for i in xrange(nb_segment):
+     x = i*dx
+     nproduce F(size*dx*length,size*width(x+dx))
+   nproduce EndGC()]
+
+endlsystem
+###### INITIALISATION ######
+
+__lpy_code_version__ = 1.1
+
+def __initialiseContext__(context):
+	import openalea.plantgl.all as pgl
+	Color_2 = pgl.Material("Color_2" , ambient = (98,196,32) , diffuse = 0.918367 , )
+	Color_2.name = "Color_2"
+	context.turtle.setMaterial(2,Color_2)
+	Color_3 = pgl.Material("Color_3" , ambient = (204,0,0) , diffuse = 0.882353 , )
+	Color_3.name = "Color_3"
+	context.turtle.setMaterial(3,Color_3)
+	Color_4 = pgl.Material("Color_4" , ambient = (145,145,35) , diffuse = 0.889655 , specular = (10,10,10) , )
+	Color_4.name = "Color_4"
+	context.turtle.setMaterial(4,Color_4)
+	Color_5 = pgl.Material("Color_5" , ambient = (0,147,147) , diffuse = 1.08844 , )
+	Color_5.name = "Color_5"
+	context.turtle.setMaterial(5,Color_5)
+	Color_6 = pgl.Material("Color_6" , ambient = (204,0,204) , diffuse = 0.784314 , )
+	Color_6.name = "Color_6"
+	context.turtle.setMaterial(6,Color_6)
+	import openalea.plantgl.all as pgl
+	nerve = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(-0.5, 0, 1),(-0.227155, -0.0580638, 1),(-0.0149051, -0.100826, 1),(0.166667, 0, 1),(0.230886, 0.0843439, 1)]) , 
+	    )
+	nerve.name = "nerve"
+	section = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(-0.5, 0, 1),(-0.218987, -0.262846, 1),(0.0897867, 0.227807, 1),(0.494569, 0.0034361, 1)]) , 
+	    )
+	section.name = "section"
+	import openalea.plantgl.all as pgl
+	width = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.0416748, 1),(0.340942, 0.240472, 1),(0.779412, 0.213307, 1),(1, 0.00747046, 1)]) , 
+	    )
+	width.name = "width"
+	panel_0 = ({'active': True, 'visible': True, 'name': 'Panel 1'},[('Curve2D',nerve),('Curve2D',section),('Function',width)])
+	parameterset = [panel_0,]
+	context["__functions__"] = [('width',width),]
+	context["__curves__"] = [('nerve',nerve),('section',section),]
+	context["__parameterset__"] = parameterset
+	context["nerve"] = nerve
+	context["section"] = section
+	context["width"] = pgl.QuantisedFunction(width)

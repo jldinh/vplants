@@ -1,0 +1,62 @@
+import openalea.tissueshape.grid_tissue as gt
+from openalea.declarativetissue.meshnode import get_cell_nodes
+from random import random, uniform, randint
+from openalea.tissueview import draw_scalar_prop
+from openalea.pglviewer import SceneView,ColorScaleGUI
+from vplants.plantgl.ext.color import JetMap
+from openalea.tissueshape import tovec
+
+sc = SceneView()
+cmap = JetMap(0.,100.,outside_values=True)
+viewer.add_world(sc)
+viewer.add_gui(ColorScaleGUI("auxin",cmap,"%.2f") )
+
+def redraw (tissuedb) :
+    mesh = tissuedb.get_topology("mesh_id")
+    pos = tovec(tissuedb.get_property("position") )
+    prop = tissuedb.get_property("auxin")
+    lsc = draw_scalar_prop(mesh,pos,2,prop,0,cmap)
+    sc.clear(False)
+    sc.merge(lsc)
+
+def init():
+    db = gt.regular_grid((3,3))
+    for n in get_cell_nodes(db):
+        n.label = 'A' if randint(0,1) == 0 else 'B'
+        n.auxin = uniform(0,100)
+    db.set_description('label','label associated with each cell')
+    print '*** t = 0, auxin = ', sum([n.auxin for n in get_cell_nodes(db)])
+    redraw(db)
+    return db
+
+def EndEach(iter,tissuedb): 
+    #print '***',[n.auxin for n in get_cell_nodes(tissuedb)]
+    print '*** t = ',iter+1,', auxin = ', sum([n.auxin for n in get_cell_nodes(tissuedb)])
+    #print [(n.id,n.label,n.auxin) for n in get_cell_nodes(tissuedb)]
+    redraw(tissuedb)
+
+ratio = 0.01
+dr = 0.01
+
+def diffuse(node):
+    ngbs = list(node.neighbors())
+    #print [(n.id,n.auxin) for n in ngbs]
+    ca = node.auxin
+    ta = sum([n.auxin-ca for n in ngbs])
+    node.auxin = ca + ta*dr    
+
+nbiterations = 200 
+rules:
+
+A(node) :
+    #node.auxin *= (1-ratio)
+    diffuse(node)
+    if node.auxin < 10:
+        node.label = 'B'
+
+B(node):
+    #node.auxin *= (1+ratio)
+    diffuse(node)
+    if node.auxin > 90:
+        node.label = 'A'
+

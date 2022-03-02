@@ -1,0 +1,26 @@
+g = MTG("geomattributes.mtg")
+Plot(g)
+dr1 = DressingData("testgeom.drf")
+
+
+
+
+g = MTG("geomattributes.mtg")
+dr1 = DressingData("testgeom.drf")
+f = PlantFrame (0, DressingData->dr1)
+
+
+geom(_x) = Switch ((Rank(_x) Mod 3)) \
+  Case 0: "c1"\
+  Case 1: "s1"\
+  Case 2: "b1"\
+  Default: Undef
+
+mat(_x) = Switch ((Rank(_x) Mod 3)) \
+  Case 0: "GREEN"\
+  Case 1: "RED"\
+  Case 2: "BLUE"\
+  Default: Undef
+
+Plot(f, Appearance->mat, Geometry->geom)
+  

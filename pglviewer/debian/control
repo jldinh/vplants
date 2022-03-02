@@ -1,0 +1,15 @@
+Source: openalea-pglviewer
+Maintainer: Christophe Pradal <christophe.pradal@cirad.fr>
+Section: python
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3~), python-setuptools (>= 0.6b3), debhelper (>= 7),  python-openalea.deploy, pyqt4-dev-tools
+
+Package: python-openalea.pglviewer
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, pyqglviewer, python-openalea
+Provides: ${python:Provides}
+Description: pglviewer package for OpenAlea
+ .
+ The pglviewer package implement the management of GUI.
+ Used to display 3D simulations in real time.
+ .

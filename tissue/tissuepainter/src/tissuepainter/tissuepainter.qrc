@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/images" >
+        <file>icons/Exasperated_Elephant.png</file>
+        <file>icons/FileVirus1.png</file>
+        <file>icons/Jaded_Jelly.png</file>
+        <file>icons/Photoshop.png</file>
+        <file>icons/Undercover.png</file>
+        <file>icons/clear.png</file>
+        <file>icons/display_both.png</file>
+        <file>icons/display_solid.png</file>
+        <file>icons/display_wireframe.png</file>
+        <file>icons/emacs.png</file>
+        <file>icons/expand.png</file>
+        <file>icons/fill.png</file>
+        <file>icons/load.png</file>
+        <file>icons/make.png</file>
+        <file>icons/pause.png</file>
+        <file>icons/play.png</file>
+        <file>icons/read.png</file>
+        <file>icons/redo.png</file>
+        <file>icons/save.png</file>
+        <file>icons/select.png</file>
+        <file>icons/select_minus.png</file>
+        <file>icons/select_plus.png</file>
+        <file>icons/shrink.png</file>
+        <file>icons/step.png</file>
+        <file>icons/stop.png</file>
+        <file>icons/undo.png</file>
+        <file>icons/write.png</file>
+        <file>tissue_splash.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,65 @@
+vplants-fractalysis (1.2.0~ppa2) trusty; urgency=medium
+
+  * Add package data 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Wed, 15 Oct 2014 16:27:07 +0200
+
+vplants-fractalysis (1.2.0~ppa1) trusty; urgency=medium
+
+  * Port to Trusty  
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Thu, 02 Oct 2014 06:36:00 +0200
+
+vplants-fractalysis (1.0.1~ppa9) quantal; urgency=low
+
+  *  Port to Quantal  
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Mon, 10 Dec 2012 17:17:17 +0100
+
+vplants-fractalysis (1.0.1~ppa8) precise; urgency=low
+
+  * Rebuild with new PlantGL 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Thu, 06 Dec 2012 14:00:56 +0100
+
+vplants-fractalysis (1.0.1~ppa2) precise; urgency=low
+
+  * Switch to dh_python2 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Wed, 12 Sep 2012 15:41:36 +0200
+
+vplants-fractalysis (1.0.1~ppa1) precise; urgency=low
+
+  *  Release 1.0 on precise  
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Sun, 25 Mar 2012 16:34:01 +0200
+
+vplants-fractalysis (1.0.0b2~ppa1) oneiric; urgency=low
+
+  * Fix Vplants and openalea namespace 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Fri, 06 Jan 2012 17:18:21 +0100
+
+vplants-fractalysis (1.0.0b1~ppa2) oneiric; urgency=low
+
+  * libglut3 to freeglut3
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Tue, 06 Dec 2011 12:22:07 +0100
+
+vplants-fractalysis (1.0.0b1~ppa1) oneiric; urgency=low
+
+  * Release
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Tue, 06 Dec 2011 10:52:58 +0100
+
+vplants-fractalysis (0.9.0-1~ppa2) lucid; urgency=low
+
+  * fix dependency from scipy to python-scipy 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Tue, 28 Sep 2010 08:35:18 +0200
+
+vplants-fractalysis (0.9.0-1~ppa1) lucid; urgency=low
+
+  * source package automatically created by stdeb 0.6.0
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Thu, 23 Sep 2010 17:16:46 +0200

@@ -1,0 +1,8 @@
+# Dressing file for WalnuTree trees
+
+SMBPath = ../../databases/SMBFiles
+
+SMBModel entrenoeud = nentn105
+
+DiameterUnit = 10	
+

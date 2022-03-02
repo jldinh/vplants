@@ -1,0 +1,34 @@
+# -*-python-*-
+import os, re
+
+Import("env")
+
+# 1. Select and install the headers
+
+includes = env.ALEAGlob('*.h', dir='../include')
+env.ALEAIncludes("cphysics", includes)
+
+# Build shared libraries
+
+# 1. If you have only one shared library:
+# sources = env.ALEAGlob('*.cpp')
+
+# 2. Build first library
+sources = ["geometry_utils.cpp",
+            "mechanics_utils.cpp",
+            "spring.cpp",
+            "spring_fem.cpp",
+            "mass_spring_solver.cpp",
+            "chemistry_utils.cpp",
+            "chemistry_actor.cpp",
+            "chemistry_solver.cpp",]
+target = "cphysics"
+
+# Add defines to export symbols on Windows
+DEFINES = list(env['CPPDEFINES'])
+DEFINES.append('CPHYSICS_DLL')
+
+# Build the library
+env.AppendUnique(LIBS = ['pglmath'])
+lib1 = env.ALEALibrary(target, sources, CPPDEFINES=DEFINES)
+

@@ -1,0 +1,47 @@
+#
+# LOG FILE : Apr 28 1999 created by godin
+#
+
+g1 = MTG("young_oaktree.mtg")
+plants = VtxList(Scale->1)
+dr = DressingData("young_oaktree.drf")
+f = PlantFrame(plants@1,Scale->3,DressingData->dr)
+todeg(_x) = If _x <= Pi Then (360/(2*Pi)) * _x Else (360/(2*Pi)) * (_x-2*Pi)
+toRad(_x) = 2*Pi*_x/360
+alpha_abs(_x) = todeg(Feature(_x,"BB"))
+beta_abs(_x) = todeg(Feature(_x,"AA"))
+
+nbleaves(_v)=  If Rank(_v) Mod 2 == 0 Then 1 Else 0
+verticille(_v)=1
+lalpha(_v)= alpha_abs(_v)
+lbeta(_v)= beta_abs(_v)
+leaf_color(_v)=Green
+leaf_len(_x) = 2
+leaf_dia(_x) = 2
+xx(_x) = Feature(_x,"XX")
+yy(_x) = Feature(_x,"YY")
+zz(_x) = Feature(_x,"ZZ")
+(#
+teta(_x) = Feature(_x,"AA")
+phi(_x) = Feature(_x,"BB")
+psi(_x) = Feature(_x,"CC")
+#)
+teta(_x) = toRad(Rank(_x) * 90)		# azimuth de leur axe de symetrie
+phi(_x) = toRad(30)			# pour lever ou baisser les feuilles
+psi(_x) = toRad(0)			# pour les tourner autour de leur axe de symetrie
+
+leaves1=VirtualPattern("DigitizedLeaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves,\
+  TopDia->leaf_dia, \
+  Length->leaf_len, \
+  Alpha-> lalpha, \
+  Beta-> lbeta,\
+  XX-> xx,\
+  YY-> yy,\
+  ZZ-> zz,\
+  Tetha-> teta,\
+  Phi-> phi,\
+  Psi->psi \
+)
+Plot(f,VirtualLeaves->leaves1,DressingData->dr)

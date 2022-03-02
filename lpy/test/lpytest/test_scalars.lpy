@@ -1,0 +1,23 @@
+print length
+print mybool
+
+initial_view = 5
+
+Axiom: _(radius)A
+
+derivation length: length
+production:
+
+A --> FA
+
+interpretation:
+
+
+endlsystem
+###### INITIALISATION ######
+
+def __initialiseContext__(context):
+	scalars = [('radius', 59, 0, 99), ('length', 29, 0, 99), ('mybool', False, False, True)]
+	context["__scalars__"] = scalars
+	for n,v,mnv,mxv in scalars:
+		context[n] = v

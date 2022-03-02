@@ -1,0 +1,150 @@
+amapmod_dir = AMAPMOD_DIR
+examples_dir = amapmod_dir + "/examples/MTG/PlantFrame/"
+databases_dir = amapmod_dir + "/databases/MTGFiles/AppleTree/"
+
+
+###################################################
+#
+#    A digitized Apple Tree
+#
+# Database credits: E. Costes and H. Sinoquet
+#
+###################################################
+
+g  = MTG(AMAPMOD_DIR + "/databases/MTGFiles/AppleTree/agraf.mtg")
+
+   
+Quest: Look at the definition of this digitized tree,
+load it and visualize the digitized tree at scale 3 using
+the following dressing file:
+
+dr1 = DressingData(examples_dir + "agraf.drf")
+
+-------------------
+f1 = PlantFrame(MTGRoot(), Scale->3, DressingData->dr1)
+Plot(f1)
+-------------------
+
+Quest: Color in red entities whose top-point were digitized.
+
+-------------------
+color_measured(_x) = \
+  If Feature(_x,"XX") != Undef Then Red Else Blue
+
+Plot(f1, Color->color_measured)
+-------------------
+
+Quest: Find the range of diameters observed on all plant entities and
+divide it into 5 classes. Color each entity according to its diameter
+class.
+
+-------------------
+diam(_x) = ToInt(TopDiameter(f1, _x))
+
+diameters = Foreach _v In VtxList(Scale->3): diam(_v)
+
+Max(diameters)
+Min(diameters)
+
+color_diam(_x) = \
+  Switch diam(_x)/10 \
+  Case 0: Red \
+  Case 1: Green \
+  Case 2: Violet \
+  Case 3: LightBlue \
+  Case 4: Blue \
+  Default: Black 
+
+Plot(f1, Color->color_diam)
+-------------------
+
+
+Quest: compute the wood volume of the plant (volume of a cone frustum
+with base diam b, top diam t and height h:
+
+hint: vol = Pi*h*(b^2+tb+t^2)/12
+
+-------------------
+cone_frust_vol(_x) = Pi*len(_x)*(topd(_x)*topd(_x)+topd(_x)*botd(_x)+botd(_x)*botd(_x))/12
+
+# Computing the volume of the tree
+# (in mm3)
+Sum(Foreach _x In Components(1, Scale->3) : cone_frust_vol(_x)) 
+-------------------
+
+
+Quest: compute the distribution of azimuth of the first node of the axes
+borne by the trunk
+
+-------------------
+axes = Foreach _x In VtxList(Scale->3): Select(_x, Order(_x)==1 And Rank(_x) == 0)
+azimuth_array = Foreach _v In axes: EulerAngles(f1,_v)@1
+
+toDeg(_x) = (180/Pi) * _x 
+
+azimuth_dist = Foreach _r In azimuth_array: ToInt(toDeg(Pi+_r)/10)
+-------------------
+
+
+###################################
+#
+#  Digitized Walnut Tree (20 years)
+#
+#  Database credits: H. Sinoquet
+#
+###################################
+ 
+# g2 = MTG(AMAPMOD_DIR + "/databases/MTGFiles/WalnutTree/noylum2.mtg")
+g2 = MTG(AMAPMOD_DIR + "/databases/MTGFiles/WalnutTree/boutdenoylum2.mtg")  
+   
+#Quest: Look at the definition of this digitized tree,
+#load it and visualize the digitized tree at scale 3 using
+#the following function for the bottom diameters of entities 
+#and dressing file:
+
+bot_dia(_x) = If Rank(_x) == 0 Then Feature(Complex(_x), "TopDia") Else Undef
+dr1 = DressingData(examples_dir + "walnut.drf")
+
+#-------------------
+f2 = PlantFrame(MTGRoot(),Scale->3, BottomDiameter->bot_dia, DressingData->dr1)
+Plot(f2)
+#-------------------
+
+#Quest: plot the histogram of entity length.
+
+#-------------------
+scale3_entities = VtxList(Scale->3)
+length_set = Foreach _v In scale3_entities: Length(f2,_v)
+length_set_int = Foreach _e In length_set: ToInt(_e)
+
+Plot(Histogram(length_set_int)) 
+#-------------------
+
+#Quest: find all entities whose length is greater than 3cm
+
+#-------------------
+length_set_30 = Foreach _x In length_set : Select(_x, _x>30)
+#-------------------
+
+#Quest: Plot in Green the set of entities whose top-point in the box
+#defined by its diagonal points: [-100.0,-100.0,200.0], [0.0,0.0,400.0]
+
+#-------------------
+boxpt1 = [-100.0,-100.0,200.0]
+boxpt2 = [0.0,0.0,400.0]
+
+xx(_v) = Coord(f2, _v)@1
+yy(_v) = Coord(f2, _v)@2
+zz(_v) = Coord(f2, _v)@3
+
+test_inbox(_x,_y,_z) = \
+  If (_x >= boxpt1@1 And _x <= boxpt2@1) And \
+     (_y >= boxpt1@2 And _y <= boxpt2@2) And \
+     (_z >= boxpt1@3 And _z <= boxpt2@3) \
+  Then True \
+  Else False
+
+color_box(_v) = If test_inbox(xx(_v),yy(_v),zz(_v)) Then Green Else Black
+Plot(f2, Color->color_box)
+#-------------------
+

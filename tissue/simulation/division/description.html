@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="description_files/style.css" />
+  <link rel="stylesheet" type="text/css" href="description_files/SyntaxHighlighter.css" />
+  <title>template</title>
+</head>
+<body>
+<div id="info">
+	<ul>
+	<li> version : 1.0.0 </li>
+	<li> license : Cecill-C </li>
+	<li> authors : Jerome Chopard </li>
+	<li> url : <a href="www.vplants.com/tissue/simulation/template">www.vplants.com/tissue/simulation/template</a> </li>
+	<li> institutes : INRIA </li>
+	</ul>
+</div>
+<div id="title">Template Simulation</div>
+<div id="summary">
+This package is an example package to create a simulation on tissue
+</div>
+<div id="dependencies">
+Direct dependencies :
+	<ul>
+	<li svn="1000"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:pkg1">pkg1</a></li>
+	<li svn="2000"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:pkg2">pkg2</a></li>
+	</ul>
+</div>
+<div id="description">
+	<div id="general">
+	<h1>Description</h1>
+	This package provide the minimal set of files used to describe a simulation.
+	</div>
+	<div id="algo">
+	<h1>Algorithms</h1>
+	<textarea name="code" class="python:nogutter:nocontrols">
+	from openalea.celltissue import *
+	</textarea>
+	</div>
+	<div id="exec">
+	<h1>Simulation</h1>
+	<div class="command">
+	user@computer:$ python simu.py
+	</div>
+	<img src="description_files/meduse.png" width="128" height="128" alt="logo meduse" />
+	</div>
+	</div>
+	<div id="exercice">
+	<h1>Exercices</h1>
+	To go further :
+	<ul>
+		<li>...</li>
+		<li>...</li>
+	</ul>
+	</div>
+</div>
+<div id="bugs_disclaimer">
+<h1>Bugs</h1>
+If you experience bugs, feel free to report them on <a href="http://gforge.inria.fr/tracker/?atid=2598&group_id=79&func=browse">gforge</a> or send a mail to the author. Thanks
+</div>
+<div id="files">
+<h1>files</h1>
+<ul>
+	<li><a href="simu.py">simu.py</a> : main simulation file </li>
+	<li><a href="simu_view.py">simu_view.py</a> : description of the visualization </li>
+	<li><a href="simu_gui.py">simu_gui.py</a> : description of user interaction with the simulation </li>
+	<li><a href="initialize_tissue.py">initialize_tissue.py</a> : add the required set of properties to the tissue </li>
+	<li><a href="tissue.zip">tissue.zip</a> : a tissue file loaded by the simulation </li>
+	<li><a href="create_tissue.py">create_tissue.py</a> : non mandatory, create <a href="tissue.zip">tissue.zip</a> from scratch </li>
+	<li>description.html : this file </li>
+	<li>description_files dir : location of external files for this html page </li>
+</ul>
+</div>
+
+<!-- syntax highlighting -->
+<script language="JavaScript" src="description_files/shCore.js" type="text/javascript"></script>
+<script language="JavaScript" src="description_files/shBrushPython.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">dp.SyntaxHighlighter.HighlightAll('code');</script>
+
+</body>
+</html>

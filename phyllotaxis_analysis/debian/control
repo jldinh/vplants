@@ -1,0 +1,13 @@
+Source: vplants-phyllotaxisanalysis
+Maintainer: Yassin Refahi <Yassin.Refahi@sophia.inria.fr>
+Section: python
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3~), python-setuptools (>= 0.6b3),  debhelper (>= 7.4.3), python-openalea.deploy
+
+
+Package: python-vplants.phyllotaxisanalysis
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-openalea
+Breaks: ${python:Breaks}
+Description: phyllotaxis_analysis package for VPlants.
+ The VPlants.phyllotaxis_analysis package is a typical package example to help developper to create their own package, compatible with OpenAlea standards.

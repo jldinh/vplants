@@ -1,0 +1,14 @@
+Source: vplants-dev
+Maintainer: VirtualPlants team <christophe.pradal@cirad.fr>
+Section: python
+Priority: optional
+Build-Depends: python-setuptools (>= 0.6b3), python-all-dev (>= 2.6.6-3), debhelper (>= 7), python-openalea.deploy
+Standards-Version: 3.9.1
+
+
+Package: python-vplants.dev
+Architecture: any
+Depends: ${misc:Depends}, ${python:Depends}, ${shlibs:Depends},  python-all-dev (>= 2.6.6-3), libqt4-dev, libqt4-opengl-dev, libcgal-dev, libboost-python-dev, bison, flex, libqhull-dev, libreadline-dev, pkg-config, freeglut3-dev, libann-dev, scons, python-numpy, python-scipy, python-qt4, liblapack-dev, libblas-dev, libeigen2-dev, libmpfr-dev, ipython-qtconsole, python-pandas, python-sklearn, python-skimage
+Provides: ${python:Provides}
+Description: VPlants development dependencies.
+

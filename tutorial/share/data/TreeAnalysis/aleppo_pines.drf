@@ -1,0 +1,14 @@
+SMBPath = /home/durand/devlp/vplants/mtg/databases/SMBFiles/
+SMBModel entrenoeud = nentn105 
+Class U = entrenoeud 
+Phyllotaxy = 83
+MinLength B = 0.5 
+MinLength U = 1
+DiameterUnit = 10
+LengthUnit = 1
+Alpha = Relative
+DefaultEdge = NONE 
+DefaultTrunkCategory = -1 
+DefaultAlpha = 45 
+DefaultDistance = 10000 
+NbPlantsPerLine = 10

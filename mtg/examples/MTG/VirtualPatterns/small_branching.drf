@@ -1,0 +1,13 @@
+SMBPath = ../../../databases/SMBFiles
+SMBModel entrenoeud = nentn105
+SMBModel Feuille = feui113
+
+Class U = entrenoeud
+Class B = entrenoeud
+Class E = entrenoeud
+Class Z = Feuille
+
+LeafClass = Z
+
+MinTopDiameter E = 3
+MinBottomDiameter E = 3

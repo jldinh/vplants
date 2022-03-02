@@ -1,0 +1,29 @@
+# -*-python-*-
+
+import os
+bn = os.path.basename
+
+Import( "env" )
+
+lib_env = env.Clone()
+
+
+# Export symbols for windows dll
+if lib_env['compiler'] == 'mingw':
+    LINKFLAGS=["-enable-stdcall-fixup",
+               "-enable-auto-import",
+               "-enable-runtime-pseudo-reloc",
+               "-s"]
+    lib_env.AppendUnique(LINKFLAGS=LINKFLAGS)
+
+# Select files
+includes= lib_env.ALEAGlob('*.h')
+sources= lib_env.ALEAGlob('electrical_model.cpp')
+pgllibs = ['pgltool']
+
+lib_env.Append(LIBS=["vpamlobj", "vpmtg"] + pgllibs)
+
+inc= lib_env.ALEAIncludes( "flux", includes )
+lib = lib_env.ALEALibrary( "vpflux", sources)
+
+

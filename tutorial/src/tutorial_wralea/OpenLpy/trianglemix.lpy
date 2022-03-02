@@ -1,0 +1,139 @@
+from pylab import *
+from time import time
+
+from openalea.plantgl.all import *
+import random as rd
+from openalea.lpy.parameterset import *
+
+
+# number of triangles generated
+# NUM_TRIANGLES = 1000
+
+# edge length of equilateral triangles
+#EDGE_LENGTH  = 5.0 #
+SQRT3 = 1.7320508075688772935274463415059
+
+# size of parallelepiped containing triangles (note: need to minus 2*height of triangle)
+#BOX_SIZE = 100
+SIZE_X = (BOX_SIZE-EDGE_LENGTH*SQRT3) # cm 
+SIZE_Y = (BOX_SIZE-EDGE_LENGTH*SQRT3) # cm 
+SIZE_Z = (BOX_SIZE-EDGE_LENGTH*SQRT3) # cm 
+
+maxvalue = EDGE_LENGTH*EDGE_LENGTH*0.5 *SQRT3
+
+
+module Triangle(p)
+module Triangles
+
+Axiom: Triangles(NUM_TRIANGLES)
+derivation length: 1
+
+production:
+
+Triangles(n) :
+  for i in range(n):
+    # random position of a trianlge within parallelepiped 
+    POS_X = rd.random()*SIZE_X - SIZE_X*0.5
+    POS_Y = rd.random()*SIZE_Y - SIZE_Y*0.5
+    POS_Z = rd.random()*SIZE_Z - SIZE_Z*0.5
+    
+    # random orientation of triangle 
+    AROUND_H = rd.random()*360.0
+    AROUND_L = rd.random()*360.0
+    AROUND_U = rd.random()*360.0
+    
+    nproduce [@M(POS_X,POS_Y,POS_Z) /(AROUND_H) ^(AROUND_L) -(AROUND_U) Triangle(ParameterSet())]
+  produce
+
+interpretation:
+maximum depth: 2
+
+
+Triangle(p) : 
+    produce ,(20) {[-(90)f(EDGE_LENGTH*0.5).][f(EDGE_LENGTH*SQRT3*0.5).][+(90)f(EDGE_LENGTH*0.5).]}
+
+endlsystem
+
+
+
+
+###### INITIALISATION ######
+
+__lpy_code_version__ = 1.1
+
+def __initialiseContext__(context):
+	import openalea.plantgl.all as pgl
+	Color_0 = pgl.Material("Color_0" , ambient = (255,0,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_0.name = "Color_0"
+	context.turtle.setMaterial(0,Color_0)
+	Color_1 = pgl.Material("Color_1" , ambient = (239,15,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_1.name = "Color_1"
+	context.turtle.setMaterial(1,Color_1)
+	Color_2 = pgl.Material("Color_2" , ambient = (223,31,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_2.name = "Color_2"
+	context.turtle.setMaterial(2,Color_2)
+	Color_3 = pgl.Material("Color_3" , ambient = (207,47,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_3.name = "Color_3"
+	context.turtle.setMaterial(3,Color_3)
+	Color_4 = pgl.Material("Color_4" , ambient = (191,63,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_4.name = "Color_4"
+	context.turtle.setMaterial(4,Color_4)
+	Color_5 = pgl.Material("Color_5" , ambient = (175,79,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_5.name = "Color_5"
+	context.turtle.setMaterial(5,Color_5)
+	Color_6 = pgl.Material("Color_6" , ambient = (159,95,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_6.name = "Color_6"
+	context.turtle.setMaterial(6,Color_6)
+	Color_7 = pgl.Material("Color_7" , ambient = (143,111,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_7.name = "Color_7"
+	context.turtle.setMaterial(7,Color_7)
+	Color_8 = pgl.Material("Color_8" , ambient = (127,127,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_8.name = "Color_8"
+	context.turtle.setMaterial(8,Color_8)
+	Color_9 = pgl.Material("Color_9" , ambient = (111,143,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_9.name = "Color_9"
+	context.turtle.setMaterial(9,Color_9)
+	Color_10 = pgl.Material("Color_10" , ambient = (95,159,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_10.name = "Color_10"
+	context.turtle.setMaterial(10,Color_10)
+	Color_11 = pgl.Material("Color_11" , ambient = (79,175,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_11.name = "Color_11"
+	context.turtle.setMaterial(11,Color_11)
+	Color_12 = pgl.Material("Color_12" , ambient = (63,191,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_12.name = "Color_12"
+	context.turtle.setMaterial(12,Color_12)
+	Color_13 = pgl.Material("Color_13" , ambient = (47,207,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_13.name = "Color_13"
+	context.turtle.setMaterial(13,Color_13)
+	Color_14 = pgl.Material("Color_14" , ambient = (31,223,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_14.name = "Color_14"
+	context.turtle.setMaterial(14,Color_14)
+	Color_15 = pgl.Material("Color_15" , ambient = (15,239,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_15.name = "Color_15"
+	context.turtle.setMaterial(15,Color_15)
+	Color_16 = pgl.Material("Color_16" , ambient = (0,255,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_16.name = "Color_16"
+	context.turtle.setMaterial(16,Color_16)
+	Color_20 = pgl.Material("Color_20" , ambient = (30,60,10) , diffuse = 3 , )
+	Color_20.name = "Color_20"
+	context.turtle.setMaterial(20,Color_20)
+	scalars = [('NUM_TRIANGLES', 3000, 1, 5000), ('EDGE_LENGTH', 9, 1, 100), ('BOX_SIZE', 100, 1, 1000)]
+	context["__scalars__"] = scalars
+	for n,v,mnv,mxv in scalars:
+		context[n] = v
+	import openalea.plantgl.all as pgl
+	parameter = pgl.NurbsPatch(	
+	    pgl.Point4Matrix([[(0, -0.5, 0, 1), (0, -0.166667, 0, 1), (0, 0.166667, 0, 1), (0, 0.5, 0, 1)], [(0, -0.5, 0.333333, 1), (0, -0.166667, 0.333333, 1), (0, 0.166667, 0.333333, 1), (0, 0.5, 0.333333, 1)], [(0, -0.5, 0.666667, 1), (0, -0.166667, 0.666667, 1), (0, 0.166667, 0.666667, 1), (0, 0.5, 0.666667, 1)], [(0, -0.5, 1, 1), (0, -0.166667, 1, 1), (0, 0.166667, 1, 1), (0, 0.5, 1, 1)]]) , 
+	    )
+	parameter.name = "parameter"
+	panel_0 = ({'active': True, 'visible': True, 'name': 'Functions'},[('NurbsPatch',parameter)])
+	panel_1 = ({'active': True, 'visible': True, 'name': 'Curve2D'},[])
+	parameterset = [panel_0,panel_1,]
+	context["__functions__"] = []
+	context["__curves__"] = []
+	context["__parameterset__"] = parameterset
+	context["parameter"] = parameter
+__copyright__ = 'open-source GPL'
+__description__ = "Axe feuille\n=======\n\n0. Comprendre la regle de production\n\n1. Controle de la position de la premiere feuille: positionner la premiere feuille sur l'axe des Y inclinee, vers les Y positifs\n\n2. Epaissir un peu les entrenoeuds. Que remarquez vous ?\n\n3. Decaler le point d'insertion de la feuille de maniere a le mettre juste a la peripherie de l'entreneud\n\n4. Rajouter un petiole a chaque feuille\n\n5. Changer l'angle d'insertion des feuilles\n\n6. augmenter le nombre d'entrenoeuds\n\n7. Changer la taille des entrenoeuds\n\n8. Mettre une legere courbure a la tige\n\n9. Enlever les premieres feuilles (jusqu'a la moitie de l'axe par exemple)\n\n10. Utiliser tout ce que vous avez vu dans ce TD pour contruire votre arbre ...\n\n"
+__institutes__ = 'INRIA - CIRAD Virtual Plants'
+__authors__ = 'C. Godin, F. Boudon'

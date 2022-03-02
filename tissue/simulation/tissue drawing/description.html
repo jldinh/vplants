@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="description_files/style.css" />
+  <link rel="stylesheet" type="text/css" href="description_files/SyntaxHighlighter.css" />
+  <title>tissue drawing</title>
+</head>
+<body>
+<div id="info">
+	<ul>
+	<li> version : 1.0.0 </li>
+	<li> license : Cecill-C </li>
+	<li> authors : Jerome Chopard </li>
+	<li> url : <a href="www.vplants.com/tissue/simulation/tissue drawing">www.vplants.com/tissue/simulation/tissue drawing</a> </li>
+	<li> institutes : INRIA </li>
+	</ul>
+</div>
+<div id="title">Drawing of a tissue</div>
+<div id="summary">
+This package is an example on how to draw a 2D tissue using svg format
+</div>
+<div id="dependencies">
+Direct dependencies :
+	<ul>
+	<li svn="1000"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:celltissue">celltissue</a></li>
+	<li svn="2333"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:svgdraw">svgdraw</a></li>
+	<li svn="6666"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:pglviewer">pglviewer</a></li>
+	<li svn="6666"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:plantgl:plantgl">plantgl</a></li>
+	</ul>
+</div>
+<div id="description">
+	<div id="general">
+	<h1>Description</h1>
+	This package provide an example on how to use svgdraw to construct a tissue from a 2D vectorial drawing.
+	</div>
+	<div id="algo">
+	<h1>Algorithms</h1>
+	<textarea name="code" class="python:nogutter:nocontrols">
+	from openalea.celltissue import *
+	</textarea>
+	</div>
+	<div id="exec">
+	<h1>Simulation</h1>
+	This package provide a simple algorithm to translate a vectorial drawing into a tissue. First use "create_tissue.py" to create a tissue from "coleochaete.svg" file.
+	<div class="command">
+	user@computer:$ python create_tissue.py
+	</div>
+	<img src="description_files/coleo_draw.png" alt="coleochaete picture" />
+	You can then run "simu.py" to display the created tissue.
+	<div class="command">
+	user@computer:$ python simu.py
+	</div>
+	The view is a classical <a href="http://pyqglviewer.gforge.inria.fr/wiki/doku.php">PyQGLViewer</a> 3D view stuck in 2D so you cannot rotate it. The GUI propose in the toolbar a set of icons that allow to display each kind of element of the tissue independently: points, walls and cells. The last one display or not the background image.
+	<img src="description_files/result_gui.png" alt="tissue gui" />
+	</div>
+	<div id="exercice">
+	<h1>Exercices</h1>
+	To go further :
+	<ul>
+		<li>open the svg file (use inkscape for example) and try to modify it. Then rerun the script to appreciate the modifications</li>
+		<li>Try to add some information in the svg file and retrieve it as a property in the tissue</li>
+	</ul>
+	</div>
+</div>
+<div id="bugs_disclaimer">
+<h1>Bugs</h1>
+If you experience bugs, feel free to report them on <a href="http://gforge.inria.fr/tracker/?atid=2598&group_id=79&func=browse">gforge</a> or send a mail to the author. Thanks
+</div>
+<div id="files">
+<h1>files</h1>
+<ul>
+	<li><a href="coleochaete.png">coleochaete.png</a> : real image of the organism </li>
+	<li><a href="coleochaete.svg">coleochaete.svg</a> : manual digitalization of <a href="coleochaete.png">coleochaete.png</a> </li>
+	<li><a href="create_tissue.py">create_tissue.py</a> : use informations in <a href="coleochaete.svg">coleochaete.svg</a> to create <a href="tissue.zip">tissue.zip</a> </li>
+	<li><a href="simu.py">simu.py</a> : main simulation file to display the created tissue</li>
+	<li><a href="simu_view.py">simu_view.py</a> : description of the visualization </li>
+	<li><a href="simu_gui.py">simu_gui.py</a> : description of user interaction with the simulation </li>
+
+	<li>description.html : this file </li>
+	<li>description_files dir : location of external files for this html page </li>
+</ul>
+</div>
+
+<!-- syntax highlighting -->
+<script language="JavaScript" src="description_files/shCore.js" type="text/javascript"></script>
+<script language="JavaScript" src="description_files/shBrushPython.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">dp.SyntaxHighlighter.HighlightAll('code');</script>
+
+</body>
+</html>

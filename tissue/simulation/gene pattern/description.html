@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="description_files/style.css" />
+  <link rel="stylesheet" type="text/css" href="description_files/SyntaxHighlighter.css" />
+  <title>genepattern</title>
+</head>
+<body>
+<div id="info">
+	<ul>
+	<li> version : 1.0.0 </li>
+	<li> license : Cecill-C </li>
+	<li> authors : Jerome Chopard </li>
+	<li> url : <a href="www.vplants.com/tissue/simulation/gene pattern">www.vplants.com/tissue/simulation/gene pattern</a> </li>
+	<li> institutes : INRIA </li>
+	</ul>
+</div>
+<div id="title">Projection of gene expression pattern</div>
+<div id="summary">
+This package use a formal description of a gene expression pattern to project it on a mockup of tissue. Hence, cells that express this gene can be accessed.
+</div>
+<div id="dependencies">
+Direct dependencies :
+	<ul>
+	<li svn="1000"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:celltissue">celltissue</a></li>
+	<li svn="1000"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:genepattern">genepattern</a></li>
+	<li svn="6666"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:pglviewer">pglviewer</a></li>
+	<li svn="6666"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:plantgl:plantgl">plantgl</a></li>
+	</ul>
+</div>
+<div id="description">
+	<div id="algo">
+	<h1>Algorithms</h1>
+
+	<h2>Description langage</h2>
+	The description of a gene expression pattern use a formal langage based on abstract geometric shapes.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	Z1 = AbsShere("center",(4,"cell"))<br>
+	Z2 = AbsHalfSpace("center","vertical")
+	</textarea>
+	Once a set of zones are defined, a set of operator allow to express a gene expression zone as a combination of thee zones.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	GEN = Border(Z1) + (Z1 & Z2)
+	</textarea>
+
+	<h2>Abstract resolution</h2>
+	Since all abstract shapes are defined according to numerous textual descriptors, a first operation must resolve these descriptors. This is done by passing dictionary associating a textual descriptor with its real description to the resolution method of the abstract shape.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	d = {"center":(5.5,5.5),"vertical":(0,1)}<br>
+	RGEN = GEN.resolution(d)
+	</textarea>
+	
+	<h2>Projection on a mockup</h2>
+	This step transform the formal description of a gene expression pattern into a list of cells that express the gene. Let's assume for example that a tissue is represented by a mesh.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	f = topen("tissue.zip",'r')<br>
+	t,descr = f.read()<br>
+	pos,descr = f.read("position")<br>
+	cfg = f.read_config("config")<br>
+	f.close()<br>
+	mesh = t.relation(cfg.mesh_id)
+	</textarea>
+	This mesh provides a geometrical representation of the tissue that will be used by a specific algorithm to decide wether a cell is inside an expression pattern.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	projector = MeshProjector(mesh,pos,2)<br>
+	PGEN = projector.project(RGEN)
+	</textarea>
+	</div>
+	
+	<div id="exec">
+	<h1>Simulation</h1>
+	All above operation have been written in <a href="simu.py">simu.py</a>, the main simulation file. The definition of zones can be modified inside. First launch <a href="create_tissue.py">create_tissue.py</a> to create a grid tissue the first time.
+	<div class="command">
+	user@computer:$ python create_tissue.py
+	</div>
+	then launch <a href="simu.py">simu.py</a> to display the gene expression pattern.
+	<div class="command">
+	user@computer:$ python simu.py
+	</div>
+	<img src="description_files/genepattern.png" alt="gene pattern" />
+	</div>
+	<div id="exercice">
+	<h1>Exercices</h1>
+	To go further :
+	<ul>
+		<li>change the abstract definition of the pattern</li>
+		<li>change the information contains inside "d" dictionary</li>
+	</ul>
+	</div>
+</div>
+<div id="bugs_disclaimer">
+<h1>Bugs</h1>
+If you experience bugs, feel free to report them on <a href="http://gforge.inria.fr/tracker/?atid=2598&group_id=79&func=browse">gforge</a> or send a mail to the author. Thanks
+</div>
+<div id="files">
+<h1>files</h1>
+<ul>
+	<li><a href="simu.py">simu.py</a> : main simulation file </li>
+	<li><a href="simu_view.py">simu_view.py</a> : description of the visualization </li>
+	<li><a href="simu_gui.py">simu_gui.py</a> : description of user interaction with the simulation </li>
+	<li><a href="tissue.zip">tissue.zip</a> : a tissue file loaded by the simulation </li>
+	<li><a href="create_tissue.py">create_tissue.py</a> : create <a href="tissue.zip">tissue.zip</a> from scratch </li>
+	<li>description.html : this file </li>
+	<li>description_files dir : location of external files for this html page </li>
+</ul>
+</div>
+
+<!-- syntax highlighting -->
+<script language="JavaScript" src="description_files/shCore.js" type="text/javascript"></script>
+<script language="JavaScript" src="description_files/shBrushPython.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">dp.SyntaxHighlighter.HighlightAll('code');</script>
+
+</body>
+</html>

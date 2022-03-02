@@ -1,0 +1,16 @@
+# -*-python-*-
+
+Import( "env" )
+
+py_dir = '../../fractalysis/engine'
+
+# Build wrappers as shared libraries
+env1=env.Clone()
+
+sources= ["bcmCompute_wrapper.cpp"]
+target= "_bcmcompute"
+
+env1.AppendUnique(LIBS= ['engine','pgltool','pglmath','pglsg', 'pglgui', 'pglalgo']) #for qt3 use pglgui3 instead of pglgui
+env1.ALEAWrapper( py_dir, target, sources )
+
+

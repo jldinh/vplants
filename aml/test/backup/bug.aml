@@ -1,0 +1,61 @@
+(#
+Subject: (pas d'objet)
+Date: Mon, 08 Jan 2001 16:26:36 -0500
+From: Laetitia Farque <farque@nancy.inra.fr>
+To: godin@cirad.fr
+
+Voilà les bugs :
+
+1- calculs des angles, les bugs sont expliqués dans le .aml :
+        test.mtg
+        test.aml
+        chene.drf
+
+2- les fonctions Sons, Ancestors, Extremities & Cie (sauf Father) de ce
+MTG ne marchent pas avec la version 1.5 mais marchent avec la 1.49
+
+3- pas de fonctions Rand, ni Random en service, mais ca c'est pas
+indispensable.
+
+4- et puis il y a un autre pb concernant les valeurs Alpha des
+VirtualPattern (cf 1.)  mais j'ai oublié les fichiers chez Kiki.
+
+Ce dont j'ai le plus besoin, c'est la fonction Alpha du module MTG. A
+priori ca marche, mais ca me gene de calculer des valeurs d'angles
+sachant que ca a foiré dans un cas.
+Pour le reste (VirtualPattern), je peux me débrouiller autrement pour
+commencer.
+
+Merci
+
+Laetitia
+
+    ---------------------------------------------------------------------
+
+#)
+
+MTG("bug.mtg")
+toDeg(_x) = _x * 180 / Pi
+angle (_f, _x) = toDeg(Alpha(_f, _x))
+
+# bug dans la calcul de l'angle :
+# arbre 1, vertex 4 -> angle devrait etre 45°
+# coordonée X = -1 qui déconne, si on met X = -1.005, ca marche
+
+f1= PlantFrame(1, Scale->2)
+angle(f1, 4)
+
+# Argument Alpha de la fonction VirtualPattern, en dessine pas l'élément
+# associé quand Alpha->0 (arbre 2)
+
+f6= PlantFrame(6, Scale->2)
+nb_f(_v)=1
+nbleaves (_v) = 1
+elevation(_x) = If Index(_x)==1 Then 90 Else 0
+leaves=VirtualPattern("Leaf",WhorlSize->nb_f, PatternNumber->nbleaves,\
+Alpha->elevation)
+
+dr1 = DressingData("bug.drf")
+
+Plot(f6, VirtualLeaves->leaves,DressingData->dr1)
+

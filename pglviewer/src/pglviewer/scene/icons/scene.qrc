@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/image" >
+        <file>clear_frame.png</file>
+        <file>display_both.png</file>
+        <file>display_solid.png</file>
+        <file>display_wireframe.png</file>
+        <file>draw_frame.png</file>
+        <file>load.png</file>
+        <file>manip.png</file>
+        <file>save.png</file>
+        <file>select_one.png</file>
+        <file>select_add.png</file>
+        <file>select_remove.png</file>
+    </qresource>
+</RCC>

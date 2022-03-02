@@ -1,0 +1,242 @@
+<ui version="4.0" >
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" />
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuProbes" >
+    <property name="title" >
+     <string>Probes</string>
+    </property>
+    <addaction name="actionAdd_probe" />
+    <addaction name="actionRemove_probe" />
+   </widget>
+   <widget class="QMenu" name="menuTissue" >
+    <property name="title" >
+     <string>Tissue</string>
+    </property>
+    <addaction name="actionOpen_tissue" />
+    <addaction name="actionWrite_state" />
+    <addaction name="actionRead_state" />
+   </widget>
+   <widget class="QMenu" name="menuEdition" >
+    <property name="title" >
+     <string>Edition</string>
+    </property>
+    <addaction name="actionUndo" />
+    <addaction name="actionRedo" />
+    <addaction name="actionClear_colors" />
+    <addaction name="separator" />
+    <addaction name="actionExpand" />
+    <addaction name="actionShrink" />
+    <addaction name="actionExpand_to_border" />
+    <addaction name="actionExpand_to_region" />
+    <addaction name="separator" />
+    <addaction name="actionFrom_envelop" />
+   </widget>
+   <widget class="QMenu" name="menuDisplay" >
+    <property name="title" >
+     <string>Display</string>
+    </property>
+    <addaction name="actionNormal_inside" />
+   </widget>
+   <addaction name="menuTissue" />
+   <addaction name="menuEdition" />
+   <addaction name="menuProbes" />
+   <addaction name="menuDisplay" />
+  </widget>
+  <widget class="QStatusBar" name="statusbar" />
+  <widget class="QToolBar" name="actionBar" >
+   <property name="windowTitle" >
+    <string>meshpaint toolBar</string>
+   </property>
+   <attribute name="toolBarArea" >
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpen_tissue" />
+   <addaction name="actionWrite_state" />
+   <addaction name="actionRead_state" />
+   <addaction name="separator" />
+   <addaction name="actionToto" />
+   <addaction name="actionCenter_cursor" />
+   <addaction name="separator" />
+   <addaction name="actionUndo" />
+   <addaction name="actionRedo" />
+   <addaction name="separator" />
+   <addaction name="actionExpand" />
+   <addaction name="actionShrink" />
+   <addaction name="actionExpand_to_border" />
+   <addaction name="actionExpand_to_region" />
+   <addaction name="actionFrom_envelop" />
+   <addaction name="separator" />
+   <addaction name="actionClear_colors" />
+   <addaction name="actionAdd_color" />
+  </widget>
+  <widget class="QToolBar" name="toolBar" >
+   <property name="windowTitle" >
+    <string>meshpaint toolBar</string>
+   </property>
+   <attribute name="toolBarArea" >
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak" >
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="actionAdd_probe" >
+   <property name="text" >
+    <string>add probe</string>
+   </property>
+  </action>
+  <action name="actionToto" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/Jaded_Jelly.png</iconset>
+   </property>
+   <property name="text" >
+    <string>toto</string>
+   </property>
+  </action>
+  <action name="actionAdd_color" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/Photoshop.png</iconset>
+   </property>
+   <property name="text" >
+    <string>add color</string>
+   </property>
+  </action>
+  <action name="actionUndo" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/undo.png</iconset>
+   </property>
+   <property name="text" >
+    <string>undo</string>
+   </property>
+  </action>
+  <action name="actionRedo" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/redo.png</iconset>
+   </property>
+   <property name="text" >
+    <string>redo</string>
+   </property>
+  </action>
+  <action name="actionOpen_tissue" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/load.png</iconset>
+   </property>
+   <property name="text" >
+    <string>open tissue</string>
+   </property>
+  </action>
+  <action name="actionWrite_state" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/write.png</iconset>
+   </property>
+   <property name="text" >
+    <string>write state</string>
+   </property>
+  </action>
+  <action name="actionRead_state" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/read.png</iconset>
+   </property>
+   <property name="text" >
+    <string>read state</string>
+   </property>
+  </action>
+  <action name="actionCenter_cursor" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/Undercover.png</iconset>
+   </property>
+   <property name="text" >
+    <string>center cursor on display</string>
+   </property>
+  </action>
+  <action name="actionExpand_to_border" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/display_wireframe.png</iconset>
+   </property>
+   <property name="text" >
+    <string>expand to border</string>
+   </property>
+  </action>
+  <action name="actionExpand_to_region" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/display_solid.png</iconset>
+   </property>
+   <property name="text" >
+    <string>expand to region</string>
+   </property>
+  </action>
+  <action name="actionExpand" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/expand.png</iconset>
+   </property>
+   <property name="text" >
+    <string>expand</string>
+   </property>
+  </action>
+  <action name="actionShrink" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/shrink.png</iconset>
+   </property>
+   <property name="text" >
+    <string>shrink</string>
+   </property>
+  </action>
+  <action name="actionNormal_inside" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>normal inside</string>
+   </property>
+  </action>
+  <action name="actionRemove_probe" >
+   <property name="text" >
+    <string>remove probe</string>
+   </property>
+  </action>
+  <action name="actionFrom_envelop" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/Exasperated_Elephant.png</iconset>
+   </property>
+   <property name="text" >
+    <string>from envelop</string>
+   </property>
+  </action>
+  <action name="actionClear_colors" >
+   <property name="icon" >
+    <iconset resource="tissuepainter.qrc" >:/images/icons/select_minus.png</iconset>
+   </property>
+   <property name="text" >
+    <string>clear colors</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="tissuepainter.qrc" />
+ </resources>
+ <connections/>
+</ui>

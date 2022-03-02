@@ -1,0 +1,91 @@
+import random
+
+# Parameters #
+##############
+# import model parameters stored in file dupreziana13.py
+import dupreziana13 as model
+M = model.memory_transition       # memory transition matrix (including the order 0 memory)
+P = model.transition_probability  # transition probability matrix (including the initial probabilities)
+
+# simulation
+nbsteps = 100
+dx = 0.1                 # length increase
+
+# geometry
+internode_length = 0.5
+length = 1               # branch length 
+phi = 45                 # phi between branch and internode
+
+# stores simulated sequence for post-processing
+output = []
+
+
+# functions #
+#############
+# return the next state for a given state 's'
+def transition(m):
+  proba = P[m] 
+  return draw(proba)
+  
+# draw of the next state
+def draw(proba):
+  unif = random.uniform(0,1)
+  cumul_proba = proba[0]
+  check = False
+  s = 0
+  while check==False:
+    if unif < cumul_proba:
+      bool = True
+      return s
+    else:
+      s = s+1
+      cumul_proba = cumul_proba + proba[s]
+
+# for the output (see section "Re-estimated Markov chain parameters from simulated sequences")
+def EndEach(lstring):
+  if 0:#getIterationNb() == nbsteps-1:
+    from openalea.aml import *
+    seq  = Sequences([output])
+    vomc = Estimate(seq, "VARIABLE_ORDER_MARKOV", "Ordinary", MaxOrder=3)
+    Display(vomc)
+
+
+# Simulation #
+##############
+m0 = 0 # initial memory
+
+Axiom: A(m0)
+
+derivation length: nbsteps
+production:
+
+# A -> I R L A
+A(m) :
+  s = transition(m)     # next state
+  output.append(int(s)) # store the states for output
+  m = M[m][s]           # next memory
+  produce I R(90) L(s,length) A(m)
+
+# branch growth 
+L(s,x) --> L(s,x+dx)
+
+
+# rendering: convert IRL list to lpy rendering primitives #
+###########################################################
+interpretation:
+
+I :   # build of an internode and a node
+  produce ,(1)F(internode_length),(0)F(internode_length/5.)
+
+R(theta) :  # make the rotation
+  produce \(theta)
+
+L(s,x) : # build the branches
+  if s == 1:
+    produce [,(2)^(phi)F(x)]                  # green: 1 branch
+  elif s == 2:
+    produce [,(3)^(phi)F(x)][,(3)^(-phi)F(x)] # red: 2 branches
+
+A(u) --> ,(2)F(0.2)@O
+
+endlsystem

@@ -1,0 +1,186 @@
+HIDDEN_MARKOV_OUT_TREE
+
+7 STATES
+
+INITIAL_PROBABILITIES
+0.851809     0.148141     1e-05        1e-05        1e-05        1e-05        1e-05        
+
+TRANSITION_PROBABILITIES
+1e-05        0.99994      1e-05        1e-05        1e-05        1e-05        1e-05        
+0.0394569    0.640991     0.198672     0.0642518    1e-05        1e-05        0.0566081    
+1e-05        0.0346691    0.634933     0.312382     1e-05        1e-05        0.0179861    
+1e-05        0.000617739  0.102901     0.375956     0.433976     0.0272119    0.0593268    
+1e-05        0.0542455    0.703131     0.229985     0.0126085    1e-05        1e-05        
+1e-05        0.0513762    0.306944     0.556558     0.0182409    0.0128154    0.0540555    
+1e-05        1e-05        0.0121265    0.109704     0.110445     0.452658     0.315047     
+
+3 OUTPUT_PROCESSES
+
+OUTPUT_PROCESS 1 : PARAMETRIC
+
+STATE 0 OBSERVATION_DISTRIBUTION
+NEGATIVE_BINOMIAL   INF_BOUND : 0   PARAMETER : 1   PROBABILITY : 0.003
+
+STATE 1 OBSERVATION_DISTRIBUTION
+NEGATIVE_BINOMIAL   INF_BOUND : 0   PARAMETER : 1   PROBABILITY : 0.05
+
+STATE 2 OBSERVATION_DISTRIBUTION
+NEGATIVE_BINOMIAL   INF_BOUND : 0   PARAMETER : 1   PROBABILITY : 0.01
+
+STATE 3 OBSERVATION_DISTRIBUTION
+NEGATIVE_BINOMIAL   INF_BOUND : 0   PARAMETER : 1   PROBABILITY : 0.008
+
+STATE 4 OBSERVATION_DISTRIBUTION
+NEGATIVE_BINOMIAL   INF_BOUND : 0   PARAMETER : 1   PROBABILITY : 0.04
+
+STATE 5 OBSERVATION_DISTRIBUTION
+NEGATIVE_BINOMIAL   INF_BOUND : 0   PARAMETER : 1   PROBABILITY : 0.01
+
+STATE 6 OBSERVATION_DISTRIBUTION
+NEGATIVE_BINOMIAL   INF_BOUND : 0   PARAMETER : 1   PROBABILITY : 0.005
+
+OUTPUT_PROCESS 2 : PARAMETRIC
+
+STATE 0 OBSERVATION_DISTRIBUTION
+NEGATIVE_BINOMIAL   INF_BOUND : 6   PARAMETER : 4.69395   PROBABILITY : 0.582521
+# mean: 9.35383   variance: 5.6487   standard deviation: 2.3767
+
+# state 0 observation histogram - sample size: 27
+# mean: 9.37037   variance: 6.0114   standard deviation: 2.45181
+
+STATE 1 OBSERVATION_DISTRIBUTION
+BINOMIAL   INF_BOUND : 0   SUP_BOUND : 4   PROBABILITY : 0.601631
+# mean: 2.40652   variance: 0.958685   standard deviation: 0.979124
+
+# state 1 observation histogram - sample size: 118
+# mean: 2.41525   variance: 0.467116   standard deviation: 0.683459
+
+STATE 2 OBSERVATION_DISTRIBUTION
+BINOMIAL   INF_BOUND : 1   SUP_BOUND : 6   PROBABILITY : 0.342414
+# mean: 2.71207   variance: 1.12583   standard deviation: 1.06105
+
+# state 2 observation histogram - sample size: 477
+# mean: 2.71279   variance: 0.843807   standard deviation: 0.91859
+
+STATE 3 OBSERVATION_DISTRIBUTION
+BINOMIAL   INF_BOUND : 1   SUP_BOUND : 7   PROBABILITY : 0.318776
+# mean: 2.91266   variance: 1.30295   standard deviation: 1.14147
+
+# state 3 observation histogram - sample size: 548
+# mean: 2.90511   variance: 1.02206   standard deviation: 1.01097
+
+STATE 4 OBSERVATION_DISTRIBUTION
+NEGATIVE_BINOMIAL   INF_BOUND : 1   PARAMETER : 0.102947   PROBABILITY : 0.262146
+# mean: 1.27769   variance: 0.929826   standard deviation: 0.964275
+
+# state 4 observation histogram - sample size: 349
+# mean: 1.27507   variance: 1.01607   standard deviation: 1.008
+
+STATE 5 OBSERVATION_DISTRIBUTION
+NEGATIVE_BINOMIAL   INF_BOUND : 1   PARAMETER : 0.068347   PROBABILITY : 0.175931
+# mean: 1.30398   variance: 1.47429   standard deviation: 1.2142
+
+# state 5 observation histogram - sample size: 214
+# mean: 1.32243   variance: 1.90964   standard deviation: 1.3819
+
+STATE 6 OBSERVATION_DISTRIBUTION
+NEGATIVE_BINOMIAL   INF_BOUND : 1   PARAMETER : 7.61128   PROBABILITY : 0.765139
+# mean: 3.33129   variance: 3.00848   standard deviation: 1.7345
+
+# state 6 observation histogram - sample size: 188
+# mean: 3.38298   variance: 3.08249   standard deviation: 1.7557
+
+OUTPUT_PROCESS 3 : NONPARAMETRIC
+
+STATE 0 OBSERVATION_DISTRIBUTION
+OUTPUT 0 : 1e-05
+OUTPUT 1 : 1e-05
+OUTPUT 2 : 0.555588
+OUTPUT 3 : 0.370314
+OUTPUT 4 : 0.0740584
+OUTPUT 5 : 1e-05
+OUTPUT 6 : 1e-05
+
+STATE 1 OBSERVATION_DISTRIBUTION
+OUTPUT 0 : 0.18482
+OUTPUT 1 : 0.513782
+OUTPUT 2 : 0.293324
+OUTPUT 3 : 0.00803397
+OUTPUT 4 : 1e-05
+OUTPUT 5 : 1e-05
+OUTPUT 6 : 1e-05
+OUTPUT 7 : 1e-05
+
+STATE 2 OBSERVATION_DISTRIBUTION
+OUTPUT 0 : 0.00424941
+OUTPUT 1 : 0.808421
+OUTPUT 2 : 0.18728
+OUTPUT 3 : 1e-05
+OUTPUT 4 : 1e-05
+OUTPUT 5 : 1e-05
+OUTPUT 6 : 1e-05
+OUTPUT 7 : 1e-05
+
+STATE 3 OBSERVATION_DISTRIBUTION
+OUTPUT 0 : 0.00515067
+OUTPUT 1 : 0.0203127
+OUTPUT 2 : 0.70225
+OUTPUT 3 : 0.270011
+OUTPUT 4 : 1e-05
+OUTPUT 5 : 0.00224584
+OUTPUT 6 : 1e-05
+OUTPUT 7 : 1e-05
+
+STATE 4 OBSERVATION_DISTRIBUTION
+OUTPUT 0 : 0.977428
+OUTPUT 1 : 0.0225121
+OUTPUT 2 : 1e-05
+OUTPUT 3 : 1e-05
+OUTPUT 4 : 1e-05
+OUTPUT 5 : 1e-05
+OUTPUT 6 : 1e-05
+OUTPUT 7 : 1e-05
+
+STATE 5 OBSERVATION_DISTRIBUTION
+OUTPUT 0 : 0.0972447
+OUTPUT 1 : 0.876364
+OUTPUT 2 : 0.0263417
+OUTPUT 3 : 1e-05
+OUTPUT 4 : 1e-05
+OUTPUT 5 : 1e-05
+OUTPUT 6 : 1e-05
+OUTPUT 7 : 1e-05
+
+STATE 6 OBSERVATION_DISTRIBUTION
+OUTPUT 0 : 0.00842145
+OUTPUT 1 : 1e-05
+OUTPUT 2 : 0.134068
+OUTPUT 3 : 0.348873
+OUTPUT 4 : 0.343223
+OUTPUT 5 : 0.134199
+OUTPUT 6 : 0.0260044
+OUTPUT 7 : 0.00520088
+
+
+# tree size histogram - sample size: 27
+# mean: 71.1481   variance: 1754.59   standard deviation: 41.8879
+
+# cumulative size: 1921
+
+# information of the trees in the iid case: -16077.4 (-8.36929)
+
+# log-likelihood of the state trees: -14236.5   (normalized: -7.41096)
+
+# log-likelihood of the observed trees: -14089.6   (normalized: -7.33452)
+
+# 86 free parameters   2 * penalyzed log-likelihood (AIC): -28351.2
+
+# 86 free parameters   2 * penalyzed log-likelihood (AICc): -28359.4
+
+# 86 free parameters   2 * penalyzed log-likelihood (BIC): -28829.4
+
+# 86 free parameters   2 * penalyzed log-likelihood (BICc): nan
+
+# 86 free parameters   2 * penalyzed log-likelihood (ICL): -29123.1
+
+# 86 free parameters   2 * penalyzed log-likelihood (ICLc): nan

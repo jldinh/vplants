@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="e3f33e5b-7e31-4a13-8efe-dfa99d9f4b55" kpf_version="4" name="errorsInPhyllotaxis.kpf">
+<command cwd="%p" doNotOpenOutputWindow="0" env="" id="29bc150a-a5af-4794-b0c9-5c4fc5a8de13" idref="e3f33e5b-7e31-4a13-8efe-dfa99d9f4b55" insertOutput="0" keyboard_shortcut="" name="Build" operateOnSelection="0" parseOutput="0" parseRegex="" runIn="command-output-window" showParsedOutputList="0">
+scons</command>
+<preference-set idref="e3f33e5b-7e31-4a13-8efe-dfa99d9f4b55">
+  <boolean id="import_live">1</boolean>
+</preference-set>
+</project>

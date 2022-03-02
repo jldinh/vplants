@@ -1,0 +1,277 @@
+from pylab import *
+from time import time
+
+from openalea.plantgl.all import *
+import random as rd
+from openalea.lpy.parameterset import *
+import openalea.plantgl.ext as pgl_ext
+
+#import environmental modules
+
+from openalea.fractalysis.light.directLight import *
+
+# caribu
+
+from alinea.caribu.CaribuScene import CaribuScene
+import alinea.caribu.sky_tools.turtle as sky_turtle
+
+# quasimc stuff
+import vplants.quasimc.quasimc as qmcobject
+reload(qmcobject)
+
+
+# number of triangles generated
+# NUM_TRIANGLES = 1000
+
+# edge length of equilateral triangles
+#EDGE_LENGTH  = 5.0 #
+SQRT3 = 1.7320508075688772935274463415059
+
+# size of parallelepiped containing triangles (note: need to minus 2*height of triangle)
+#BOX_SIZE = 100
+SIZE_X = (BOX_SIZE-EDGE_LENGTH*SQRT3) # cm 
+SIZE_Y = (BOX_SIZE-EDGE_LENGTH*SQRT3) # cm 
+SIZE_Z = (BOX_SIZE-EDGE_LENGTH*SQRT3) # cm 
+
+maxvalue = EDGE_LENGTH*EDGE_LENGTH*0.5 *SQRT3
+
+def gen_cmap(minvalue = 0,maxvalue = maxvalue):
+  return pgl_ext.color.HeatMap(minvalue,maxvalue) if HEAT_MAP else pgl_ext.color.JetMap(minvalue,maxvalue)
+
+cmap = gen_cmap()
+
+module Triangle(p)
+module Triangles
+
+Axiom: Triangles(NUM_TRIANGLES)
+derivation length: 1
+
+production:
+
+Triangles(n) :
+  for i in range(n):
+    # random position of a trianlge within parallelepiped 
+    POS_X = rd.random()*SIZE_X - SIZE_X*0.5
+    POS_Y = rd.random()*SIZE_Y - SIZE_Y*0.5
+    POS_Z = rd.random()*SIZE_Z - SIZE_Z*0.5
+    
+    # random orientation of triangle 
+    AROUND_H = rd.random()*360.0
+    AROUND_L = rd.random()*360.0
+    AROUND_U = rd.random()*360.0
+    
+    nproduce [@M(POS_X,POS_Y,POS_Z) /(AROUND_H) ^(AROUND_L) -(AROUND_U) Triangle(ParameterSet(fractlight=0, caribulight = 0, qmclight=0))]
+  produce
+
+interpretation:
+maximum depth: 2
+
+
+Triangle(p) : 
+    #colour = cmap.get_color(p.fractlight).i3tuple()
+    colour = cmap.get_color(p.caribulight).i3tuple()
+    produce @g(Material(colour)){[-(90)f(EDGE_LENGTH*0.5).][f(EDGE_LENGTH*SQRT3*0.5).][+(90)f(EDGE_LENGTH*0.5).]}
+
+endlsystem
+
+def apply_muslim(lstring, lscene, ligthsources):
+    res = directionalInterception(lscene,ligthsources)
+    #res = diffuseInterception(scene)
+    for id,v in res.items():
+      if lstring[id].name == 'Triangle':
+        lstring[id].p.fractlight = v
+    return res
+
+def apply_quasimc(lstring, lscene, ligthsources):
+    qmc = qmcobject.QuasiMC()
+    
+    tessel = Tesselator()
+    for shape in lscene:
+        qmc.add_shape(shape,tessel)
+    
+    # weight,x_dir,y_dir,z_dir
+    qmc.add_light_sources(ligthsources)
+      
+    qmc.run()
+    #qres = qmc.get_flux()
+    # download latest QuasiMC egg to get access to get_sunlit_leaf_area() function
+    # https://gforge.inria.fr/frs/download.php/31115/VPlants.quasimc-1.0.0-py2.7-win32.egg
+    qres = qmc.get_sunlit_leaf_area()
+    
+    for id,v in qres.items():
+      if lstring[id].name == 'Triangle':
+        lstring[id].p.qmclight = v
+    return qres
+
+def apply_caribu(lstring, lscene, ligthsources):
+    c_scene = CaribuScene()    
+    idmap = c_scene.add_Shapes(lscene)    
+    c_scene.addSources(ligthsources)
+    
+    output = c_scene.runCaribu(infinity=False)
+    c_res = c_scene.output_by_id(output, idmap)['Einc']
+    
+    for id,v in c_res.items():
+        if lstring[id].name == 'Triangle':
+          lstring[id].p.caribulight = v
+    return c_res
+
+def EndEach(lstring,scene):
+  if not scene is None:
+    global cmap
+    
+    print 'setting lights sources and tesselator'
+    
+    energy, emission, direction, elevation , azimuth  = sky_turtle.turtle()  
+    
+    if MUSLIM:
+      print 'computing with muslim'
+      start=time()
+      # weighting of sources is made according to emission intensity rather than incidence on an horizontal plane
+      ligthsources = zip(azimuth, elevation, emission)
+      muslimres = apply_muslim(lstring, scene, ligthsources)
+      dfract = time() - start
+    
+    if QUASIMC:  
+      print 'computing with quasimc'
+      start = time()
+      ligthsources = [(e,) + p for e,p in zip(energy,direction)]
+      quasimcres = apply_quasimc(lstring, scene, ligthsources)
+      dqmc = time() -start
+    
+    
+    if CARIBU:
+      print 'computing with Caribu'
+      start=time()
+      ligthsources = zip(energy,direction)
+      caribures =  apply_caribu(lstring, scene, ligthsources)      
+      dcaribu= time() - start
+    
+    
+    nblightsimulation = MUSLIM+QUASIMC+CARIBU
+    if nblightsimulation >= 2 :
+      clf()
+      caribulist=[]
+      muslimlist=[]
+      quasimclist=[]
+      for k in caribures.iterkeys():
+        if CARIBU:   caribulist.append(caribures[k])
+        if MUSLIM:   muslimlist.append(muslimres[k])
+        if QUASIMC:  quasimclist.append(quasimcres[k])
+        
+      if MUSLIM and CARIBU: plot(caribulist,muslimlist,'.',label='fractalysis')    
+      if QUASIMC and CARIBU:  plot(caribulist,quasimclist,'.',label='QuasiMC')
+      if nblightsimulation == 2 and QUASIMC and MUSLIM:  plot(muslimlist,quasimclist,'.',label='QuasiMC')
+      
+      title('Caribu/QuasiMc/Fractalysis comparison')
+      if CARIBU : xlabel('Caribu')
+      else : xlabel('Muslim')
+      
+      if nblightsimulation == 3:
+        ylabel('Fractalysis/QuasiMc')
+      else:
+        if QUASIMC: ylabel('QuasiMc')
+        else : ylabel('Fractalysis')
+      
+      M = 0
+      if CARIBU:   M = max(M,max(caribulist))
+      if MUSLIM:   M = max(M,max(muslimlist))
+      if QUASIMC:  M = max(M,max(quasimclist))
+      
+      plot([0,M],[0,M])
+      legend(loc = 0)
+      show()
+    
+    #setup cmap range for 3Dplot
+    if DISPLAY_METHOD == 0: res = caribures
+    if DISPLAY_METHOD == 1: res = muslimres
+    elif DISPLAY_METHOD == 2: res = quasimcres
+    
+    # generate color map for triangle display
+    minvalue = min(res.values())
+    maxvalue = max(res.values())
+    cmap = gen_cmap(minvalue,maxvalue)
+    
+    if MUSLIM:   print 'fractalysis : ', dfract ,'sec.'
+    if QUASIMC:  print 'QMc:' ,dqmc ,'sec.'
+    if CARIBU:   print 'Caribu: ', dcaribu ,'sec.'
+  return lstring
+
+
+###### INITIALISATION ######
+
+__lpy_code_version__ = 1.1
+
+def __initialiseContext__(context):
+	import openalea.plantgl.all as pgl
+	Color_0 = pgl.Material("Color_0" , ambient = (255,0,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_0.name = "Color_0"
+	context.turtle.setMaterial(0,Color_0)
+	Color_1 = pgl.Material("Color_1" , ambient = (239,15,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_1.name = "Color_1"
+	context.turtle.setMaterial(1,Color_1)
+	Color_2 = pgl.Material("Color_2" , ambient = (223,31,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_2.name = "Color_2"
+	context.turtle.setMaterial(2,Color_2)
+	Color_3 = pgl.Material("Color_3" , ambient = (207,47,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_3.name = "Color_3"
+	context.turtle.setMaterial(3,Color_3)
+	Color_4 = pgl.Material("Color_4" , ambient = (191,63,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_4.name = "Color_4"
+	context.turtle.setMaterial(4,Color_4)
+	Color_5 = pgl.Material("Color_5" , ambient = (175,79,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_5.name = "Color_5"
+	context.turtle.setMaterial(5,Color_5)
+	Color_6 = pgl.Material("Color_6" , ambient = (159,95,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_6.name = "Color_6"
+	context.turtle.setMaterial(6,Color_6)
+	Color_7 = pgl.Material("Color_7" , ambient = (143,111,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_7.name = "Color_7"
+	context.turtle.setMaterial(7,Color_7)
+	Color_8 = pgl.Material("Color_8" , ambient = (127,127,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_8.name = "Color_8"
+	context.turtle.setMaterial(8,Color_8)
+	Color_9 = pgl.Material("Color_9" , ambient = (111,143,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_9.name = "Color_9"
+	context.turtle.setMaterial(9,Color_9)
+	Color_10 = pgl.Material("Color_10" , ambient = (95,159,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_10.name = "Color_10"
+	context.turtle.setMaterial(10,Color_10)
+	Color_11 = pgl.Material("Color_11" , ambient = (79,175,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_11.name = "Color_11"
+	context.turtle.setMaterial(11,Color_11)
+	Color_12 = pgl.Material("Color_12" , ambient = (63,191,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_12.name = "Color_12"
+	context.turtle.setMaterial(12,Color_12)
+	Color_13 = pgl.Material("Color_13" , ambient = (47,207,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_13.name = "Color_13"
+	context.turtle.setMaterial(13,Color_13)
+	Color_14 = pgl.Material("Color_14" , ambient = (31,223,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_14.name = "Color_14"
+	context.turtle.setMaterial(14,Color_14)
+	Color_15 = pgl.Material("Color_15" , ambient = (15,239,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_15.name = "Color_15"
+	context.turtle.setMaterial(15,Color_15)
+	Color_16 = pgl.Material("Color_16" , ambient = (0,255,0) , diffuse = 0 , specular = (0,0,0) , )
+	Color_16.name = "Color_16"
+	context.turtle.setMaterial(16,Color_16)
+	scalars = [('HEAT_MAP', True, False, True), ('NUM_TRIANGLES', 3000, 1, 5000), ('EDGE_LENGTH', 9, 1, 100), ('BOX_SIZE', 100, 1, 1000), ('MUSLIM', True, False, True), ('QUASIMC', True, False, True), ('CARIBU', True, False, True), ('DISPLAY_METHOD', 0, 0, 2)]
+	context["__scalars__"] = scalars
+	for n,v,mnv,mxv in scalars:
+		context[n] = v
+	import openalea.plantgl.all as pgl
+	parameter = pgl.NurbsPatch(	
+	    pgl.Point4Matrix([[(0, -0.5, 0, 1), (0, -0.166667, 0, 1), (0, 0.166667, 0, 1), (0, 0.5, 0, 1)], [(0, -0.5, 0.333333, 1), (0, -0.166667, 0.333333, 1), (0, 0.166667, 0.333333, 1), (0, 0.5, 0.333333, 1)], [(0, -0.5, 0.666667, 1), (0, -0.166667, 0.666667, 1), (0, 0.166667, 0.666667, 1), (0, 0.5, 0.666667, 1)], [(0, -0.5, 1, 1), (0, -0.166667, 1, 1), (0, 0.166667, 1, 1), (0, 0.5, 1, 1)]]) , 
+	    )
+	parameter.name = "parameter"
+	panel_0 = ({'active': True, 'visible': True, 'name': 'Functions'},[('NurbsPatch',parameter)])
+	panel_1 = ({'active': True, 'visible': True, 'name': 'Curve2D'},[])
+	parameterset = [panel_0,panel_1,]
+	context["__functions__"] = []
+	context["__curves__"] = []
+	context["__parameterset__"] = parameterset
+	context["parameter"] = parameter
+__copyright__ = 'open-source GPL'
+__description__ = "Axe feuille\n=======\n\n0. Comprendre la regle de production\n\n1. Controle de la position de la premiere feuille: positionner la premiere feuille sur l'axe des Y inclinee, vers les Y positifs\n\n2. Epaissir un peu les entrenoeuds. Que remarquez vous ?\n\n3. Decaler le point d'insertion de la feuille de maniere a le mettre juste a la peripherie de l'entreneud\n\n4. Rajouter un petiole a chaque feuille\n\n5. Changer l'angle d'insertion des feuilles\n\n6. augmenter le nombre d'entrenoeuds\n\n7. Changer la taille des entrenoeuds\n\n8. Mettre une legere courbure a la tige\n\n9. Enlever les premieres feuilles (jusqu'a la moitie de l'axe par exemple)\n\n10. Utiliser tout ce que vous avez vu dans ce TD pour contruire votre arbre ...\n\n"
+__institutes__ = 'INRIA - CIRAD Virtual Plants'
+__authors__ = 'C. Godin, F. Boudon'

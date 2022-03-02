@@ -1,0 +1,68 @@
+# test du calcul des longueurs dans le cas d'un MTG ayant
+# des coordonnees
+
+CODE:	FORM-A			
+
+
+CLASSES:				
+SYMBOL	SCALE	DECOMPOSITION	INDEXATION	DEFINITION
+$	0	FREE	FREE	IMPLICIT
+P 	1	CONNECTED	FREE	EXPLICIT
+U 	2	FREE	FREE	EXPLICIT
+E 	3	NONE	FREE	EXPLICIT
+
+DESCRIPTION :				
+LEFT	RIGHT	RELTYPE	MAX	
+
+U	U	<	1	
+U	U	+	?
+E	E	<	1	
+E	E	+	?
+
+
+
+FEATURES:			
+NAME	TYPE		
+
+MTG:
+
+TOPO		
+
+/P1/U1		
+^/E1
+^<E2	
+	
+	+U1/E1					
+	^<E2
+	^<E5
+	^<E15
+	^<E17
+	^<E30
+	^<E39	
+^<E3<<E20
+	+U1/E1					
+	^<E2
+	^<E5
+	^<E15
+	^<E17
+	^<E30
+	^<E39	
+^<E21<<E25	
+	+U1/E1					
+	^<E27
+	^<E35
+	^<E45	
+	^<E47
+	^<E50	
+	^<E59	
+^<E26<<E27	
+	+U1/E28					
+	^<E29
+	^<E35
+	^<E45	
+	^<E47
+	^<E10	
+	^<E19	
+
+
+

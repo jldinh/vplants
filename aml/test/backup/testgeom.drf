@@ -1,0 +1,9 @@
+Geometry = cone.geom
+Geometry = geomobjs.geom
+
+Appearance = colors.app
+
+SMBPath = ../../../databases/SMBFiles
+SMBModel entrenoeud = nentn105
+
+Class A = c1

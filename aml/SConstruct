@@ -1,0 +1,28 @@
+# -*-python-*-
+
+from openalea.sconsx import config, environ
+import os
+
+pj = os.path.join
+ALEASolution = config.ALEASolution
+
+options = Variables(['../options.py', 'options.py'], ARGUMENTS)
+
+# Dependencies
+common_tools = ['vplants.mtg', 'vplants.plantgl', 'vplants.tool', 'vplants.amlobj',
+                'vplants.stat_tool', 'vplants.sequence_analysis',
+                'vplants.tree_matching','boost_python']
+
+tools = ['python','flex','install', 'qt4', 'cgal'] + common_tools
+
+env = ALEASolution(options, tools)
+
+# Build stage
+prefix = env['build_prefix']
+env.Append(LIBPATH=pj(prefix,'lib'))
+SConscript(pj(prefix,"src/cpp/SConscript"),
+           exports='env')
+SConscript(pj(prefix,"src/wrapper/SConscript"),
+           exports='env')
+
+Default("build")

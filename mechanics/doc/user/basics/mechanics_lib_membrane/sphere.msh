@@ -1,0 +1,743 @@
+BEGIN topomesh degree 2
+
+BEGIN description
+from blender
+END description
+
+BEGIN properties description
+deg0	X(float,pix)	Y(float,pix)	Z(float,pix)
+deg1
+deg2
+END properties description
+
+BEGIN wisp degree 0
+id 0	0.0	0.0	-10.0
+id 1	7.2359995842	-5.25720024109	-4.47214984894
+id 2	-2.7638502121	-8.50640010834	-4.47214984894
+id 3	-8.94425010681	0.0	-4.47214984894
+id 4	-2.7638502121	8.50640010834	-4.47214984894
+id 5	7.2359995842	5.25720024109	-4.47214984894
+id 6	2.7638502121	-8.50640010834	4.47214984894
+id 7	-7.2359995842	-5.25720024109	4.47214984894
+id 8	-7.2359995842	5.25720024109	4.47214984894
+id 9	2.7638502121	8.50640010834	4.47214984894
+id 10	8.94425010681	0.0	4.47214984894
+id 11	0.0	0.0	10.0
+id 12	4.25322628021	-3.09011363983	-8.50654220581
+id 13	-1.62455558777	-4.99995279312	-8.50654411316
+id 14	2.62868833542	-8.09011650085	-5.25737667084
+id 15	4.25322628021	3.09011363983	-8.50654220581
+id 16	8.50647830963	0.0	-5.25735902786
+id 17	-5.25729751587	0.0	-8.5065164566
+id 18	-6.88189315796	-4.99996948242	-5.25736236572
+id 19	-1.62455558777	4.99995279312	-8.50654411316
+id 20	-6.88189315796	4.99996948242	-5.25736236572
+id 21	2.62868833542	8.09011650085	-5.25737667084
+id 22	9.51057910919	3.09012627602	0.0
+id 23	9.51057910919	-3.09012627602	0.0
+id 24	5.87785625458	-8.09016799927	0.0
+id 25	0.0	-10.0	0.0
+id 26	-5.87785625458	-8.09016799927	0.0
+id 27	-9.51057910919	-3.09012627602	0.0
+id 28	-9.51057910919	3.09012627602	0.0
+id 29	-5.87785625458	8.09016799927	0.0
+id 30	0.0	10.0	0.0
+id 31	5.87785625458	8.09016799927	0.0
+id 32	6.88189315796	-4.99996948242	5.25736236572
+id 33	-2.62868833542	-8.09011650085	5.25737667084
+id 34	-8.50647830963	0.0	5.25735902786
+id 35	-2.62868833542	8.09011650085	5.25737667084
+id 36	6.88189315796	4.99996948242	5.25736236572
+id 37	5.25729751587	0.0	8.5065164566
+id 38	1.62455558777	-4.99995279312	8.50654411316
+id 39	-4.25322628021	-3.09011363983	8.50654220581
+id 40	-4.25322628021	3.09011363983	8.50654220581
+id 41	1.62455558777	4.99995279312	8.50654411316
+END wisp degree 0
+BEGIN wisp degree 1
+id 0
+id 1
+id 2
+id 3
+id 4
+id 5
+id 6
+id 7
+id 8
+id 9
+id 10
+id 11
+id 12
+id 13
+id 14
+id 15
+id 16
+id 17
+id 18
+id 19
+id 20
+id 21
+id 22
+id 23
+id 24
+id 25
+id 26
+id 27
+id 28
+id 29
+id 30
+id 31
+id 32
+id 33
+id 34
+id 35
+id 36
+id 37
+id 38
+id 39
+id 40
+id 41
+id 42
+id 43
+id 44
+id 45
+id 46
+id 47
+id 48
+id 49
+id 50
+id 51
+id 52
+id 53
+id 54
+id 55
+id 56
+id 57
+id 58
+id 59
+id 60
+id 61
+id 62
+id 63
+id 64
+id 65
+id 66
+id 67
+id 68
+id 69
+id 70
+id 71
+id 72
+id 73
+id 74
+id 75
+id 76
+id 77
+id 78
+id 79
+id 80
+id 81
+id 82
+id 83
+id 84
+id 85
+id 86
+id 87
+id 88
+id 89
+id 90
+id 91
+id 92
+id 93
+id 94
+id 95
+id 96
+id 97
+id 98
+id 99
+id 100
+id 101
+id 102
+id 103
+id 104
+id 105
+id 106
+id 107
+id 108
+id 109
+id 110
+id 111
+id 112
+id 113
+id 114
+id 115
+id 116
+id 117
+id 118
+id 119
+END wisp degree 1
+BEGIN wisp degree 2
+id 0
+id 1
+id 2
+id 3
+id 4
+id 5
+id 6
+id 7
+id 8
+id 9
+id 10
+id 11
+id 12
+id 13
+id 14
+id 15
+id 16
+id 17
+id 18
+id 19
+id 20
+id 21
+id 22
+id 23
+id 24
+id 25
+id 26
+id 27
+id 28
+id 29
+id 30
+id 31
+id 32
+id 33
+id 34
+id 35
+id 36
+id 37
+id 38
+id 39
+id 40
+id 41
+id 42
+id 43
+id 44
+id 45
+id 46
+id 47
+id 48
+id 49
+id 50
+id 51
+id 52
+id 53
+id 54
+id 55
+id 56
+id 57
+id 58
+id 59
+id 60
+id 61
+id 62
+id 63
+id 64
+id 65
+id 66
+id 67
+id 68
+id 69
+id 70
+id 71
+id 72
+id 73
+id 74
+id 75
+id 76
+id 77
+id 78
+id 79
+END wisp degree 2
+BEGIN decomposition
+link degree 1 wid 0 bid 1
+link degree 1 wid 0 bid 12
+link degree 1 wid 1 bid 0
+link degree 1 wid 1 bid 12
+link degree 1 wid 2 bid 2
+link degree 1 wid 2 bid 13
+link degree 1 wid 3 bid 0
+link degree 1 wid 3 bid 13
+link degree 1 wid 4 bid 1
+link degree 1 wid 4 bid 14
+link degree 1 wid 5 bid 2
+link degree 1 wid 5 bid 14
+link degree 1 wid 6 bid 5
+link degree 1 wid 6 bid 15
+link degree 1 wid 7 bid 0
+link degree 1 wid 7 bid 15
+link degree 1 wid 8 bid 5
+link degree 1 wid 8 bid 16
+link degree 1 wid 9 bid 1
+link degree 1 wid 9 bid 16
+link degree 1 wid 10 bid 3
+link degree 1 wid 10 bid 17
+link degree 1 wid 11 bid 0
+link degree 1 wid 11 bid 17
+link degree 1 wid 12 bid 3
+link degree 1 wid 12 bid 18
+link degree 1 wid 13 bid 2
+link degree 1 wid 13 bid 18
+link degree 1 wid 14 bid 4
+link degree 1 wid 14 bid 19
+link degree 1 wid 15 bid 0
+link degree 1 wid 15 bid 19
+link degree 1 wid 16 bid 3
+link degree 1 wid 16 bid 20
+link degree 1 wid 17 bid 4
+link degree 1 wid 17 bid 20
+link degree 1 wid 18 bid 4
+link degree 1 wid 18 bid 21
+link degree 1 wid 19 bid 5
+link degree 1 wid 19 bid 21
+link degree 1 wid 20 bid 5
+link degree 1 wid 20 bid 22
+link degree 1 wid 21 bid 10
+link degree 1 wid 21 bid 22
+link degree 1 wid 22 bid 10
+link degree 1 wid 22 bid 23
+link degree 1 wid 23 bid 1
+link degree 1 wid 23 bid 23
+link degree 1 wid 24 bid 6
+link degree 1 wid 24 bid 24
+link degree 1 wid 25 bid 1
+link degree 1 wid 25 bid 24
+link degree 1 wid 26 bid 6
+link degree 1 wid 26 bid 25
+link degree 1 wid 27 bid 2
+link degree 1 wid 27 bid 25
+link degree 1 wid 28 bid 7
+link degree 1 wid 28 bid 26
+link degree 1 wid 29 bid 2
+link degree 1 wid 29 bid 26
+link degree 1 wid 30 bid 3
+link degree 1 wid 30 bid 27
+link degree 1 wid 31 bid 7
+link degree 1 wid 31 bid 27
+link degree 1 wid 32 bid 3
+link degree 1 wid 32 bid 28
+link degree 1 wid 33 bid 8
+link degree 1 wid 33 bid 28
+link degree 1 wid 34 bid 4
+link degree 1 wid 34 bid 29
+link degree 1 wid 35 bid 8
+link degree 1 wid 35 bid 29
+link degree 1 wid 36 bid 4
+link degree 1 wid 36 bid 30
+link degree 1 wid 37 bid 9
+link degree 1 wid 37 bid 30
+link degree 1 wid 38 bid 5
+link degree 1 wid 38 bid 31
+link degree 1 wid 39 bid 9
+link degree 1 wid 39 bid 31
+link degree 1 wid 40 bid 6
+link degree 1 wid 40 bid 32
+link degree 1 wid 41 bid 10
+link degree 1 wid 41 bid 32
+link degree 1 wid 42 bid 6
+link degree 1 wid 42 bid 33
+link degree 1 wid 43 bid 7
+link degree 1 wid 43 bid 33
+link degree 1 wid 44 bid 7
+link degree 1 wid 44 bid 34
+link degree 1 wid 45 bid 8
+link degree 1 wid 45 bid 34
+link degree 1 wid 46 bid 9
+link degree 1 wid 46 bid 35
+link degree 1 wid 47 bid 8
+link degree 1 wid 47 bid 35
+link degree 1 wid 48 bid 9
+link degree 1 wid 48 bid 36
+link degree 1 wid 49 bid 10
+link degree 1 wid 49 bid 36
+link degree 1 wid 50 bid 10
+link degree 1 wid 50 bid 37
+link degree 1 wid 51 bid 11
+link degree 1 wid 51 bid 37
+link degree 1 wid 52 bid 6
+link degree 1 wid 52 bid 38
+link degree 1 wid 53 bid 11
+link degree 1 wid 53 bid 38
+link degree 1 wid 54 bid 7
+link degree 1 wid 54 bid 39
+link degree 1 wid 55 bid 11
+link degree 1 wid 55 bid 39
+link degree 1 wid 56 bid 8
+link degree 1 wid 56 bid 40
+link degree 1 wid 57 bid 11
+link degree 1 wid 57 bid 40
+link degree 1 wid 58 bid 9
+link degree 1 wid 58 bid 41
+link degree 1 wid 59 bid 11
+link degree 1 wid 59 bid 41
+link degree 1 wid 60 bid 12
+link degree 1 wid 60 bid 14
+link degree 1 wid 61 bid 12
+link degree 1 wid 61 bid 13
+link degree 1 wid 62 bid 13
+link degree 1 wid 62 bid 14
+link degree 1 wid 63 bid 12
+link degree 1 wid 63 bid 16
+link degree 1 wid 64 bid 12
+link degree 1 wid 64 bid 15
+link degree 1 wid 65 bid 15
+link degree 1 wid 65 bid 16
+link degree 1 wid 66 bid 13
+link degree 1 wid 66 bid 18
+link degree 1 wid 67 bid 13
+link degree 1 wid 67 bid 17
+link degree 1 wid 68 bid 17
+link degree 1 wid 68 bid 18
+link degree 1 wid 69 bid 17
+link degree 1 wid 69 bid 20
+link degree 1 wid 70 bid 17
+link degree 1 wid 70 bid 19
+link degree 1 wid 71 bid 19
+link degree 1 wid 71 bid 20
+link degree 1 wid 72 bid 19
+link degree 1 wid 72 bid 21
+link degree 1 wid 73 bid 15
+link degree 1 wid 73 bid 19
+link degree 1 wid 74 bid 15
+link degree 1 wid 74 bid 21
+link degree 1 wid 75 bid 16
+link degree 1 wid 75 bid 23
+link degree 1 wid 76 bid 16
+link degree 1 wid 76 bid 22
+link degree 1 wid 77 bid 22
+link degree 1 wid 77 bid 23
+link degree 1 wid 78 bid 14
+link degree 1 wid 78 bid 25
+link degree 1 wid 79 bid 14
+link degree 1 wid 79 bid 24
+link degree 1 wid 80 bid 24
+link degree 1 wid 80 bid 25
+link degree 1 wid 81 bid 18
+link degree 1 wid 81 bid 27
+link degree 1 wid 82 bid 18
+link degree 1 wid 82 bid 26
+link degree 1 wid 83 bid 26
+link degree 1 wid 83 bid 27
+link degree 1 wid 84 bid 20
+link degree 1 wid 84 bid 29
+link degree 1 wid 85 bid 20
+link degree 1 wid 85 bid 28
+link degree 1 wid 86 bid 28
+link degree 1 wid 86 bid 29
+link degree 1 wid 87 bid 21
+link degree 1 wid 87 bid 31
+link degree 1 wid 88 bid 21
+link degree 1 wid 88 bid 30
+link degree 1 wid 89 bid 30
+link degree 1 wid 89 bid 31
+link degree 1 wid 90 bid 23
+link degree 1 wid 90 bid 32
+link degree 1 wid 91 bid 23
+link degree 1 wid 91 bid 24
+link degree 1 wid 92 bid 24
+link degree 1 wid 92 bid 32
+link degree 1 wid 93 bid 25
+link degree 1 wid 93 bid 33
+link degree 1 wid 94 bid 25
+link degree 1 wid 94 bid 26
+link degree 1 wid 95 bid 26
+link degree 1 wid 95 bid 33
+link degree 1 wid 96 bid 27
+link degree 1 wid 96 bid 34
+link degree 1 wid 97 bid 27
+link degree 1 wid 97 bid 28
+link degree 1 wid 98 bid 28
+link degree 1 wid 98 bid 34
+link degree 1 wid 99 bid 29
+link degree 1 wid 99 bid 35
+link degree 1 wid 100 bid 29
+link degree 1 wid 100 bid 30
+link degree 1 wid 101 bid 30
+link degree 1 wid 101 bid 35
+link degree 1 wid 102 bid 31
+link degree 1 wid 102 bid 36
+link degree 1 wid 103 bid 22
+link degree 1 wid 103 bid 31
+link degree 1 wid 104 bid 22
+link degree 1 wid 104 bid 36
+link degree 1 wid 105 bid 32
+link degree 1 wid 105 bid 38
+link degree 1 wid 106 bid 32
+link degree 1 wid 106 bid 37
+link degree 1 wid 107 bid 37
+link degree 1 wid 107 bid 38
+link degree 1 wid 108 bid 33
+link degree 1 wid 108 bid 39
+link degree 1 wid 109 bid 33
+link degree 1 wid 109 bid 38
+link degree 1 wid 110 bid 38
+link degree 1 wid 110 bid 39
+link degree 1 wid 111 bid 34
+link degree 1 wid 111 bid 40
+link degree 1 wid 112 bid 34
+link degree 1 wid 112 bid 39
+link degree 1 wid 113 bid 39
+link degree 1 wid 113 bid 40
+link degree 1 wid 114 bid 35
+link degree 1 wid 114 bid 41
+link degree 1 wid 115 bid 35
+link degree 1 wid 115 bid 40
+link degree 1 wid 116 bid 40
+link degree 1 wid 116 bid 41
+link degree 1 wid 117 bid 36
+link degree 1 wid 117 bid 37
+link degree 1 wid 118 bid 36
+link degree 1 wid 118 bid 41
+link degree 1 wid 119 bid 37
+link degree 1 wid 119 bid 41
+link degree 2 wid 0 bid 60
+link degree 2 wid 0 bid 0
+link degree 2 wid 0 bid 4
+link degree 2 wid 1 bid 60
+link degree 2 wid 1 bid 62
+link degree 2 wid 1 bid 61
+link degree 2 wid 2 bid 2
+link degree 2 wid 2 bid 62
+link degree 2 wid 2 bid 5
+link degree 2 wid 3 bid 3
+link degree 2 wid 3 bid 1
+link degree 2 wid 3 bid 61
+link degree 2 wid 4 bid 9
+link degree 2 wid 4 bid 0
+link degree 2 wid 4 bid 63
+link degree 2 wid 5 bid 64
+link degree 2 wid 5 bid 65
+link degree 2 wid 5 bid 63
+link degree 2 wid 6 bid 8
+link degree 2 wid 6 bid 65
+link degree 2 wid 6 bid 6
+link degree 2 wid 7 bid 1
+link degree 2 wid 7 bid 7
+link degree 2 wid 7 bid 64
+link degree 2 wid 8 bid 66
+link degree 2 wid 8 bid 2
+link degree 2 wid 8 bid 13
+link degree 2 wid 9 bid 66
+link degree 2 wid 9 bid 68
+link degree 2 wid 9 bid 67
+link degree 2 wid 10 bid 10
+link degree 2 wid 10 bid 68
+link degree 2 wid 10 bid 12
+link degree 2 wid 11 bid 11
+link degree 2 wid 11 bid 3
+link degree 2 wid 11 bid 67
+link degree 2 wid 12 bid 69
+link degree 2 wid 12 bid 10
+link degree 2 wid 12 bid 16
+link degree 2 wid 13 bid 69
+link degree 2 wid 13 bid 71
+link degree 2 wid 13 bid 70
+link degree 2 wid 14 bid 14
+link degree 2 wid 14 bid 71
+link degree 2 wid 14 bid 17
+link degree 2 wid 15 bid 15
+link degree 2 wid 15 bid 11
+link degree 2 wid 15 bid 70
+link degree 2 wid 16 bid 72
+link degree 2 wid 16 bid 14
+link degree 2 wid 16 bid 18
+link degree 2 wid 17 bid 72
+link degree 2 wid 17 bid 74
+link degree 2 wid 17 bid 73
+link degree 2 wid 18 bid 6
+link degree 2 wid 18 bid 74
+link degree 2 wid 18 bid 19
+link degree 2 wid 19 bid 7
+link degree 2 wid 19 bid 15
+link degree 2 wid 19 bid 73
+link degree 2 wid 20 bid 23
+link degree 2 wid 20 bid 9
+link degree 2 wid 20 bid 75
+link degree 2 wid 21 bid 76
+link degree 2 wid 21 bid 77
+link degree 2 wid 21 bid 75
+link degree 2 wid 22 bid 22
+link degree 2 wid 22 bid 77
+link degree 2 wid 22 bid 21
+link degree 2 wid 23 bid 76
+link degree 2 wid 23 bid 8
+link degree 2 wid 23 bid 20
+link degree 2 wid 24 bid 27
+link degree 2 wid 24 bid 5
+link degree 2 wid 24 bid 78
+link degree 2 wid 25 bid 79
+link degree 2 wid 25 bid 80
+link degree 2 wid 25 bid 78
+link degree 2 wid 26 bid 26
+link degree 2 wid 26 bid 80
+link degree 2 wid 26 bid 24
+link degree 2 wid 27 bid 79
+link degree 2 wid 27 bid 4
+link degree 2 wid 27 bid 25
+link degree 2 wid 28 bid 30
+link degree 2 wid 28 bid 12
+link degree 2 wid 28 bid 81
+link degree 2 wid 29 bid 82
+link degree 2 wid 29 bid 83
+link degree 2 wid 29 bid 81
+link degree 2 wid 30 bid 31
+link degree 2 wid 30 bid 83
+link degree 2 wid 30 bid 28
+link degree 2 wid 31 bid 82
+link degree 2 wid 31 bid 13
+link degree 2 wid 31 bid 29
+link degree 2 wid 32 bid 34
+link degree 2 wid 32 bid 17
+link degree 2 wid 32 bid 84
+link degree 2 wid 33 bid 85
+link degree 2 wid 33 bid 86
+link degree 2 wid 33 bid 84
+link degree 2 wid 34 bid 35
+link degree 2 wid 34 bid 86
+link degree 2 wid 34 bid 33
+link degree 2 wid 35 bid 85
+link degree 2 wid 35 bid 16
+link degree 2 wid 35 bid 32
+link degree 2 wid 36 bid 38
+link degree 2 wid 36 bid 19
+link degree 2 wid 36 bid 87
+link degree 2 wid 37 bid 88
+link degree 2 wid 37 bid 89
+link degree 2 wid 37 bid 87
+link degree 2 wid 38 bid 39
+link degree 2 wid 38 bid 89
+link degree 2 wid 38 bid 37
+link degree 2 wid 39 bid 88
+link degree 2 wid 39 bid 18
+link degree 2 wid 39 bid 36
+link degree 2 wid 40 bid 90
+link degree 2 wid 40 bid 22
+link degree 2 wid 40 bid 41
+link degree 2 wid 41 bid 90
+link degree 2 wid 41 bid 92
+link degree 2 wid 41 bid 91
+link degree 2 wid 42 bid 24
+link degree 2 wid 42 bid 92
+link degree 2 wid 42 bid 40
+link degree 2 wid 43 bid 25
+link degree 2 wid 43 bid 23
+link degree 2 wid 43 bid 91
+link degree 2 wid 44 bid 93
+link degree 2 wid 44 bid 26
+link degree 2 wid 44 bid 42
+link degree 2 wid 45 bid 93
+link degree 2 wid 45 bid 95
+link degree 2 wid 45 bid 94
+link degree 2 wid 46 bid 28
+link degree 2 wid 46 bid 95
+link degree 2 wid 46 bid 43
+link degree 2 wid 47 bid 29
+link degree 2 wid 47 bid 27
+link degree 2 wid 47 bid 94
+link degree 2 wid 48 bid 96
+link degree 2 wid 48 bid 31
+link degree 2 wid 48 bid 44
+link degree 2 wid 49 bid 96
+link degree 2 wid 49 bid 98
+link degree 2 wid 49 bid 97
+link degree 2 wid 50 bid 33
+link degree 2 wid 50 bid 98
+link degree 2 wid 50 bid 45
+link degree 2 wid 51 bid 32
+link degree 2 wid 51 bid 30
+link degree 2 wid 51 bid 97
+link degree 2 wid 52 bid 99
+link degree 2 wid 52 bid 35
+link degree 2 wid 52 bid 47
+link degree 2 wid 53 bid 99
+link degree 2 wid 53 bid 101
+link degree 2 wid 53 bid 100
+link degree 2 wid 54 bid 37
+link degree 2 wid 54 bid 101
+link degree 2 wid 54 bid 46
+link degree 2 wid 55 bid 36
+link degree 2 wid 55 bid 34
+link degree 2 wid 55 bid 100
+link degree 2 wid 56 bid 102
+link degree 2 wid 56 bid 39
+link degree 2 wid 56 bid 48
+link degree 2 wid 57 bid 102
+link degree 2 wid 57 bid 104
+link degree 2 wid 57 bid 103
+link degree 2 wid 58 bid 21
+link degree 2 wid 58 bid 104
+link degree 2 wid 58 bid 49
+link degree 2 wid 59 bid 20
+link degree 2 wid 59 bid 38
+link degree 2 wid 59 bid 103
+link degree 2 wid 60 bid 52
+link degree 2 wid 60 bid 40
+link degree 2 wid 60 bid 105
+link degree 2 wid 61 bid 106
+link degree 2 wid 61 bid 107
+link degree 2 wid 61 bid 105
+link degree 2 wid 62 bid 53
+link degree 2 wid 62 bid 107
+link degree 2 wid 62 bid 51
+link degree 2 wid 63 bid 106
+link degree 2 wid 63 bid 41
+link degree 2 wid 63 bid 50
+link degree 2 wid 64 bid 54
+link degree 2 wid 64 bid 43
+link degree 2 wid 64 bid 108
+link degree 2 wid 65 bid 109
+link degree 2 wid 65 bid 110
+link degree 2 wid 65 bid 108
+link degree 2 wid 66 bid 55
+link degree 2 wid 66 bid 110
+link degree 2 wid 66 bid 53
+link degree 2 wid 67 bid 109
+link degree 2 wid 67 bid 42
+link degree 2 wid 67 bid 52
+link degree 2 wid 68 bid 56
+link degree 2 wid 68 bid 45
+link degree 2 wid 68 bid 111
+link degree 2 wid 69 bid 112
+link degree 2 wid 69 bid 113
+link degree 2 wid 69 bid 111
+link degree 2 wid 70 bid 57
+link degree 2 wid 70 bid 113
+link degree 2 wid 70 bid 55
+link degree 2 wid 71 bid 112
+link degree 2 wid 71 bid 44
+link degree 2 wid 71 bid 54
+link degree 2 wid 72 bid 58
+link degree 2 wid 72 bid 46
+link degree 2 wid 72 bid 114
+link degree 2 wid 73 bid 115
+link degree 2 wid 73 bid 116
+link degree 2 wid 73 bid 114
+link degree 2 wid 74 bid 59
+link degree 2 wid 74 bid 116
+link degree 2 wid 74 bid 57
+link degree 2 wid 75 bid 115
+link degree 2 wid 75 bid 47
+link degree 2 wid 75 bid 56
+link degree 2 wid 76 bid 50
+link degree 2 wid 76 bid 49
+link degree 2 wid 76 bid 117
+link degree 2 wid 77 bid 118
+link degree 2 wid 77 bid 119
+link degree 2 wid 77 bid 117
+link degree 2 wid 78 bid 51
+link degree 2 wid 78 bid 119
+link degree 2 wid 78 bid 59
+link degree 2 wid 79 bid 118
+link degree 2 wid 79 bid 48
+link degree 2 wid 79 bid 58
+END decomposition
+END topomesh

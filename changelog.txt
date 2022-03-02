@@ -1,0 +1,28 @@
+27/01/08 release_0.6.0
+======================
+**revision 5974**
+
+- Demos added and/or fixed
+- Tests added and/or fixed
+
+PlantGL
+-------
+
+others
+------
+- pyLsysGui merged with lsystem
+- merge pylsysgui into pylsystem
+- fix postinstall 
+
+06/05/08 VPlants 0.3.0
+==========================================
+**revision 4865**
+
+- Fix .smb extension
+- Fix the Delete method for AML objects
+- Add a databases directory to the aml package
+- New stat objects and interface
+- Add Py_ssize_t type definition to provide compatibility with Python 2.4.
+- Add new statistical methods and update the stat interface.
+
+

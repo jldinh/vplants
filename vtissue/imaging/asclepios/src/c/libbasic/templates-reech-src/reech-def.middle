@@ -1,0 +1,706 @@
+
+/* Resampling procedure.
+
+   Work for 3D images, not for vectorial ones.
+
+   Cette procedure utilise un champ de deformations 
+   backward, c'est-a-dire allant de l'image a reechantillonner
+   a l'image reference. Une fois estime le point apres application
+   du champ de deformation, on applique a celui-ci une matrice 
+   de transformation.
+
+   Entrees:
+   - le buffer de l'image reference
+   - une coupe (flottante) de l'image resultat
+   - les 3 coupes de deformations (le vecteur) associees
+   - la matrice
+   - le numero de la coupe
+
+   Je prefere faire comme ca pour pouvoir facilement gerer 
+   une lecture plan par plan du champ de deformation si necessaire.
+
+   Pas de conversion faite a cause de l'eventualite d'un biais et 
+   d'un gain.
+*/
+
+void ReechTriLinDefBack_TYPE ( void *theBuf, /* buffer to be resampled */
+			       int *theDim, /* dimensions of buffers */
+			       r32* resBuf,  /* result buffer */
+			       int *resDim,  /* dimensions of this buffer */
+			       r32** theDef, /* deformations */
+                               int *defDim, /* dimensions of these buffers */
+			       double* mat_aft,  /* transformation matrix */
+			       double* mat_bef,  /* transformation matrix */
+			       int slice
+			       )
+{
+  int i, j, l, ix, iy, iz;
+  
+  double xd, yd, zd, x, y, z;
+  double dx, dy, dz, dxdy,dxdz,dydz,dxdydz;
+  double v[3];
+  double res;
+  double v6, v5, v4;
+
+  int rdimx=resDim[0], rdimy=resDim[1];
+
+  int tdimx=theDim[0], tdimy=theDim[1], tdimz=theDim[2];
+  int tdimxy=tdimx*tdimy;
+  int toffset1=tdimxy+tdimx+1, toffset2=tdimxy-tdimx-1;
+  int t1dimx=tdimx-1, t1dimy=tdimy-1, t1dimz=tdimz-1;
+
+  int ddimx=defDim[0], ddimy=defDim[1], ddimz=defDim[2];
+  int ddimxy = ddimx * ddimy;
+  int doffset1=ddimxy+ddimx+1, doffset2=ddimxy-ddimx-1;
+  int d1dimx=ddimx-1, d1dimy=ddimy-1, d1dimz=ddimz-1;
+
+  double borddimx = (double)tdimx-0.5, borddimy = (double)tdimy-0.5;
+  double borddimz = (double)tdimz-0.5;
+  TYPE *tbuf = (TYPE*)theBuf;
+  TYPE *tpt;
+  r32* rbuf = resBuf;
+
+  r32* defx = theDef[0] + slice*defDim[0]*defDim[1];
+  r32* defy = theDef[1] + slice*defDim[0]*defDim[1];
+  r32* defz = theDef[2] + slice*defDim[0]*defDim[1];
+  r32* dbuf;
+
+  if ( mat_bef == NULL ) {
+    if ( resDim[0] != defDim[0] || resDim[1] != defDim[1] || resDim[2] != defDim[2] ) {
+      fprintf( stderr, "deformation field should have the same dimension than result image\n" );
+      return;
+    }
+  }
+
+  for ( j = 0; j < rdimy; j ++ )
+  for ( i = 0; i < rdimx; i ++, rbuf ++ ) {
+
+    /* computation of the corresponding point after deformation */
+    if ( mat_bef == NULL ) {
+       xd = (double)i     + *defx;
+       yd = (double)j     + *defy;
+       zd = (double)slice + *defz;
+       defx ++;
+       defy ++;
+       defz ++;
+    }
+    else {
+
+      /* apply the first matrix */
+      x = mat_bef[0] * i +  mat_bef[1] * j + mat_bef[2] * slice + mat_bef[3];
+      y = mat_bef[4] * i +  mat_bef[5] * j + mat_bef[6] * slice + mat_bef[7];
+      z = mat_bef[8] * i +  mat_bef[9] * j + mat_bef[10] * slice + mat_bef[11];
+
+      /* interpolate the vector deformation at (xd,yd,zd) */
+      ix = (int)x;
+      iy = (int)y;
+      iz = (int)z;
+
+      /* the point is outside the deformation field 
+       */
+      if ( ( x < -0.5 ) || ( x > ddimx-0.5)
+	   || ( y < -0.5 ) || ( y > ddimy-0.5)
+	   || ( z < -0.5 ) || ( z > ddimz-0.5) ) {
+	*rbuf = 0; 
+	continue; 
+      }
+      
+      /* vector interpolation: are we on the border or not ? */
+      if ( (x > 0.0) && (ix < d1dimx) &&
+	   (y > 0.0) && (iy < d1dimy) &&
+	   (z > 0.0) && (iz < d1dimz) ) {
+	/* the corresponding point is in the box defined 
+	 by (ix[+1],iy[+1],iz[+1]) */
+	dx = x - ix;
+	dy = y - iy;
+	dz = z - iz;
+	dxdy = dx*dy;
+	dxdz = dx*dz;
+	dydz = dy*dz;
+	dxdydz = dxdy*dz;
+	
+	/* we have
+	   v[7]=dxdydz;            coefficient of tbuf(ix+1,iy+1,iz+1)
+	   v[6]=dxdz-dxdydz;       coefficient of tbuf(ix+1,iy,  iz+1)
+	   v[5]=dxdy-dxdydz;       coefficient of tbuf(ix+1,iy+1,iz  )
+	   v[4]=dx-dxdy-v[6];      coefficient of tbuf(ix+1,iy  ,iz  )
+	   v[3]=dydz-dxdydz;       coefficient of tbuf(ix  ,iy+1,iz+1)
+	   v[2]=dz-dydz-v[6];      coefficient of tbuf(ix  ,iy  ,iz+1)
+	   v[1]=dy-dydz-v[5];      coefficient of tbuf(ix  ,iy+1,iz  )
+	   v[0]=1-dy-dz+dydz-v[4]; coefficient of tbuf(ix  ,iy  ,iz  )
+	*/
+	
+	v6 = dxdz-dxdydz;
+	v5 = dxdy-dxdydz;
+	v4 = dx-dxdy-v6;
+	
+	for ( l=0; l<3; l++ ) {
+	  v[l] = 0;
+	  dbuf = theDef[l];
+	  dbuf += ix + iy * ddimx + iz * ddimxy + doffset1;
+	  v[l] += dxdydz * (*dbuf);            /* tbuf(ix+1,iy+1,iz+1) */
+	  dbuf --;
+	  v[l] += (dydz-dxdydz) * (*dbuf);     /* tbuf(ix  ,iy+1,iz+1) */
+	  dbuf -= d1dimx;
+	  v[l] += v6 * (*dbuf);                /* tbuf(ix+1  ,iy,  iz+1) */
+	  dbuf --;
+	  v[l] += (dz-dydz-v6) * (*dbuf);      /* tbuf(ix  ,iy  ,iz+1) */
+	  dbuf -= doffset2;
+	  v[l] += v5 * (*dbuf);                /* tbuf(ix+1,iy+1,iz  ) */
+	  dbuf --;
+	  v[l] += (dy-dydz-v5) * (*dbuf);      /* tbuf(ix  ,iy+1,iz  ) */
+	  dbuf -= d1dimx;
+	  v[l] += v4 * (*dbuf);                /* tbuf(ix+1,iy  ,iz  ) */
+	  dbuf --;
+	  v[l] += (1-dy-dz+dydz-v4) * (*dbuf); /* tbuf(ix  ,iy  ,iz  ) */
+	}
+      }
+      else {
+	  
+	/* here, we are sure we are on some border */
+	  
+	if ( (x < 0.0) || (ix == d1dimx) ) {
+	  if ( (y < 0.0) || (iy == d1dimy) ) {
+	    if ( (z < 0.0) || (iz == d1dimz) ) {
+	      for ( l=0; l<3; l++ ) {
+		v[l] = 0;
+		dbuf = theDef[l];
+		dbuf += ix + iy * ddimx + iz * ddimxy;
+		v[l] = *dbuf;
+	      }
+	    }
+	    else {
+	      dz = z - iz;
+	      for ( l=0; l<3; l++ ) {
+		v[l] = 0;
+		dbuf = theDef[l];
+		dbuf += ix + iy * ddimx + iz * ddimxy;
+		v[l]  = (1-dz) * (*dbuf); /* (1-dz)* tbuf(ix,iy,iz) */
+		dbuf += ddimxy;
+		v[l] += dz * (*dbuf);     /* dz * tbuf(ix,iy,iz+1) */
+	      }
+	    }
+	  }
+	  else {
+	    dy = y - iy;
+	    if ( (z < 0.0) || (iz == d1dimz) ) {
+	      for ( l=0; l<3; l++ ) {
+		v[l] = 0;
+		dbuf = theDef[l];
+		dbuf += ix + iy * ddimx + iz * ddimxy;
+		v[l]  = (1-dy) * (*dbuf); /* (1-dy)* tbuf(ix,iy,iz) */
+		dbuf += ddimx;
+		v[l] += dy * (*dbuf);     /* dy * tbuf(ix,iy+1,iz) */
+	      }
+	    }
+	    else {
+	      dz = z - iz;
+	      for ( l=0; l<3; l++ ) {
+		v[l] = 0;
+		dbuf = theDef[l];
+		dbuf += ix + iy * ddimx + iz * ddimxy;
+		v[l] = (1-dy)*(1-dz) * (*dbuf); /* tbuf(ix,iy,iz) */
+		dbuf += ddimx;
+		v[l] += dy*(1-dz) * (*dbuf);    /* tbuf(ix,iy+1,iz) */
+		dbuf += doffset2+1;
+		v[l] += (1-dy)*dz * (*dbuf);    /* tbuf(ix,iy,iz+1) */
+		dbuf += ddimx;
+		v[l] += dy*dz * (*dbuf);        /* tbuf(ix,iy+1,iz+1) */
+	      }
+	    }
+	  }
+	}
+	else {
+	  /* here we are sure that the border is either
+	     along the Y or the Z axis */
+	  dx = x - ix;
+	  if ( (y < 0.0) || (iy == d1dimy) ) {
+	    if ( (z < 0.0) || (iz == d1dimz) ) {
+	      for ( l=0; l<3; l++ ) {
+		v[l] = 0;
+		dbuf = theDef[l];
+		dbuf += ix + iy * ddimx + iz * ddimxy;
+		v[l] = (1-dx) * (*dbuf); /* tbuf(ix,iy,iz) */
+		dbuf ++;
+		v[l] += dx * (*dbuf);    /* tbuf(ix+1,iy,iz) */
+	      }
+	    }
+	    else {
+	      dz = z - iz;
+	      for ( l=0; l<3; l++ ) {
+		v[l] = 0;
+		dbuf = theDef[l];
+		dbuf += ix + iy * ddimx + iz * ddimxy;
+		v[l] = (1-dx)*(1-dz) * (*dbuf); /* tbuf(ix,iy,iz) */
+		dbuf ++;
+		v[l] += dx*(1-dz) * (*dbuf);    /* tbuf(ix+1,iy,iz) */
+		dbuf += ddimxy-1;
+		v[l] += (1-dx)*dz * (*dbuf);    /* tbuf(ix,iy,iz+1) */
+		dbuf ++;
+		v[l] += dx*dz * (*dbuf);        /* tbuf(ix+1,iy,iz+1) */
+	      }
+	    }
+	  }
+	  else {
+	    dy = y - iy;
+	    for ( l=0; l<3; l++ ) {
+	      v[l] = 0;
+	      dbuf = theDef[l];
+	      dbuf += ix + iy * ddimx + iz * ddimxy;
+	      v[l] = (1-dx)*(1-dy) * (*dbuf); /* tbuf(ix,iy,iz) */
+	      dbuf ++;
+	      v[l] += dx*(1-dy) * (*dbuf);    /* tbuf(ix+1,iy,iz) */
+	      dbuf += d1dimx;
+	      v[l] += (1-dx)*dy * (*dbuf);    /* tbuf(ix,iy+1,iz) */
+	      dbuf ++;
+	      v[l] += dx*dy * (*dbuf);        /* tbuf(ix+1,iy+1,iz) */
+	    }
+	  }
+	}
+      }
+      
+      xd = x + v[0];
+      yd = y + v[1];
+      zd = z + v[2];
+
+    } /* ( mat_bef != NULL ) */
+    
+    /* computation of the corresponding point after matrix application */
+    if ( mat_aft == NULL ) {
+      x = xd;
+      if (( x < -0.5 ) || ( x > borddimx)) { *rbuf = 0; continue; }
+      y = yd;
+      if (( y < -0.5 ) || ( y > borddimy)) { *rbuf = 0; continue; }
+      z = zd;
+      if (( z < -0.5 ) || ( z > borddimz)) { *rbuf = 0; continue; }
+    }
+    else {
+      x = mat_aft[0] * xd +  mat_aft[1] * yd + mat_aft[2] * zd + mat_aft[3];
+      if (( x < -0.5 ) || ( x > borddimx)) { *rbuf = 0; continue; }
+      y = mat_aft[4] * xd +  mat_aft[5] * yd + mat_aft[6] * zd + mat_aft[7];
+      if (( y < -0.5 ) || ( y > borddimy)) { *rbuf = 0; continue; }
+      z = mat_aft[8] * xd +  mat_aft[9] * yd + mat_aft[10] * zd + mat_aft[11];
+      if (( z < -0.5 ) || ( z > borddimz)) { *rbuf = 0; continue; }
+    }
+    
+    /* here, the point lies on the borders or completely inside
+       the image */
+    ix = (int)x;
+    iy = (int)y;
+    iz = (int)z;
+    tpt = (TYPE *)tbuf;
+
+    /* are we on the border or not ? */
+    if ( (x > 0.0) && (ix < t1dimx) &&
+	 (y > 0.0) && (iy < t1dimy) &&
+	 (z > 0.0) && (iz < t1dimz) ) {
+      /* the corresponding point is in the box defined 
+	 by (ix[+1],iy[+1],iz[+1]) */
+      dx = x - ix;
+      dy = y - iy;
+      dz = z - iz;
+      dxdy = dx*dy;
+      dxdz = dx*dz;
+      dydz = dy*dz;
+      dxdydz = dxdy*dz;
+      
+      /* we have
+	 v[7]=dxdydz;            coefficient of tbuf(ix+1,iy+1,iz+1)
+	 v[6]=dxdz-dxdydz;       coefficient of tbuf(ix+1,iy,  iz+1)
+	 v[5]=dxdy-dxdydz;       coefficient of tbuf(ix+1,iy+1,iz  )
+	 v[4]=dx-dxdy-v[6];      coefficient of tbuf(ix+1,iy  ,iz  )
+	 v[3]=dydz-dxdydz;       coefficient of tbuf(ix  ,iy+1,iz+1)
+	 v[2]=dz-dydz-v[6];      coefficient of tbuf(ix  ,iy  ,iz+1)
+	 v[1]=dy-dydz-v[5];      coefficient of tbuf(ix  ,iy+1,iz  )
+	 v[0]=1-dy-dz+dydz-v[4]; coefficient of tbuf(ix  ,iy  ,iz  )
+      */
+      tpt += ix + iy * tdimx + iz * tdimxy + toffset1;
+      v6 = dxdz-dxdydz;
+      v5 = dxdy-dxdydz;
+      v4 = dx-dxdy-v6;
+      
+      res = 0;
+      res += dxdydz * (*tpt);            /* tbuf(ix+1,iy+1,iz+1) */
+      tpt --;
+      res += (dydz-dxdydz) * (*tpt);     /* tbuf(ix  ,iy+1,iz+1) */
+      tpt -= t1dimx;
+      res += v6 * (*tpt);                /* tbuf(ix+1  ,iy,  iz+1) */
+      tpt --;
+      res += (dz-dydz-v6) * (*tpt);      /* tbuf(ix  ,iy  ,iz+1) */
+      tpt -= toffset2;
+      res += v5 * (*tpt);                /* tbuf(ix+1,iy+1,iz  ) */
+      tpt --;
+      res += (dy-dydz-v5) * (*tpt);      /* tbuf(ix  ,iy+1,iz  ) */
+      tpt -= t1dimx;
+      res += v4 * (*tpt);                /* tbuf(ix+1,iy  ,iz  ) */
+      tpt --;
+      res += (1-dy-dz+dydz-v4) * (*tpt); /* tbuf(ix  ,iy  ,iz  ) */
+      *rbuf = (float)res;
+      continue;
+    }
+    /* here, we are sure we are on some border */
+    tpt += ix + iy * tdimx + iz * tdimxy;
+    if ( (x < 0.0) || (ix == t1dimx) ) {
+      if ( (y < 0.0) || (iy == t1dimy) ) {
+	if ( (z < 0.0) || (iz == t1dimz) ) {
+	  *rbuf = *tpt;
+	  continue;
+	}
+	dz = z - iz;
+	res  = (1-dz) * (*tpt); /* (1-dz)* tbuf(ix,iy,iz) */
+	tpt += tdimxy;
+	res += dz * (*tpt);     /* dz * tbuf(ix,iy,iz+1) */
+	*rbuf = (float)res;
+	continue;
+      }
+      dy = y - iy;
+      if ( (z < 0.0) || (iz == t1dimz) ) {
+	res  = (1-dy) * (*tpt); /* (1-dy)* tbuf(ix,iy,iz) */
+	tpt += tdimx;
+	res += dy * (*tpt);     /* dy * tbuf(ix,iy+1,iz) */
+	*rbuf = (float)res;
+	continue;
+      }
+      dz = z - iz;
+      res = (1-dy)*(1-dz) * (*tpt); /* tbuf(ix,iy,iz) */
+      tpt += tdimx;
+      res += dy*(1-dz) * (*tpt);    /* tbuf(ix,iy+1,iz) */
+      tpt += toffset2+1;
+      res += (1-dy)*dz * (*tpt);    /* tbuf(ix,iy,iz+1) */
+      tpt += tdimx;
+      res += dy*dz * (*tpt);        /* tbuf(ix,iy+1,iz+1) */
+      *rbuf = (float)res;
+      continue;
+    }
+    /* here we are sure that the border is either
+       along the Y or the Z axis */
+    dx = x - ix;
+    if ( (y < 0.0) || (iy == t1dimy) ) {
+      if ( (z < 0.0) || (iz == t1dimz) ) {
+	res = (1-dx) * (*tpt); /* tbuf(ix,iy,iz) */
+	tpt ++;
+	res += dx * (*tpt);    /* tbuf(ix+1,iy,iz) */
+	*rbuf = (float)res;
+	continue;
+      }
+      dz = z - iz;
+      res = (1-dx)*(1-dz) * (*tpt); /* tbuf(ix,iy,iz) */
+      tpt ++;
+      res += dx*(1-dz) * (*tpt);    /* tbuf(ix+1,iy,iz) */
+      tpt += tdimxy-1;
+      res += (1-dx)*dz * (*tpt);    /* tbuf(ix,iy,iz+1) */
+      tpt ++;
+      res += dx*dz * (*tpt);        /* tbuf(ix+1,iy,iz+1) */
+      *rbuf = (float)res;
+      continue;
+    }
+    /* here we are sure that the border is along the Z axis */
+    dy = y - iy;
+    res = (1-dx)*(1-dy) * (*tpt); /* tbuf(ix,iy,iz) */
+    tpt ++;
+    res += dx*(1-dy) * (*tpt);    /* tbuf(ix+1,iy,iz) */
+    tpt += t1dimx;
+    res += (1-dx)*dy * (*tpt);    /* tbuf(ix,iy+1,iz) */
+    tpt ++;
+    res += dx*dy * (*tpt);        /* tbuf(ix+1,iy+1,iz) */
+    *rbuf = (float)res;
+  }
+}
+
+/* Resampling procedure.
+
+   Work for 3D images, not for vectorial ones.
+
+   Cette procedure utilise un champ de deformations 
+   backward, c'est-a-dire allant de l'image a reechantillonner
+   a l'image reference. Une fois estime le point apres application
+   du champ de deformation, on applique a celui-ci une matrice 
+   de transformation.
+
+   Entrees:
+   - le buffer de l'image reference
+   - une coupe (du meme type) de l'image resultat
+   - les 3 coupes de deformations (le vecteur) associees
+   - la matrice
+   - le numero de la coupe
+
+   Je prefere faire comme ca pour pouvoir facilement gerer 
+   une lecture plan par plan du champ de deformation si necessaire.
+
+   Pas de conversion faite a cause de l'eventualite d'un biais et 
+   d'un gain.
+*/
+
+void ReechNearestDefBack_TYPE ( void *theBuf, /* buffer to be resampled */
+			       int *theDim, /* dimensions of buffers */
+			       void* resBuf,  /* result buffer */
+			       int *resDim,  /* dimensions of this buffer */
+			       r32** theDef, /* deformations */
+                               int *defDim, /* dimensions of these buffers */
+			       double* mat_aft,  /* transformation matrix */
+			       double* mat_bef,  /* transformation matrix */
+			       int slice
+			       )
+{
+  int i, j, l, ix, iy, iz;
+  
+  double xd, yd, zd, x, y, z;
+  double dx, dy, dz, dxdy,dxdz,dydz,dxdydz;
+  double v[3];
+  double v6, v5, v4;
+
+  int rdimx=resDim[0], rdimy=resDim[1];
+
+  int tdimx=theDim[0], tdimy=theDim[1], tdimz=theDim[2];
+  int tdimxy=tdimx*tdimy;
+
+  int ddimx=defDim[0], ddimy=defDim[1], ddimz=defDim[2];
+  int ddimxy = ddimx * ddimy;
+  int doffset1=ddimxy+ddimx+1, doffset2=ddimxy-ddimx-1;
+  int d1dimx=ddimx-1, d1dimy=ddimy-1, d1dimz=ddimz-1;
+
+  double borddimx = (double)tdimx-0.5, borddimy = (double)tdimy-0.5;
+  double borddimz = (double)tdimz-0.5;
+  TYPE *tbuf = (TYPE*)theBuf;
+  TYPE* rbuf = resBuf;
+
+  r32* defx = theDef[0] + slice*defDim[0]*defDim[1];
+  r32* defy = theDef[1] + slice*defDim[0]*defDim[1];
+  r32* defz = theDef[2] + slice*defDim[0]*defDim[1];
+  r32* dbuf;
+
+  if ( mat_bef == NULL ) {
+    if ( resDim[0] != defDim[0] || resDim[1] != defDim[1] || resDim[2] != defDim[2] ) {
+      fprintf( stderr, "deformation field should have the same dimension than result image\n" );
+      return;
+    }
+  }
+
+  for ( j = 0; j < rdimy; j ++ )
+  for ( i = 0; i < rdimx; i ++, rbuf ++ ) {
+
+    /* computation of the corresponding point after deformation */
+    if ( mat_bef == NULL ) {
+       xd = (double)i     + *defx;
+       yd = (double)j     + *defy;
+       zd = (double)slice + *defz;
+       defx ++;
+       defy ++;
+       defz ++;
+    }
+    else {
+   
+      /* apply the first matrix */
+      x = mat_bef[0] * i +  mat_bef[1] * j + mat_bef[2] * slice + mat_bef[3];
+      y = mat_bef[4] * i +  mat_bef[5] * j + mat_bef[6] * slice + mat_bef[7];
+      z = mat_bef[8] * i +  mat_bef[9] * j + mat_bef[10] * slice + mat_bef[11];
+
+      /* interpolate the vector deformation at (xd,yd,zd) */
+      ix = (int)x;
+      iy = (int)y;
+      iz = (int)z;
+      
+
+      /* the point is outside the deformation field 
+       */
+      if ( ( x < -0.5 ) || ( x > ddimx-0.5)
+	   || ( y < -0.5 ) || ( y > ddimy-0.5)
+	   || ( z < -0.5 ) || ( z > ddimz-0.5) ) {
+	*rbuf = 0; 
+	continue; 
+      }
+      
+      /* vector interpolation: are we on the border or not ? */
+      if ( (x > 0.0) && (ix < d1dimx) &&
+	   (y > 0.0) && (iy < d1dimy) &&
+	   (z > 0.0) && (iz < d1dimz) ) {
+	/* the corresponding point is in the box defined 
+	 by (ix[+1],iy[+1],iz[+1]) */
+	dx = x - ix;
+	dy = y - iy;
+	dz = z - iz;
+	dxdy = dx*dy;
+	dxdz = dx*dz;
+	dydz = dy*dz;
+	dxdydz = dxdy*dz;
+	
+	/* we have
+	   v[7]=dxdydz;            coefficient of tbuf(ix+1,iy+1,iz+1)
+	   v[6]=dxdz-dxdydz;       coefficient of tbuf(ix+1,iy,  iz+1)
+	   v[5]=dxdy-dxdydz;       coefficient of tbuf(ix+1,iy+1,iz  )
+	   v[4]=dx-dxdy-v[6];      coefficient of tbuf(ix+1,iy  ,iz  )
+	   v[3]=dydz-dxdydz;       coefficient of tbuf(ix  ,iy+1,iz+1)
+	   v[2]=dz-dydz-v[6];      coefficient of tbuf(ix  ,iy  ,iz+1)
+	   v[1]=dy-dydz-v[5];      coefficient of tbuf(ix  ,iy+1,iz  )
+	   v[0]=1-dy-dz+dydz-v[4]; coefficient of tbuf(ix  ,iy  ,iz  )
+	*/
+	
+	v6 = dxdz-dxdydz;
+	v5 = dxdy-dxdydz;
+	v4 = dx-dxdy-v6;
+	
+	for ( l=0; l<3; l++ ) {
+	  v[l] = 0;
+	  dbuf = theDef[l];
+	  dbuf += ix + iy * ddimx + iz * ddimxy + doffset1;
+	  v[l] += dxdydz * (*dbuf);            /* tbuf(ix+1,iy+1,iz+1) */
+	  dbuf --;
+	  v[l] += (dydz-dxdydz) * (*dbuf);     /* tbuf(ix  ,iy+1,iz+1) */
+	  dbuf -= d1dimx;
+	  v[l] += v6 * (*dbuf);                /* tbuf(ix+1  ,iy,  iz+1) */
+	  dbuf --;
+	  v[l] += (dz-dydz-v6) * (*dbuf);      /* tbuf(ix  ,iy  ,iz+1) */
+	  dbuf -= doffset2;
+	  v[l] += v5 * (*dbuf);                /* tbuf(ix+1,iy+1,iz  ) */
+	  dbuf --;
+	  v[l] += (dy-dydz-v5) * (*dbuf);      /* tbuf(ix  ,iy+1,iz  ) */
+	  dbuf -= d1dimx;
+	  v[l] += v4 * (*dbuf);                /* tbuf(ix+1,iy  ,iz  ) */
+	  dbuf --;
+	  v[l] += (1-dy-dz+dydz-v4) * (*dbuf); /* tbuf(ix  ,iy  ,iz  ) */
+	}
+
+      }
+      else {
+	  
+	/* here, we are sure we are on some border */
+	  
+	if ( (x < 0.0) || (ix == d1dimx) ) {
+	  if ( (y < 0.0) || (iy == d1dimy) ) {
+	    if ( (z < 0.0) || (iz == d1dimz) ) {
+	      for ( l=0; l<3; l++ ) {
+		v[l] = 0;
+		dbuf = theDef[l];
+		dbuf += ix + iy * ddimx + iz * ddimxy;
+		v[l] = *dbuf;
+	      }
+	    }
+	    else {
+	      dz = z - iz;
+	      for ( l=0; l<3; l++ ) {
+		v[l] = 0;
+		dbuf = theDef[l];
+		dbuf += ix + iy * ddimx + iz * ddimxy;
+		v[l]  = (1-dz) * (*dbuf); /* (1-dz)* tbuf(ix,iy,iz) */
+		dbuf += ddimxy;
+		v[l] += dz * (*dbuf);     /* dz * tbuf(ix,iy,iz+1) */
+	      }
+	    }
+	  }
+	  else {
+	    dy = y - iy;
+	    if ( (z < 0.0) || (iz == d1dimz) ) {
+	      for ( l=0; l<3; l++ ) {
+		v[l] = 0;
+		dbuf = theDef[l];
+		dbuf += ix + iy * ddimx + iz * ddimxy;
+		v[l]  = (1-dy) * (*dbuf); /* (1-dy)* tbuf(ix,iy,iz) */
+		dbuf += ddimx;
+		v[l] += dy * (*dbuf);     /* dy * tbuf(ix,iy+1,iz) */
+	      }
+	    }
+	    else {
+	      dz = z - iz;
+	      for ( l=0; l<3; l++ ) {
+		v[l] = 0;
+		dbuf = theDef[l];
+		dbuf += ix + iy * ddimx + iz * ddimxy;
+		v[l] = (1-dy)*(1-dz) * (*dbuf); /* tbuf(ix,iy,iz) */
+		dbuf += ddimx;
+		v[l] += dy*(1-dz) * (*dbuf);    /* tbuf(ix,iy+1,iz) */
+		dbuf += doffset2+1;
+		v[l] += (1-dy)*dz * (*dbuf);    /* tbuf(ix,iy,iz+1) */
+		dbuf += ddimx;
+		v[l] += dy*dz * (*dbuf);        /* tbuf(ix,iy+1,iz+1) */
+	      }
+	    }
+	  }
+	}
+	else {
+	  /* here we are sure that the border is either
+	     along the Y or the Z axis */
+	  dx = x - ix;
+	  if ( (y < 0.0) || (iy == d1dimy) ) {
+	    if ( (z < 0.0) || (iz == d1dimz) ) {
+	      for ( l=0; l<3; l++ ) {
+		v[l] = 0;
+		dbuf = theDef[l];
+		dbuf += ix + iy * ddimx + iz * ddimxy;
+		v[l] = (1-dx) * (*dbuf); /* tbuf(ix,iy,iz) */
+		dbuf ++;
+		v[l] += dx * (*dbuf);    /* tbuf(ix+1,iy,iz) */
+	      }
+	    }
+	    else {
+	      dz = z - iz;
+	      for ( l=0; l<3; l++ ) {
+		v[l] = 0;
+		dbuf = theDef[l];
+		dbuf += ix + iy * ddimx + iz * ddimxy;
+		v[l] = (1-dx)*(1-dz) * (*dbuf); /* tbuf(ix,iy,iz) */
+		dbuf ++;
+		v[l] += dx*(1-dz) * (*dbuf);    /* tbuf(ix+1,iy,iz) */
+		dbuf += ddimxy-1;
+		v[l] += (1-dx)*dz * (*dbuf);    /* tbuf(ix,iy,iz+1) */
+		dbuf ++;
+		v[l] += dx*dz * (*dbuf);        /* tbuf(ix+1,iy,iz+1) */
+	      }
+	    }
+	  }
+	  else {
+	    dy = y - iy;
+	    for ( l=0; l<3; l++ ) {
+	      v[l] = 0;
+	      dbuf = theDef[l];
+	      dbuf += ix + iy * ddimx + iz * ddimxy;
+	      v[l] = (1-dx)*(1-dy) * (*dbuf); /* tbuf(ix,iy,iz) */
+	      dbuf ++;
+	      v[l] += dx*(1-dy) * (*dbuf);    /* tbuf(ix+1,iy,iz) */
+	      dbuf += d1dimx;
+	      v[l] += (1-dx)*dy * (*dbuf);    /* tbuf(ix,iy+1,iz) */
+	      dbuf ++;
+	      v[l] += dx*dy * (*dbuf);        /* tbuf(ix+1,iy+1,iz) */
+	    }
+	  }
+	}
+      }
+      
+      xd = x + v[0];
+      yd = y + v[1];
+      zd = z + v[2];
+
+    } /* ( mat_bef != NULL ) */
+    
+    /* computation of the corresponding point after matrix application */
+    if ( mat_aft == NULL ) {
+      x = xd;
+      if (( x < -0.5 ) || ( x > borddimx)) { *rbuf = 0; continue; }
+      y = yd;
+      if (( y < -0.5 ) || ( y > borddimy)) { *rbuf = 0; continue; }
+      z = zd;
+      if (( z < -0.5 ) || ( z > borddimz)) { *rbuf = 0; continue; }
+    }
+    else {
+      x = mat_aft[0] * xd +  mat_aft[1] * yd + mat_aft[2] * zd + mat_aft[3];
+      if (( x < -0.5 ) || ( x > borddimx)) { *rbuf = 0; continue; }
+      y = mat_aft[4] * xd +  mat_aft[5] * yd + mat_aft[6] * zd + mat_aft[7];
+      if (( y < -0.5 ) || ( y > borddimy)) { *rbuf = 0; continue; }
+      z = mat_aft[8] * xd +  mat_aft[9] * yd + mat_aft[10] * zd + mat_aft[11];
+      if (( z < -0.5 ) || ( z > borddimz)) { *rbuf = 0; continue; }
+    }
+    
+    /* here, the point lies on the borders or completely inside
+       the image */
+    ix = (int)(x+0.5);
+    iy = (int)(y+0.5);
+    iz = (int)(z+0.5);
+
+    *rbuf = tbuf[ ix + iy * tdimx + iz * tdimxy ];
+
+  }
+}
+
+
+
+
+

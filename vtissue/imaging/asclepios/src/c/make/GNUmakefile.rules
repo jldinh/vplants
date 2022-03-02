@@ -1,0 +1,881 @@
+#
+# Regles par defaut pour un GNUmakefile standardise
+# Author: Gregoire Malandain
+# Date: Thu Jul  2 14:25:09 MET DST 1998
+#
+
+#
+#
+#
+
+NOVERBOSESTRING=
+ifneq "$(strip $(VERBOSE))" "TRUE"
+  NOVERBOSESTRING=@
+endif
+
+
+#
+# TACHE PAR DEFAUT
+# 
+
+# default : defaulttargets 
+
+#
+# RPFLAGS mise a jour
+#
+space := $(empty) $(empty)
+ifneq "$(strip $(RPFLAGS_PATH) $(RPFLAGS_GLOBAL_PATH))" ""
+  RPFLAGS_alpha   = -rpath $(subst $(space),:,$(strip $(RPFLAGS_PATH) $(RPFLAGS_GLOBAL_PATH)))
+  RPFLAGS_sgi     = -rpath $(subst $(space),:,$(strip $(RPFLAGS_PATH) $(RPFLAGS_GLOBAL_PATH)))
+  RPFLAGS_solaris = -Wl,-t,-R,$(subst $(space),:,$(strip $(RPFLAGS_PATH) $(RPFLAGS_GLOBAL_PATH)))
+  RPFLAGS_linux   = -Wl,-rpath,$(subst $(space),:,$(strip $(RPFLAGS_PATH) $(RPFLAGS_GLOBAL_PATH)))
+endif
+
+
+#
+# VARIABLES UTILISEES
+# 
+MYFILES =
+MYHEADERS = ${HEADERS} ${CHEADERS} ${C++HEADERS}
+MYEXECS =
+MYLIB =
+OBJS =
+TPLS =
+
+#
+#
+#
+# FLAG : doit-on creer les repertoires ?
+#
+#
+#
+ifeq "$(strip $(CREATE_DIRS))" "TRUE"
+  MAKEDIR = mkdir -m $(UMASK) -p
+else
+  MAKEDIR = echo "ERROR: the following directory does not exists: "
+endif
+
+
+#
+#
+#
+#
+#
+# OBJETS
+#
+#
+#
+#
+#
+
+MYFILES = ${FILES} ${CFILES} ${C++FILES}
+# 
+# CONSTRUCTION DE LA LISTE DES OBJETS
+# a partir des fichiers sources C et C++
+#
+# on teste si la liste est vide
+ifneq "$(strip ${MYFILES})" ""
+  #
+  # on elimine les doublons comme ./toto.c toto.c
+  MYFILES := $(sort $(join $(dir $(MYFILES)), $(notdir $(MYFILES))))
+  #
+  # construction de la liste des objets
+  # a partir de la liste des sources
+  OBJS = $(addsuffix .o, $(join $(addsuffix $(OBJDIR)/, $(dir $(MYFILES))),\
+  $(notdir $(basename $(MYFILES)))))
+  TPLS = $(addsuffix .rpo, $(join $(addsuffix $(OBJDIR)/, $(dir $(MYFILES))),\
+  $(notdir $(basename $(MYFILES)))))
+  #
+  # on recupere les objets locaux -> ce sont des targets
+  LOCALSOBJS = $(filter ./${OBJDIR}/%.o,$(OBJS))
+  ifneq "$(strip $(LOCALSOBJS))" ""
+    TARGETSTOBEDONE += ${OBJDIR} $(LOCALSOBJS)
+  endif
+  #
+  # on recupere les autres objets -> les targets sont
+  #             les commandes pour les compiler
+  OTHERSOBJS = $(filter-out ./${OBJDIR}/%.o,$(OBJS))
+  #
+  # on a une commande cd ... ; $(MAKE) ... par objet
+  ifneq "$(strip $(OTHERSOBJS))" ""
+    COMPILEOBJS=$(foreach o, ${OTHERSOBJS}, \
+    cd ${PWD}/$(strip $(subst ${OBJDIR}/,,$(dir $o))) ;\
+    ${MAKE} 'OPT = ${OPT}' 'OPT++ = ${OPT++}' ${OBJDIR}/$(notdir $o) ; )
+#
+# si DO_NOT_CHECK_DISTANT_OBJS n'est pas a TRUE
+#   on va verifier les objets distants en lancant
+#   la ligne de commandes 
+# sinon on donne juste la liste des autres objets
+#   la ligne de commandes sera lancee si l'un d'entre eux
+#   n'existe pas 
+#
+    ifneq "$(strip $(DO_NOT_CHECK_DISTANT_OBJS))" "TRUE"
+      TARGETSTOBEDONE += compileobjs
+    else 
+      TARGETSTOBEDONE += ${OTHERSOBJS}
+    endif
+  endif
+#
+# ESSAI pour limiter le nombre de lignes de commandes
+# mais ca ne marche pas
+#  OTHERSOBJS = $(filter-out ./${OBJDIR}/%.o,$(OBJS))
+#  ifneq "$(strip $(OTHERSOBJS))" ""
+#    OTHERSDIRS = $(sort $(dir $(OTHERSOBJS)))
+#    COMPILEOBJS=$(foreach d, $(OTHERSDIRS), \
+#      cd $(PWD)/$(subst $(OBJDIR)/,,$d) ;\
+#      $(MAKE) 'OPT=$(OPT)' \
+#      other $(OTHERSOBJS) \
+# JUSQU ICI ca va 
+# mais la ligne ci-dessous ne fonctionne pas. Pourquoi ?
+#      essai1 $(filter ./$d/%.o,$(OTHERSOBJS)) \
+#      ; )
+#    ifneq "$(strip $(DO_NOT_CHECK_DISTANT_OBJS))" "TRUE"
+#      TARGETSTOBEDONE += compileobjs
+#    endif
+#  endif
+  # 
+  # fichiers dans le repertoire courant
+  LOCALFILES = $(filter ./%.c,$(MYFILES)) $(filter ./%.C,$(MYFILES)) $(filter ./%.cpp,$(MYFILES)) $(filter ./%.cc,$(MYFILES))
+endif
+
+$(OTHERSOBJS) compileobjs :
+	$(COMPILEOBJS)
+
+#
+#
+#
+#
+#
+# LIBRAIRIES
+#
+#
+#
+#
+#
+
+#
+# les librairies
+#
+LIBCOMMENT=
+LIBCOMMAND=
+ifneq "$(strip ${LIB})" ""
+  ifneq "$(strip $(OBJS))" ""
+  #
+  MYLIB = $(LIBDIR)/$(notdir $(LIB))
+  #
+  # ALIB = $(subst .so,,$(subst lib,-l,$(notdir $(LIB))))
+  # libImageIO.so -> -lImageIO
+  # ImageIO.so    ->   ImageIO
+  # ImageIO.a     ->   ImageIO.a
+  # libImageIO.a  -> -lImageIO.a
+  #
+  #
+  # si la librairie n'a pas de suffixe
+  #
+  ifneq "$(suffix $(MYLIB))" ".a"
+    ifneq "$(suffix $(MYLIB))" ".so"
+      ifeq "$(strip $(BINARY_MODE))" "STATIC"
+         MYLIB = $(LIBDIR)/$(notdir $(LIB))_s.a
+      else
+         MYLIB = $(LIBDIR)/$(notdir $(LIB)).so
+      endif
+    endif
+  endif
+  #
+  #
+  # librairie statique
+  ifeq ($(suffix $(MYLIB)),.a)
+    LIBCOMMENT = @echo "... archiving in $(MYLIB)"
+    LIBCOMMAND = $(NOVERBOSESTRING)$(AR) ${ARFLAGS} $(MYLIB) $(OBJS)
+    ifneq "$(strip $(RANLIB))" ""
+      LIBCOMMAND += ; $(RANLIB) $(MYLIB)
+    endif
+    TARGETSTOBEDONE += $(LIBDIR) $(MYLIB)
+    
+    #
+    # do we have something like libXXXX.a?
+    #
+    _TMPLIB = $(filter lib%.a,$(notdir $(MYLIB)))
+    ifneq (,${_TMPLIB})
+      MYLDLIBS = $(subst .a,,$(subst lib,-l,$(notdir $(LIB))))
+      LDPATH += -L./${LIBDIR}
+    else
+      MYLDLIBS = $(MYLIB)
+    endif
+
+  endif
+  #
+  # librairie dynamique
+  ifeq ($(suffix $(MYLIB)),.so)
+    ifeq "$(strip $(LD_LOCATION_FILE))" ""
+      LD_LOCATION_FILE = $(dir $(MYLIB))/so_locations
+    endif
+
+    LIBCOMMENT = @echo "... linking in $(MYLIB)"
+
+    ifneq "$(strip ${C++FILES})" ""
+      LIBCOMMAND = $(NOVERBOSESTRING)$(LD.C) $(LDPATH) \
+        -o $(MYLIB) $(OBJS) $(LOADLIBSFORSHAREDLIB)
+    else
+      ifneq "$(strip ${CFILES})" ""
+        LIBCOMMAND = $(NOVERBOSESTRING)$(LD.c) $(LDPATH) \
+          -o $(MYLIB) $(OBJS) $(LOADLIBSFORSHAREDLIB)
+      else
+        _SUFFIXES := $(sort $(suffix $(MYFILES)))
+	LIBCOMMAND = $(NOVERBOSESTRING)$(LD.$(firstword $(_SUFFIXES))) $(LDPATH) \
+          -o $(MYLIB) $(OBJS) $(LOADLIBSFORSHAREDLIB)
+      endif
+    endif
+
+#    LIBCOMMENT = @echo "... linking in $(MYLIB)"
+#    LIBCOMMAND = $(NOVERBOSESTRING)$(LD) ${LDFLAGS} $(LDPATH) -o $(MYLIB) \
+#    $(OBJS)  $(LOADLIBSFORSHAREDLIB)
+
+    TARGETSTOBEDONE += $(LIBDIR) $(MYLIB)
+    
+    #
+    # do we have something like libXXXX.so?
+    #
+    _TMPLIB = $(filter lib%.so,$(notdir $(MYLIB)))
+    ifneq (,${_TMPLIB})
+      MYLDLIBS = $(subst .so,,$(subst lib,-l,$(notdir $(LIB))))
+      LDPATH += -L./${LIBDIR}
+      ifneq "$(strip ${INSTALLLIBDIR})" ""
+        RPFLAGS_PATH += ${INSTALLLIBDIR}
+      endif
+      RPFLAGS_PATH += $(shell pwd)/${LIBDIR}
+    else
+      MYLDLIBS = $(MYLIB)
+    endif
+
+  endif
+  endif
+else
+  LINKOBJS = $(OBJS)
+endif
+
+$(MYLIB) : $(LIBDIR) $(OBJS)
+	$(LIBCOMMENT)
+	$(LIBCOMMAND)
+
+
+#
+#
+#
+#
+#
+# EXECUTABLES
+#
+#
+#
+#
+#
+COMPLETENAMEEXECS=
+EXECSOBJS=
+EXECSFILES=
+MYEXECS=$(EXECS)
+ifneq "$(strip $(MYEXECS))" ""
+  TARGETSTOBEDONE += $(BINDIR) ${MYEXECS}
+  EXECSOBJS=$(addsuffix .o, $(addprefix $(OBJDIR)/, $(MYEXECS)))
+  EXECSFILES=$(foreach f, $(MYEXECS), $(notdir $(shell find . -maxdepth 1\
+	-name $(notdir $f).c -o -name $(notdir $f).C \
+	-o -name $(notdir $f).cc -o -name $(notdir $f).cpp)))
+  COMPLETENAMEEXECS=$(addprefix $(BINDIR)/, $(MYEXECS))
+endif
+
+
+
+#
+#
+#
+#
+# les regles de compilation
+#
+#
+#
+#
+
+ifeq "$(strip $(cEQUALC))" "TRUE"
+  COMPILE.c = $(COMPILE.C)
+  LINK.c = $(LINK.C)
+endif
+
+.SUFFIXES:.o .c .C .cpp .cc .h .html .hh .tmpl
+# .PHONY: $(EXECS)
+
+${OBJDIR}/%.o: %.c 
+	@echo "... Compiling $@"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	$(NOVERBOSESTRING)$(COMPILE.c) $< -o $@
+
+%.o: %.c
+	@echo "... Compiling $@"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	$(NOVERBOSESTRING)$(COMPILE.c) $< -o $(OBJDIR)/$@
+
+
+
+${OBJDIR}/%.o: %.C
+	@echo "... Compiling $@"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	$(NOVERBOSESTRING)$(COMPILE.C) $< -o $@
+
+%.o: %.C
+	@echo "... Compiling $@"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	$(NOVERBOSESTRING)$(COMPILE.C) $< -o $(OBJDIR)/$@
+
+
+
+${OBJDIR}/%.o: %.cpp
+	@echo "... Compiling $@"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	$(NOVERBOSESTRING)$(COMPILE.C) $< -o $@
+
+%.o: %.cpp
+	@echo "... Compiling $@"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	$(NOVERBOSESTRING)$(COMPILE.C) $< -o $(OBJDIR)/$@
+
+${OBJDIR}/%.o: %.cc
+	@echo "... Compiling $@"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	$(NOVERBOSESTRING)$(COMPILE.C) $< -o $@
+
+%.o: %.cc
+	@echo "... Compiling $@"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	$(NOVERBOSESTRING)$(COMPILE.C) $< -o $(OBJDIR)/$@
+
+
+
+%: $(BINDIR)/% ;
+
+$(BINDIR)/%: $(OBJDIR)/%.o $(MYLIB) $(OBJS)
+	@echo "... Linking $@ with $(suffix  $(notdir $(shell find . -maxdepth  1\
+	 -name $(notdir $@).c -o -name $(notdir $@).C -o \
+	-name $(notdir $@).cc -o -name $(notdir $@).cpp))) object"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	-@test -d $(BINDIR) || $(MAKEDIR) $(BINDIR) 
+	$(NOVERBOSESTRING)$(LINK$(suffix $(notdir $(shell find . -maxdepth  1\
+	-name $(notdir $@).c -o -name $(notdir $@).C \
+	-o -name $(notdir $@).cc -o -name $(notdir $@).cpp))))
+
+%: $(OBJDIR)/%.o $(MYLIB) $(OBJS)
+	@echo "... Linking $@ with $(suffix  $(shell find . -maxdepth  1\
+	 -name $(notdir $@).c -o -name $(notdir $@).C -o \
+	-name $(notdir $@).cc -o -name $(notdir $@).cpp)) object"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	-@test -d $(BINDIR) || $(MAKEDIR) $(BINDIR) 
+	$(NOVERBOSESTRING)$(LINK$(suffix $(shell find . -maxdepth  1\
+	 -name $(notdir $@).c -o -name $(notdir $@).C -o \
+	-name $(notdir $@).cc -o -name $(notdir $@).cpp)))
+
+%: %.c $(MYLIB) $(OBJS)
+	@echo "... compiling $(OBJDIR)/$(subst .c,.o,$<)"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	-@test -d $(BINDIR) || $(MAKEDIR) $(BINDIR) 
+	$(NOVERBOSESTRING)$(COMPILE.c) $< -o ${OBJDIR}/$(subst .c,.o,$<)
+	@echo "... linking with $(OBJDIR)/$(subst .c,.o,$<)"
+	$(NOVERBOSESTRING)$(LINK.c)
+
+%: %.C $(MYLIB) $(OBJS)
+	@echo "... compiling $(OBJDIR)/$(subst .C,.o,$<)"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	-@test -d $(BINDIR) || $(MAKEDIR) $(BINDIR) 
+	$(NOVERBOSESTRING)$(COMPILE.C) $< -o ${OBJDIR}/$(subst .C,.o,$<)
+	@echo "... linking with $(OBJDIR)/$(subst .C,.o,$<)"
+	$(NOVERBOSESTRING)$(LINK.C)
+
+%: %.cpp $(MYLIB) $(OBJS)
+	@echo "... compiling $(OBJDIR)/$(subst .cpp,.o,$<)"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	-@test -d $(BINDIR) || $(MAKEDIR) $(BINDIR) 
+	$(NOVERBOSESTRING)$(COMPILE.C) $< -o ${OBJDIR}/$(subst .cpp,.o,$<)
+	@echo "... linking with $(OBJDIR)/$(subst .cpp,.o,$<)"
+	$(NOVERBOSESTRING)$(LINK.C)
+
+%: %.cc $(MYLIB) $(OBJS)
+	@echo "... compiling $(OBJDIR)/$(subst .cc,.o,$<)"
+	-@test -d $(OBJDIR) || $(MAKEDIR) $(OBJDIR) 
+	-@test -d $(BINDIR) || $(MAKEDIR) $(BINDIR) 
+	$(NOVERBOSESTRING)$(COMPILE.C) $< -o ${OBJDIR}/$(subst .cc,.o,$<)
+	@echo "... linking with $(OBJDIR)/$(subst .cc,.o,$<)"
+	$(NOVERBOSESTRING)$(LINK.C)
+
+#
+# on pourrait essayer aussi de generer les dependances
+# avec $(CC) (en fait cpp) et les options -M et -MD
+# PBS: -> comportement different selon les architectures
+#      -> a priori, un fichier (foo.o.d) genere pour le 1er fichier
+#         source foo.c. Pas de choix pour le nom.
+#      -> pas d option -p
+#
+
+DEPENDCOMMAND=
+EXECDEPENDCOMMAND=
+# ALLLOCALFILES=${LOCALFILES} ${EXECSFILES}
+# il faut enlevr les "./" au debut des noms de fichiers,
+# sinon il apparaissent sous la forme $(OBJDIR)/./fichier.o
+# sous certaines architectures
+ALLLOCALFILES=$(subst ./,,${LOCALFILES} ${EXECSFILES})
+ifeq "$(strip ${ALLLOCALFILES})" ""
+  DEPENDCOMMAND = echo "... no dependencies to make"
+else
+  EXECDEPENDCOMMAND = ${MAKEDEPEND} -f${DEPEND} -- ${CPPFLAGS} $(IFLAGS) ${I++FLAGS} -- ${DEPFLAGS} ${ALLLOCALFILES}
+  DEPENDCOMMAND = echo "... making dependencies in ${DEPEND}" ; $(EXECDEPENDCOMMAND)
+endif
+
+
+DEPENDDIR = $(dir $(DEPEND))
+
+ifneq "$(strip $(ALLWAYS_UPDATE_DEPEND))" "FALSE"
+${DEPEND} : ${ALLLOCALFILES} ${MYHEADERS}
+	-@test -d $(DEPENDDIR) || $(MAKEDIR) $(DEPENDDIR) 
+	-@test -f $@ || touch $@
+	@$(DEPENDCOMMAND) 
+else
+${DEPEND} :
+	-@test -d $(DEPENDDIR) || $(MAKEDIR) $(DEPENDDIR) 
+	-@test -f $@ || touch $@
+	-@test -s @s || echo "... Making dependencies in ${DEPEND}"
+	-@test -s @s || $(EXECDEPENDCOMMAND)
+endif
+
+#depend : ${ALLLOCALFILES} ${MYHEADERS}
+depend : 
+	@$(DEPENDCOMMAND)
+
+#
+#
+#
+# CREATION DES REPERTOIRES
+#
+#
+#
+
+${OBJDIR} : 
+	@$(MAKEDIR) ${OBJDIR}
+
+${BINDIR} :
+	@$(MAKEDIR) ${BINDIR}
+
+${LIBDIR} :
+	@$(MAKEDIR) ${LIBDIR}
+
+#
+#
+#
+#
+#
+# INSTALL
+#
+#
+#
+#
+#
+
+ifeq "$(strip ${INSTALLHEADERSDIR})" ""
+  ifneq "$(strip ${INSTALLDIR})" ""
+    INSTALLHEADERSDIR = ${INSTALLDIR}/include
+  endif
+endif
+ifeq "$(strip ${INSTALLLIBDIR})" ""
+  ifneq "$(strip ${INSTALLDIR})" ""
+    INSTALLLIBDIR = ${INSTALLDIR}/$(LIBDIR)
+  endif
+endif
+ifeq "$(strip ${INSTALLBINDIR})" ""
+  ifneq "$(strip ${INSTALLDIR})" ""
+    INSTALLBINDIR = ${INSTALLDIR}/$(BINDIR)
+  endif
+endif
+
+
+INSTALLHEADERS=
+CHMODHEADERS=
+ifneq "$(strip ${MYHEADERS})" ""
+  ifneq "$(strip ${INSTALLHEADERSDIR})" ""
+    INSTALLHEADERS = -@test -d ${INSTALLHEADERSDIR} \
+      && (echo "... installing headers in ${INSTALLHEADERSDIR}"; \
+      $(RSYNC) $(RSYNCHEADERSOPTIONS) ${MYHEADERS} $(INSTALLHEADERSDIR)) \
+      || echo "... Error: ${INSTALLHEADERSDIR} does not exist"
+    ifneq "$(strip ${CHMODOPTIONS})$" ""
+      CHMODHEADERS = -@${CHMOD} ${CHMODOPTIONS} $(addprefix $(INSTALLHEADERSDIR)/, ${MYHEADERS})
+    endif
+  endif
+endif
+
+INSTALLLIB=
+ifneq "$(strip ${MYLIB})" ""
+  ifneq "$(strip ${INSTALLLIBDIR})" ""
+    INSTALLLIB = -@test -d ${INSTALLLIBDIR} \
+      && (echo "... installing lib in ${INSTALLLIBDIR}"; \
+      $(RSYNC) $(RSYNCLIBOPTIONS) ${MYLIB} ${INSTALLLIBDIR}) \
+      || echo "... Error: ${INSTALLLIBDIR} does not exist"
+    ifneq "$(strip ${CHMODOPTIONS})$" ""
+      CHMODLIB = -@${CHMOD} ${CHMODOPTIONS} $(addprefix ${INSTALLLIBDIR}/, $(notdir ${MYLIB}))
+    endif
+  endif
+endif
+
+INSTALLEXECS=
+ifneq "$(strip ${MYEXECS})" ""
+  ifneq "$(strip ${INSTALLBINDIR})" ""
+    INSTALLEXECS = -@test -d ${INSTALLBINDIR} \
+      && (echo "... installing bins in ${INSTALLBINDIR}"; \
+      $(RSYNC) $(RSYNCBINOPTIONS) $(addprefix $(BINDIR)/, $(MYEXECS)) ${INSTALLBINDIR}) \
+      || echo "... Error: ${INSTALLBINDIR} does not exist"
+    ifneq "$(strip ${CHMODOPTIONS})$" ""
+      CHMODEXECS = -@${CHMOD} ${CHMODOPTIONS} $(addprefix ${INSTALLBINDIR}/, $(MYEXECS))
+    endif
+  endif
+endif
+
+installlib : 
+	$(INSTALLLIB)
+	${CHMODLIB}
+
+installheaders : 
+	$(INSTALLHEADERS)
+	${CHMODHEADERS}
+
+installexecs : 
+	$(INSTALLEXECS)
+	${CHMODEXECS}
+
+install : defaulttarget installheaders installlib installexecs ;
+
+#
+# DESINSTALLATION (contribution d'Alexandre Guimond)
+#
+
+UNINSTALLHEADERS=
+ifneq "$(strip ${MYHEADERS})" ""
+  ifneq "$(strip ${INSTALLHEADERSDIR})" ""
+    UNINSTALLHEADERS = -@test -d ${INSTALLHEADERSDIR} \
+      && (echo "... removing headers in ${INSTALLHEADERSDIR}"; \
+      rm -f $(addprefix $(INSTALLHEADERSDIR)/,$(MYHEADERS))) \
+      || echo "... Error: ${INSTALLHEADERSDIR} does not exist"
+  endif
+endif
+
+UNINSTALLLIB=
+ifneq "$(strip ${MYLIB})" ""
+  ifneq "$(strip ${INSTALLLIBDIR})" ""
+    UNINSTALLLIB = -@test -d ${INSTALLLIBDIR} \
+      && (echo "... removing lib in ${INSTALLLIBDIR}"; \
+      rm -f $(addprefix $(INSTALLLIBDIR)/,$(LIB))) \
+      || echo "... Error: ${INSTALLLIBDIR} does not exist"
+  endif
+endif
+
+UNINSTALLEXECS=
+ifneq "$(strip ${MYEXECS})" ""
+  ifneq "$(strip ${INSTALLBINDIR})" ""
+    UNINSTALLEXECS = -@test -d ${INSTALLBINDIR} \
+      && (echo "... removing bins in ${INSTALLBINDIR}"; \
+      rm -f $(addprefix $(INSTALLBINDIR)/, $(MYEXECS))) \
+      || echo "... Error: ${INSTALLBINDIR} does not exist"
+  endif
+endif
+
+uninstalllib :
+	$(UNINSTALLLIB)
+
+uninstallheaders :
+	$(UNINSTALLHEADERS)
+
+uninstallexecs :
+	$(UNINSTALLEXECS)
+
+uninstall : uninstallheaders uninstalllib uninstallexecs ;
+
+#
+#
+#
+#
+#
+#
+#
+
+.DEFAULT:
+	@echo
+	@echo "... Do not know how to make $@"
+	@echo "... please write your explicit rule"
+	@echo
+
+clean :
+	$(NOVERBOSESTRING)rm -f ${DEPEND} ${DEPEND}.bak
+	$(NOVERBOSESTRING)rm -f *~ ${OBJS} ${EXECSOBJS} ${TPLS} 
+	$(NOVERBOSESTRING)rm -f so_locations $(LD_LOCATION_FILE)
+
+clobber : clean
+	$(NOVERBOSESTRING)rm -f ${DEPEND} ${MYLIB} $(COMPLETENAMEEXECS) 
+	$(NOVERBOSESTRING)rm -rf $(OBJDIR)/*.o $(OBJDIR)/ii_files
+
+realclean : clobber
+	$(NOVERBOSESTRING)rm -rf obj lib bin
+
+defaulttarget : $(TARGETSTOBEDONE)
+
+
+ifneq "$(strip ${ALLLOCALFILES})" ""
+# include ${DEPEND}
+# sinclude n'oblige pas le fichier a exister
+sinclude ${DEPEND}
+endif
+
+
+#
+#
+#
+#
+#
+#
+#
+#
+
+printaddons :
+	@echo ""
+	@echo "ADDONS included: " ${ADDONS_INCLUDED}
+	@echo ""
+
+myprint :
+	@echo ... targets ...
+	@echo TARGETSTOBEDONE=${TARGETSTOBEDONE}
+	@echo ... flags ...
+	@echo DO_NOT_CHECK_DISTANT_OBJS=${DO_NOT_CHECK_DISTANT_OBJS}
+	@echo CREATE_DIRS=${CREATE_DIRS}
+	@echo ... commandes ...
+#	@echo OBJSCOMMAND=${OBJSCOMMAND}
+#	@echo LIBCOMMAND=${LIBCOMMAND}
+	@echo ... fichiers ...
+	@echo MYFILES=${MYFILES}
+	@echo LOCALFILES=${LOCALFILES}
+	@echo OBJS=${OBJS}
+	@echo LOCALSOBJS=${LOCALSOBJS}
+	@echo OTHERSOBJS=${OTHERSOBJS}
+	@echo OTHERSDIRS=${OTHERSDIRS}
+	@echo ... variables ...
+	@echo PWD=${PWD}
+
+#
+#
+#
+help :
+	@echo "AIDE SUR LES VARIABLES PREDEFINIES"
+	@echo "leur signification -> " ${MAKE} helpvars
+	@echo "leur valeur        -> " ${MAKE} printvars
+	@echo "pour voir les repertoires et ce qui a servi a les"
+	@echo "definir (MYCPU, etc) -> " ${MAKE} printenv
+	@echo "pour voir la valeur d'UNE variable"
+	@echo "                   -> " ${MAKE} "print VAR=variable_a_voir"
+	@echo "           exemple -> " ${MAKE} "print VAR=CC"
+	@echo "pour voir les valeurs associees a un compilateur"
+	@echo "                   -> " ${MAKE} "printC VAR=compilateur_a_voir"
+	@echo "           exemple -> " ${MAKE} "printC VAR=gcc"
+	@echo "                   -> " ${MAKE} "printC++ VAR=compilateur_a_voir"
+	@echo "           exemple -> " ${MAKE} "printC++ VAR=g++"
+	@echo "AIDE AU DEBOGAGE"
+	@echo "pour voir les commandes sans les executer"
+	@echo "                   -> " ${MAKE} -n ...
+
+print :
+	@echo $(VAR) = \"$($(VAR))\"
+
+
+printenv :
+	@echo "Environnement"
+	@echo "     MYCPU   = " $(MYCPU)
+	@echo "     MYOS    = " $(MYOS)
+	@echo "     OBJTYPE = " $(OBJTYPE)
+	@echo "Definitions internes"
+	@echo "     MYCPU   = " $(INTERNECPU)
+	@echo "     MYOS    = " $(INTERNEOS)
+	@echo "     OBJTYPE = " $(INTERNEOBJTYPE)
+	@echo "Repertoires locaux"
+	@echo "     BASEDIR = " ${BASEDIR}
+	@echo "     OBJDIR  = " ${OBJDIR}
+	@echo "     LIBDIR  = " ${LIBDIR}
+	@echo "     BINDIR  = " ${BINDIR}
+	@echo "Repertoires d'installation"
+	@echo "     INSTALLDIR         = " $(INSTALLDIR)
+	@echo "     INSTALLHEADERSDIR = " $(INSTALLHEADERSDIR)
+	@echo "     INSTALLLIBDIR     = " $(INSTALLLIBDIR)
+	@echo "     INSTALLBINDIR     = " $(INSTALLBINDIR)
+
+printC :
+	@echo "Compilateur = " $(VAR)
+	@echo "  Les variables instanciees sont de la forme VAR_"$(VAR)
+	@echo "  Exemple CC_"$(VAR)
+	@echo "Initialisation"
+	@echo "     CC     = " $(CC_$(VAR))
+	@echo "     OPT    = " $(OPT_$(VAR))
+	@echo "     CFLAGS = " $(CFLAGS_$(VAR))
+	@echo "     IFLAGS = " $(IFLAGS_$(VAR))
+
+printC++ :
+	@echo "Compilateur = " $(VAR)
+	@echo "  Les variables instanciees sont de la forme VAR_"$(VAR)
+	@echo "  Exemple C++_"$(VAR)
+	@echo "Initialisation"
+	@echo "     C++      = " $(C++_$(VAR))
+	@echo "     OPT++    = " $(OPT++_$(VAR))
+	@echo "     C++FLAGS = " $(C++FLAGS_$(VAR))
+	@echo "     I++FLAGS = " $(I++FLAGS_$(VAR))
+
+helpvars :
+	@echo REPERTOIRES
+	@echo "     OBJDIR : ou se trouvent les objets"
+	@echo "     LIBDIR : ou se trouve(ro)nt les librairies"
+	@echo "     BINDIR : ou se trouveront les binaires"
+	@echo FICHIERS
+	@echo "     CFILES     les fichiers sources C"
+	@echo "     C++FILES   les fichiers sources C++"
+	@echo "     FILES      tous les fichiers sources C et C++"
+	@echo "                pour l'instant ce n'est pas necessaire"
+	@echo "                de les distinguer"
+	@echo "     OBJS       les objets (issus des sources)"
+	@echo "     LIB        la librairie eventuelle a creer"
+	@echo "     CHEADERS   les headers (include) C"
+	@echo "     C++HEADERS les headers (include) C++"
+	@echo DEPENDANCES
+	@echo "     MAKEDEPEND "
+	@echo "     DEPFLAGS   options pour makedepend"
+	@echo "     DEPEND     fichier de dependance"
+	@echo PRECOMPILATION
+	@echo "     CPPFLAGS   options de precompilation (-D... -U...)"
+	@echo OPTIONS COMMUNES DE COMPILATION C et C++
+	@echo "     OPT        option d'optimisation (-O,-g)"
+	@echo "     IFLAGS     recherche des include (-I...)"
+	@echo COMPILATION C
+	@echo "     CC         compilateur C"
+	@echo "     CFLAGS     options pour le compilateur C"
+	@echo "     COMPILE.c  permet de passer du .c au .o"
+	@echo COMPILATION C++
+	@echo "     C++        compilateur C++"
+	@echo "     C++FLAGS   options pour le compilateur C"
+	@echo "     COMPILE.C  permet de passer du .C au .o"
+	@echo ARCHIVAGE STATIQUE
+	@echo "     AR         programme d'archivage"
+	@echo "     ARFLAGS    options d'archivage"
+	@echo "     RANLIB"
+	@echo ARCHIVAGE DYNAMIQUE
+	@echo "     LD         edition de liens"
+	@echo "     LDFLAGS    options pour l'edition de liens"
+	@echo "     LDPATH     recherche des librairies (-L...)"
+	@echo "     LD_LOCATION_FILE fichier contenant les segments"
+	@echo "                      des objets partages (cf man ld)"
+	@echo "     LOADLIBSFORSHAREDLIB librairies a ajouter a l'edition de liens"
+	@echo "                          pour la creation d'une librairie dynamique"
+	@echo EDITION DE LIENS
+	@echo "     RPFLAGS pour la recherche des librairies dynamiques"
+	@echo "             lors de l'execution (-rpath ...)"
+	@echo "     LDLIBS  librairies a charger"
+	@echo
+	@echo ${MAKE} printvars "-> affiche les valeurs de ces variables"
+
+printvars :
+	@echo REPERTOIRES
+	@echo "     " OBJDIR=${OBJDIR}
+	@echo "     " LIBDIR=${LIBDIR}
+	@echo "     " BINDIR=${BINDIR}
+	@echo "     " PWD=${PWD}
+	@echo FICHIERS
+	@echo "     " CFILES=${CFILES}
+	@echo "     " C++FILES=${C++FILES}
+	@echo "     " FILES=${FILES}
+	@echo "     " OBJS=${OBJS}
+	@echo "     " LIB=${LIB}
+	@echo "     " CHEADERS=${CHEADERS}
+	@echo "     " C++HEADERS=${C++HEADERS}
+	@echo DEPENDANCES
+	@echo "     " MAKEDEPEND=${MAKEDEPEND}
+	@echo "     " DEPFLAGS=${DEPFLAGS}
+	@echo "     " DEPEND=${DEPEND}
+	@echo PRECOMPILATION
+	@echo "     " CPPFLAGS=${CPPFLAGS}
+	@echo OPTIONS COMMUNES DE COMPILATION C et C++
+	@echo "     " OPT=${OPT}
+	@echo "     " IFLAGS=${IFLAGS}
+	@echo COMPILATION C
+	@echo "     " CC=${CC}
+	@echo "     " CFLAGS=${CFLAGS}
+	@echo "   COMPILE.c = CC CPPFLAGS CFLAGS OPT IFLAGS -c"
+	@echo "  " COMPILE.c = $(COMPILE.c)
+	@echo COMPILATION C++
+	@echo "     " C++=${C++}
+	@echo "     " C++FLAGS=${C++FLAGS}
+	@echo "     " I++FLAGS=${I++FLAGS}
+	@echo "   COMPILE.C = C++ CPPFLAGS C++FLAGS OPT IFLAGS I++FLAGS -c"
+	@echo "  " COMPILE.C = $(COMPILE.C)
+	@echo ARCHIVAGE STATIQUE
+	@echo "     " AR=${AR}
+	@echo "     " ARFLAGS=${ARFLAGS}
+	@echo "     " RANLIB=${RANLIB}
+	@echo ARCHIVAGE DYNAMIQUE
+	@echo "     " LD=${LD}
+	@echo "     " LDFLAGS=${LDFLAGS}
+	@echo "     " LDPATH=${LDPATH}
+	@echo "     " LD_LOCATION_FILE=$(LD_LOCATION_FILE)
+	@echo "     " LOADLIBSFORSHAREDLIB=$(LOADLIBSFORSHAREDLIB)
+	@echo EDITION DE LIENS
+	@echo "     " RPFLAGS=${RPFLAGS}
+	@echo "     " LDLIBS=${LDLIBS}
+	@echo DIVERS
+	@echo "     " SHELL=${SHELL}
+
+##############################
+#
+# FICHIERS A INCLURE
+#
+##############################
+# ADDONS_INCLUDED =
+
+ifeq "$(strip $(ADDONSRULESFILE))" ""
+ADDONSRULESFILE = Makefile.rules.addons
+endif
+
+ifneq "$(strip $(word 1, $(ADDONSDIR)))" "" 
+ADDONS_INCLUDED += $(word 1, $(ADDONSDIR))/$(ADDONSRULESFILE)
+-include $(word 1, $(ADDONSDIR))/$(ADDONSRULESFILE)
+$(word 1, $(ADDONSDIR))/$(ADDONSRULESFILE) : ;
+endif
+
+ifneq "$(strip $(word 2, $(ADDONSDIR)))" "" 
+ADDONS_INCLUDED += $(word 2, $(ADDONSDIR))/$(ADDONSRULESFILE)
+-include $(word 2, $(ADDONSDIR))/$(ADDONSRULESFILE)
+$(word 2, $(ADDONSDIR))/$(ADDONSRULESFILE) : ;
+endif
+
+ifneq "$(strip $(word 3, $(ADDONSDIR)))" "" 
+ADDONS_INCLUDED += $(word 3, $(ADDONSDIR))/$(ADDONSRULESFILE)
+-include $(word 3, $(ADDONSDIR))/$(ADDONSRULESFILE)
+$(word 3, $(ADDONSDIR))/$(ADDONSRULESFILE) : ;
+endif
+
+ifneq "$(strip $(word 4, $(ADDONSDIR)))" "" 
+ADDONS_INCLUDED += $(word 4, $(ADDONSDIR))/$(ADDONSRULESFILE)
+-include $(word 4, $(ADDONSDIR))/$(ADDONSRULESFILE)
+$(word 4, $(ADDONSDIR))/$(ADDONSRULESFILE) : ;
+endif
+
+ifneq "$(strip $(word 5, $(ADDONSDIR)))" "" 
+ADDONS_INCLUDED += $(word 5, $(ADDONSDIR))/$(ADDONSRULESFILE)
+-include $(word 5, $(ADDONSDIR))/$(ADDONSRULESFILE)
+$(word 5, $(ADDONSDIR))/$(ADDONSRULESFILE) : ;
+endif
+
+TMPADDONSFILE := $(wildcard $(HOME)/share/$(ADDONSRULESFILE))
+ifneq "$(strip $(TMPADDONSFILE))" "" 
+  -include $(HOME)/share/$(ADDONSRULESFILE)
+  ADDONS_INCLUDED += $(HOME)/share/$(ADDONSRULESFILE)
+endif
+
+
+
+
+ifneq "$(strip $(ADDONS_INCLUDED))" ""
+  TARGETSTOBEDONE += printaddons
+endif

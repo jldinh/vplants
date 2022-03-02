@@ -1,0 +1,16 @@
+Source: vplants-mechanics
+Maintainer: Christophe Pradal <christophe.pradal@cirad.fr>
+Section: python
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3~), python-setuptools (>= 0.6b3), debhelper (>= 7),  python-openalea.deploy
+
+
+Package: python-vplants.mechanics
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-openalea, python-vplants.plantgl, python-openalea.container, python-scipy
+Provides: ${python:Provides}
+Description: algorithms for mechanics.
+ .
+ contains a set of algorithms to compute
+ the mechanical state of a system
+ .

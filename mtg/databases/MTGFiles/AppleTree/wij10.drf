@@ -1,0 +1,34 @@
+# Dressing file for apple trees
+SMBPath = ../../SMBFiles
+
+SMBModel node = nentn105
+SMBModel apple = pommecyl
+
+Class B = node
+Class C = node
+Class E = node
+
+Class W = apple
+
+# define dimensions
+
+
+MinLength B = 20
+MinLength C = 5
+MinLength E = 5
+
+MinTopDiameter A = 100
+MinBottomDiameter A = 100
+
+MinTopDiameter B = 10
+MinTopDiameter C = 10
+MinTopDiameter E = 10
+
+MinBottomDiameter B = 10
+MinBottomDiameter C = 10
+MinBottomDiameter E = 10
+
+#Changer les unités
+DiameterUnit = 1
+
+#Definir l'angle de branchement

@@ -1,0 +1,17 @@
+# -*-python-*-
+
+import os
+bn = os.path.basename
+
+Import( "env" )
+
+lib_env = env.Clone()
+
+
+includes= lib_env.ALEAGlob('lineaging.h')
+sources = ['lineaging_p.cpp', 'lineaging.cpp', 'candidates_p.cpp']
+
+lib = lib_env.ALEALibrary( "lineage",
+                           sources )
+
+

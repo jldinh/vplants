@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="description_files/style.css" />
+  <link rel="stylesheet" type="text/css" href="description_files/SyntaxHighlighter.css" />
+  <title>3 points bending</title>
+</head>
+<body>
+<div id="info">
+	<ul>
+	<li> version : 1.0.0 </li>
+	<li> license : Cecill-C </li>
+	<li> authors : Jerome Chopard </li>
+	<li> url : <a href="www.vplants.com/tissue/simulation/3points_bending">www.vplants.com/tissue/simulation/3points_bending</a> </li>
+	<li> institutes : INRIA </li>
+	</ul>
+</div>
+<div id="title">3 points bending Simulation</div>
+<div id="summary">
+Simple mechanical simulation of tissue deformation using mass springs
+</div>
+<div id="dependencies">
+Direct dependencies :
+	<ul>
+	<li svn="1000"><a href="http://wiki.python.org/moin/PyQt4">PyQt4</a></li>
+	<li svn="1000"><a href="http://matplotlib.sourceforge.net/">matplotlib</a></li>
+	<li svn="6666"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:plantgl:plantgl">plantgl</a></li>
+	<li svn="1000"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:container">container</a></li>
+	<li svn="1000"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:celltissue">celltissue</a></li>
+	<li svn="1000"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:tissueshape">tissueshape</a></li>
+	<li svn="1000"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:physics">physics</a></li>
+	<li svn="6666"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:pglviewer">pglviewer</a></li>
+	</ul>
+</div>
+<div id="description">
+	<div id="general">
+	<h1>Description</h1>
+	This simulation describes the evolution of the shape of a tissue when subjected to a classical 3 points bending experiment.
+	<img src="description_files/3points_bending.png" alt="bending" />
+	The mechanical properties of the material constituting the tissue will be represented by a set of springs, both linear and angular ones.
+	<img src="description_files/spring_representation.png" alt="springs" />
+	The interaction of the tissue with the 2 points below will be represented be a fixed point condition, meaning that the two points touching the support are not allowed to move at all. The third point, above the tissue, will push on it with a force distributed on a small surface on top of the tissue.
+	<img src="description_files/force_representation.png" alt="springs" />
+	</div>
+	<div id="algo">
+	<h1>Algorithms</h1>
+	<h2>Tissue Structure</h2>
+	The tissue structure in its rest state is represented by a mesh.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	f = topen("tissue.zip",'r')
+	t,descr = f.read()
+	pos,descr = f.read("position")
+	cfg = f.read_config("config")
+	f.close()
+	mesh = t.relation(cfg.mesh_id)
+	</textarea>
+	<h2>Mechanics</h2>
+	To account for the mechanical properties of the tissue, each point will be given a mass and a set of springs will be defined.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	weight = dict( (pid,1.) for pid in mesh.wisps(0) )
+	springs = []
+	</textarea>
+	Each edge will stands for a linear spring.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	for eid in mesh.wisps(1) :
+		pid1,pid2 = mesh.borders(1,eid)
+		l = edge_length(mesh,pos,eid)
+		spring = LinearSpring(pid1,pid2,K,l)
+		springs.append(spring)
+	</textarea>
+	where K is a stiffness parameter. In each point, a set of circular spring are added to maintain the angles around this particular point.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	for pid in mesh.wisps(0) :
+		neighbors = list(mesh.region_neighbors(0,pid))
+		nb = len(neighbors)
+		for i in xrange(nb) :
+			pid1 = neighbors[i]
+			pid2 = neighbors[(i+1)%nb]
+			ref_angle = CircularSpring2D(pid,pid1,pid2,L,0.).angle(pos)
+			spring = CircularSpring2D(pid,pid1,pid2,L,ref_angle)
+			springs.append(spring)
+	</textarea>
+	where L is another stiffness parameter (radial stifness). Interactions with the world are defined in a bound function.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	def bound (solver) :
+		for pid in fixed_points :
+			solver.set_force(pid,0,0)
+		for pid in top_points :
+			solver.set_force(pid,solver.fx(pid),solver.fy(pid)+load)
+	</textarea>
+	where fixed_points list the two interaction points with the support below the tissue and top_points are all the points on top of the tissue subjected to load. If the evolution is quasistatic, each step of the simulation much reach a mechanical equilibrium.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	algo = ForwardEuler2D(weight,springs,bound)
+	algo.deform(pos,dt_meca,1000)
+	</textarea>
+	in which dt_meca is a time constant used to perform the mecanical integration and 1000 is an estimated number of steps to perform to reach this equilibrium.
+	</div>
+	<div id="exec">
+	<h1>Simulation</h1>
+	The simulation by itself is just a repetition of the step of mechanical equilibrium. Each time, however, the force (load) is increased a little up to a maximum value. All above operations have been written in <a href="simu.py">simu.py</a>, the main simulation file. First launch <a href="create_tissue.py">create_tissue.py</a> to create a pseudo-grid tissue the first time.
+	<div class="command">
+	user@computer:$ python create_tissue.py
+	</div>
+	then launch (only once) <a href="GUI/compile_ui.py">compile_ui.py</a> to create the gui associated with this particular simulation.
+	<div class="command">
+	user@computer:$ cd GUI<br>
+	user@computer/GUI:$ python compile_ui.py
+	</div>
+	Last launch <a href="simu.py">simu.py</a> to display the mechanical evolution of the tissue under load (press play to run the simulation). Due to the number of computation needed to reach a stable state at each time step, simulation speed will be very slow.
+	<div class="command">
+	user@computer:$ python simu.py
+	</div>
+	<img src="description_files/massspring.png" alt="mass spring" />
+	</div>
+	<div id="exercice">
+	<h1>Exercices</h1>
+	To go further :
+	<ul>
+		<li>change the stiffness constant K and see what happens in terms of bending. If K is too big you may need to decrease dt_meca to avoid numerical instabilities</li>
+		<li>change the maximal value of the load and see what happens in terms of bending. If the load is too big you may need to decrease dt_meca to avoid numerical instabilities</li>
+		<li>change the number of steps to reach mechanical equilibrium</li>
+	</ul>
+	</div>
+</div>
+<div id="bugs_disclaimer">
+<h1>Bugs</h1>
+If you experience bugs, feel free to report them on <a href="http://gforge.inria.fr/tracker/?atid=2598&group_id=79&func=browse">gforge</a> or send a mail to the author. Thanks
+</div>
+<div id="files">
+<h1>files</h1>
+<ul>
+	<li><a href="simu.py">simu.py</a> : main simulation file </li>
+	<li><a href="simu_view.py">simu_view.py</a> : description of the visualization </li>
+	<li><a href="simu_gui.py">simu_gui.py</a> : description of user interaction with the simulation </li>
+	<li><a href="tissue.zip">tissue.zip</a> : a tissue file loaded by the simulation </li>
+	<li><a href="create_tissue.py">create_tissue.py</a> : non mandatory, create <a href="tissue.zip">tissue.zip</a> from scratch </li>
+	<li>description.html : this file </li>
+	<li>description_files dir : location of external files for this html page </li>
+	<li>GUI dir : contains all file needed to create the GUI</li>
+</ul>
+</div>
+
+<!-- syntax highlighting -->
+<script language="JavaScript" src="description_files/shCore.js" type="text/javascript"></script>
+<script language="JavaScript" src="description_files/shBrushPython.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">dp.SyntaxHighlighter.HighlightAll('code');</script>
+
+</body>
+</html>

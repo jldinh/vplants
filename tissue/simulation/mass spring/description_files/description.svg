@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docname="description.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.0570206"
+     inkscape:cx="834.58084"
+     inkscape:cy="842.23754"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1279"
+     inkscape:window-height="949"
+     inkscape:window-x="0"
+     inkscape:window-y="25" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 246.72696,129.90324 L 213.51154,129.90324 L 200.56271,148.14807 L 174.66504,111.6584 L 148.76738,148.14807 L 122.86972,111.6584 L 96.972059,148.14807 L 71.074389,111.6584 L 45.176729,148.14807 L 19.279059,111.6584 L 6.3302286,129.90324 L -17.612886,129.90324"
+       id="path2427"
+       sodipodi:nodetypes="cccccccccccc"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       sodipodi:nodetypes="cccccccccccc"
+       id="path2431"
+       d="M 507.99302,129.90324 L 474.7776,129.90324 L 461.82877,148.14807 L 435.9311,111.6584 L 410.03344,148.14807 L 384.13578,111.6584 L 358.23812,148.14807 L 332.34045,111.6584 L 306.44279,148.14807 L 280.54512,111.6584 L 267.59629,129.90324 L 243.65318,129.90324"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       sodipodi:type="arc"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path2433"
+       sodipodi:cx="360.51797"
+       sodipodi:cy="372.19467"
+       sodipodi:rx="14.595869"
+       sodipodi:ry="14.595869"
+       d="M 375.11384,372.19467 A 14.595869,14.595869 0 1 1 345.92211,372.19467 A 14.595869,14.595869 0 1 1 375.11384,372.19467 z"
+       transform="translate(-120.28331,-242.29143)" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 998.41423,129.90324 L 965.19881,129.90324 L 952.24998,148.14807 L 926.35231,111.6584 L 900.45465,148.14807 L 874.55699,111.6584 L 848.65933,148.14807 L 822.76166,111.6584 L 796.864,148.14807 L 770.96633,111.6584 L 758.0175,129.90324 L 734.07439,129.90324"
+       id="path2435"
+       sodipodi:nodetypes="cccccccccccc"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="translate(370.1379,-242.29143)"
+       d="M 375.11384,372.19467 A 14.595869,14.595869 0 1 1 345.92211,372.19467 A 14.595869,14.595869 0 1 1 375.11384,372.19467 z"
+       sodipodi:ry="14.595869"
+       sodipodi:rx="14.595869"
+       sodipodi:cy="372.19467"
+       sodipodi:cx="360.51797"
+       id="path2437"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       sodipodi:type="arc"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="translate(140.98275,-242.29143)"
+       d="M 375.11384,372.19467 A 14.595869,14.595869 0 1 1 345.92211,372.19467 A 14.595869,14.595869 0 1 1 375.11384,372.19467 z"
+       sodipodi:ry="14.595869"
+       sodipodi:rx="14.595869"
+       sodipodi:cy="372.19467"
+       sodipodi:cx="360.51797"
+       id="path2429"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       sodipodi:type="arc"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <g
+       id="g3215"
+       transform="translate(21.164001,0)"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90">
+      <path
+         transform="matrix(0.5,0,0,0.5,389.84233,-56.19409)"
+         d="M 375.11384,372.19467 A 14.595869,14.595869 0 1 1 345.92211,372.19467 A 14.595869,14.595869 0 1 1 375.11384,372.19467 z"
+         sodipodi:ry="14.595869"
+         sodipodi:rx="14.595869"
+         sodipodi:cy="372.19467"
+         sodipodi:cx="360.51797"
+         id="path2439"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         sodipodi:type="arc"
+         inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+         sodipodi:type="arc"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="path3211"
+         sodipodi:cx="360.51797"
+         sodipodi:cy="372.19467"
+         sodipodi:rx="14.595869"
+         sodipodi:ry="14.595869"
+         d="M 375.11384,372.19467 A 14.595869,14.595869 0 1 1 345.92211,372.19467 A 14.595869,14.595869 0 1 1 375.11384,372.19467 z"
+         transform="matrix(0.5,0,0,0.5,414.65532,-56.19409)" />
+      <path
+         transform="matrix(0.5,0,0,0.5,439.46828,-56.19409)"
+         d="M 375.11384,372.19467 A 14.595869,14.595869 0 1 1 345.92211,372.19467 A 14.595869,14.595869 0 1 1 375.11384,372.19467 z"
+         sodipodi:ry="14.595869"
+         sodipodi:rx="14.595869"
+         sodipodi:cy="372.19467"
+         sodipodi:cx="360.51797"
+         id="path3213"
+         style="fill:#000000;fill-opacity:1;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         sodipodi:type="arc"
+         inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+    </g>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:4;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+       d="M -18.97463,77.358108 L -18.97463,175.15043"
+       id="path3220"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -19.830948,169.23098 L -55.25302,189.68192"
+       id="path3222"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       id="path3224"
+       d="M -19.830948,164.18411 L -55.25302,184.63505"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -19.830948,159.13717 L -55.25302,179.58811"
+       id="path3226"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       id="path3228"
+       d="M -19.830948,154.09023 L -55.25302,174.54118"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -19.830948,149.04336 L -55.25302,169.4943"
+       id="path3230"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       id="path3232"
+       d="M -19.830948,143.99642 L -55.25302,164.44737"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -19.830948,138.94949 L -55.25302,159.40043"
+       id="path3234"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       id="path3236"
+       d="M -19.830948,133.90255 L -55.25302,154.35349"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -19.830948,128.85568 L -55.25302,149.30662"
+       id="path3238"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       id="path3240"
+       d="M -19.830948,123.80874 L -55.25302,144.25968"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -19.830948,118.7618 L -55.25302,139.21275"
+       id="path3242"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       id="path3244"
+       d="M -19.830948,113.71493 L -55.25302,134.16587"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -19.830948,108.66799 L -55.25302,129.11894"
+       id="path3246"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       id="path3248"
+       d="M -19.830948,103.62106 L -55.25302,124.072"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -19.830948,98.574182 L -55.25302,119.02513"
+       id="path3250"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       id="path3252"
+       d="M -19.830948,93.527246 L -55.25302,113.97819"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -19.830948,88.48031 L -55.25302,108.93125"
+       id="path3254"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       id="path3256"
+       d="M -19.830948,83.433435 L -55.25302,103.88438"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M -19.830948,78.386499 L -55.25302,98.837442"
+       id="path3258"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       id="path3260"
+       d="M -19.830948,174.27792 L -55.25302,194.72886"
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       id="path3264"
+       style="fill:#0000ff;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
+       d="M 992.88263,103.03548 L 992.88263,156.771 L 1102.3543,156.771 L 1102.3543,196.41356 L 1180.7302,129.90324 L 1102.3543,63.392913 L 1102.3543,103.03548 L 992.88263,103.03548 z"
+       sodipodi:nodetypes="cccccccc"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       sodipodi:type="arc"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path2411"
+       sodipodi:cx="360.51797"
+       sodipodi:cy="372.19467"
+       sodipodi:rx="14.595869"
+       sodipodi:ry="14.595869"
+       d="M 375.11384,372.19467 A 14.595869,14.595869 0 1 1 345.92211,372.19467 A 14.595869,14.595869 0 1 1 375.11384,372.19467 z"
+       transform="translate(-379.4926,-242.29143)" />
+    <path
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/chopard/dvlpt/vplants/tissue/simulation/mass spring/description_files/spring_representation.png"
+       sodipodi:type="arc"
+       style="fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:4;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path2413"
+       sodipodi:cx="360.51797"
+       sodipodi:cy="372.19467"
+       sodipodi:rx="14.595869"
+       sodipodi:ry="14.595869"
+       d="M 375.11384,372.19467 A 14.595869,14.595869 0 1 1 345.92211,372.19467 A 14.595869,14.595869 0 1 1 375.11384,372.19467 z"
+       transform="translate(633.13964,-242.29143)" />
+  </g>
+</svg>

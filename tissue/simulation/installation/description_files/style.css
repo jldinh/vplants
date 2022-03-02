@@ -1,0 +1,150 @@
+body {
+	background: #ffffff;
+	min-width: 600px;
+}
+
+#info {
+	background: #aaaaaa;
+	padding: 5px;
+	-moz-border-radius: 6px;
+}
+
+#title {
+	position: relative;
+	width: 50%;
+	left: 25%;
+	top: 20px;
+	padding: 10px;
+	color: #aa0000;
+	text-align: center;
+	font-size: larger;
+	font-weight: bold;
+	border: 1px solid #0000aa;
+	-moz-border-radius: 10px;
+}
+
+#summary {
+	margin: 20px;
+	padding: 10px;
+}
+
+#summary:before {
+	content: url(openalea.png) " ";
+}
+
+#dependencies {
+	margin: 20px;
+	padding: 10px;
+	border: 3px solid #0000aa;
+	-moz-border-radius: 10px;
+	background: #eeeeee;
+}
+
+#dependencies li {
+	color: #000000;
+}
+#dependencies li:after {
+	content: "   ("attr(svn)")";
+	color: #0000aa;
+}
+
+#description .info {
+	margin: 10px;
+	max-width: 60em;
+}
+
+#description h1 {
+	margin: 0 0 10px 0;
+	color: #000;
+	text-align: center;
+	font-size: larger;
+	font-weight: bold;
+}
+
+#description h2 {
+	color: #600;
+	text-align: left;
+	font-size: larger;
+	font-weight: bold;
+}
+
+#description img {
+	display: block;
+	margin: 10px auto 10px auto;
+	text-align: center;
+}
+
+#description .command {
+	margin: 10px;
+	margin-left: 40px;
+	margin-right: 40px;
+	padding: 10px;
+	border: 1px dashed #0000aa;
+	background: #cccccc;
+}
+
+#description textarea {
+	display: block;
+	margin: 10px;
+	margin-left: 40px;
+	margin-right: 40px;
+	padding: 10px;
+	border: 1px dashed #0000aa;
+	width: 80%;
+	background: #aaffaa;
+	/*white-space: pre;*/
+}
+
+#general {
+	margin: 20px;
+	border: 3px solid #0000aa;
+	-moz-border-radius: 10px;
+	padding: 30px;
+	background: #dddddd;
+}
+
+#algo {
+	margin: 20px;
+	border: 3px solid #00aa00;
+	-moz-border-radius: 10px;
+	padding: 30px;
+	background: #eeffee;
+}
+
+#exec {
+	margin: 20px;
+	border: 3px solid #aa0000;
+	-moz-border-radius: 10px;
+	padding: 30px;
+	background: #ffeeee;
+}
+
+#exercice {
+	margin: 20px;
+	border: 3px solid #0000aa;
+	-moz-border-radius: 10px;
+	padding: 30px;
+	background: #eeeeff;
+}
+
+#bugs_disclaimer {
+	background: #eeaaaa;
+	padding: 5px;
+	-moz-border-radius: 6px;
+}
+
+#bugs_disclaimer H1 {
+	font-size: larger;
+	font-weight: bold;
+}
+
+#files {
+	background: #eeeeee;
+	padding: 5px;
+	-moz-border-radius: 6px;
+}
+
+#files H1 {
+	font-size: larger;
+	font-weight: bold;
+}

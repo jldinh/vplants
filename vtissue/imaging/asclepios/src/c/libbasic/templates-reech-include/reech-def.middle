@@ -1,0 +1,27 @@
+
+
+extern void ReechTriLinDefBack_TYPE ( void *theBuf, /* buffer to be resampled */
+			       int *theDim, /* dimensions of buffers */
+			       r32* resBuf,  /* result buffer */
+			       int *resDim,  /* dimensions of this buffer */
+			       r32** theDef, /* deformations */
+                               int *defDim, /* dimensions of these buffers */
+			       double* mat_aft,  /* transformation matrix */
+			       double* mat_bef,  /* transformation matrix */
+			       int slice     /* slice index */
+			       );
+extern void ReechNearestDefBack_TYPE ( void *theBuf, /* buffer to be resampled */
+			       int *theDim, /* dimensions of buffers */
+			       void* resBuf,  /* result buffer */
+			       int *resDim,  /* dimensions of this buffer */
+			       r32** theDef, /* deformations */
+                               int *defDim, /* dimensions of these buffers */
+			       double* mat_aft,  /* transformation matrix */
+			       double* mat_bef,  /* transformation matrix */
+			       int slice     /* slice index */
+			       );
+
+
+
+
+

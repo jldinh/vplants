@@ -1,0 +1,3 @@
+11/06/2009
+* Fix a bug when calling an aml using a char rather than a string:
+	Sons(2,EdgeType='+') is now working

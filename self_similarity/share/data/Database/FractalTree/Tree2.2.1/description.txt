@@ -1,0 +1,6 @@
+Tree data base for JTB paper on tree autosimilarity with Pascal and Przemek 
+(Tree simulation of a physiological age)
+
+Tree 1. Pure monopodial tree
+
+(each branch of a stem in state s goes in the next "state" s+1)

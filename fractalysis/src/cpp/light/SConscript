@@ -1,0 +1,30 @@
+# -*-python-*-
+Import( "env" )
+
+lib_env= env.Clone()
+
+includes= lib_env.ALEAGlob('*.h')
+lib_env.ALEAIncludes( "fractalysis/light", includes )
+
+dirs=lib_env.ALEAGlob('SConscript','*') 
+
+# Install headers
+SConscript( dirs, exports = { "env" : lib_env } )
+
+# Select recursively the sources
+sources= lib_env.ALEAGlob('*.cpp',dir = '*')
+sources+= lib_env.ALEAGlob('*.cpp')
+
+# Add defines to export symbols on Windows
+DEFINES= list(lib_env['CPPDEFINES'])
+DEFINES.append('LGT_MAKEDLL')
+
+# Link with the following libraries
+LIBRARIES= list(lib_env['LIBS'])
+LIBRARIES.extend(['pgltool','pglmath','pglsg', 'pglgui', 'pglalgo'])  #for qt3 use pglgui3 instead of pglgui
+
+lib_env.ALEALibrary( "light",
+                     sources, 
+                     CPPDEFINES = DEFINES, 
+                     LIBS = LIBRARIES )
+

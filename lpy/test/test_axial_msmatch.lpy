@@ -1,0 +1,33 @@
+matched = False
+
+def Start():
+  global matched
+  matched = False
+  
+def EndEach(lstring):
+  assert matched == True
+
+module A : scale = 2
+module C, B,D : scale = 1
+
+
+Axiom: A(1)[A(2)C(0)]B(2)[A(3)C(0)[D(1)C(1)]]A(5)D(5)
+
+derivation length: 1
+ignore: +-
+
+production:
+
+
+A(a) < B(b) > [C(c)]D(d) :
+    global matched
+    matched = True
+    print 'a =',a,',b =',b,',c =',c,',d =',d
+    assert d == 5
+    produce B(b)
+
+endlsystem
+###### INITIALISATION ######
+
+def __initialiseContext__(context):
+	context.options.setSelection('String matching',3)

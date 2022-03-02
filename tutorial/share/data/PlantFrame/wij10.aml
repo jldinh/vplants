@@ -1,0 +1,175 @@
+######################################################################
+#
+#    A set of 10 hybrid Apple trees
+#
+#    Plotting a plant representation at different scales
+#
+# Database credits : E. Costes 
+#
+######################################################################
+
+amapmod_dir = "../../../"
+examples_dir = AMAPMOD_DIR + "/examples/MTG/PlantFrame/"
+
+g = MTG(AMAPMOD_DIR + "/databases/MTGFiles/AppleTree/wij10.mtg")
+
+plants = VtxList(Scale->1)
+plant(_i) = (Foreach _v In plants: Select(_v, Index(_v)==_i))@1
+
+p10 = plant(10)
+
+
+f0 = PlantFrame(p10, Scale->2)
+Plot(f0)
+
+f1 = PlantFrame(p10, Scale->3)
+Plot(f1)
+
+f2 = PlantFrame(p10, Scale->4)
+Plot(f2)
+
+#set of axes of the plant
+axes_basis = Foreach _x In Components(p10, Scale->4): \
+               Select(_x, Predecessor(_x) == Undef)
+
+axes = Foreach _en In axes_basis : Axis(_en)
+axes_size =  Foreach _array In axes : Size(_array)
+Plot(Histogram(axes_size))  
+
+# select a long branch 
+b1 = (Foreach _x In axes  : Select(_x,Size(_x)>70))@2
+
+f3 = PlantFrame(b1@1, Scale->4)
+Plot(f3)
+
+# plot of a set of individuals
+f4 = PlantFrame(plants, Scale->4, TrunkDist->100)
+
+Plot(f4)
+
+######################################################################
+#    Using dressing data and functions to control geometry
+######################################################################
+
+h(_x) = If (_x != Undef) \
+        Then If Complex(_x) != Undef \
+             Then If Class(Complex(_x)) == 'I' Then 'W' Else Undef \
+             Else Undef \
+        Else Undef
+
+dr1 = DressingData(examples_dir + "wij10.drf")
+# dr1 = DressingData(examples_dir + "databases/MTGFiles/AppleTree/wij10.drf")
+
+f5 = PlantFrame(p10, Scale->4, DressingData->dr1)
+Plot(f5, Class->h)
+
+diam(_x) = If h(_x) == 'W' Then 50 Else Undef
+f5 = PlantFrame(p10, Scale->4, DressingData->dr1, TopDiameter->diam, BottomDiameter->diam, Length->diam)
+Plot(f5)
+Plot(f5, Class->h)
+
+
+diam(_x) = If h(_x) == 'W' Then 50 Else \
+           If h(Successor(_x)) == 'W' Then 10 Else Undef
+f6 = PlantFrame(p10, Scale->4, DressingData->dr1, TopDiameter->diam, BottomDiameter->diam, Length->diam)
+Plot(f6, Class->h)
+
+# modifier le fichier .drf pour changer l'angle d'insertion par defaut a 90 deg
+# et la phyllotaxy a 120 deg
+dr1 = DressingData(examples_dir + "wij10.drf")
+f6 = PlantFrame(p10, Scale->4, DressingData->dr1, TopDiameter->diam, BottomDiameter->diam, Length->diam)
+Plot(f6, Class->h)
+
+# variation of the insertion angle as a function of the entity rank
+
+dr1 = DressingData(examples_dir + "wij10.drf")
+Size(Trunk(p10,Scale->4)) #114
+angle(_x) = If Father(_x) == Undef \
+            Then Undef \
+            Else 90 - (Rank(Father(_x))*ToReal(110)/100)
+f6 = PlantFrame(p10, Scale->4, DressingData->dr1, Alpha->angle)   
+Plot(f6)
+                                 
+
+# Give a particular shape to the plant axes
+# use BranchPattern in the dressing file
+
+dr1 = DressingData(examples_dir + "wij10.drf")
+f6 = PlantFrame(p10, Scale->4, DressingData->dr1)   
+Plot(f6)
+
+
+######################################################################
+#    Coloring plant representation to explore architecture
+######################################################################
+
+dr1 = DressingData(examples_dir + "wij10.drf")
+
+f(_x) = If Class(Complex(_x)) == 'I' Then Red Else Green
+
+diam(_x) = If h(_x) == 'W' Then 50 Else \
+           If h(Successor(_x)) == 'W' Then 10 Else Undef
+
+f2 = PlantFrame(p10, Scale->4, DressingData->dr1, TopDiameter->diam, BottomDiameter->diam, Length->diam)
+
+Plot(f2, Color->f, Class->h)
+
+
+#######################################
+#
+#       Coloring functions
+#
+#######################################
+
+color_order(_v) = \
+  Switch Order(_v) \
+  Case 0 : Green \
+  Case 1 : Red \ 
+  Case 2 : Blue \
+  Case 3 : Yellow \ 
+  Case 4 : Violet \
+  Default : White
+
+color_class(_x) = \
+  If Class(Complex(_x, Scale->3)) == 'I' \
+  Then Violet \
+  Else \
+    Switch Class(_x) \
+    Case 'B' : Green \ 
+    Case 'C' : Red \
+    Case 'E' : Black \
+    Default : Yellow
+
+color_fruits(_x) = \
+  If Class(Complex(_x, Scale->3)) == 'I' \
+  Then \
+    Switch Index(Complex(_x, Scale->2)) \
+    Case 92 : Yellow \
+    Case 93 : Red \
+    Default : Black \
+  Else Green 
+
+
+Plot(f6, Color -> color_order, Class->h)
+Plot(f6, Color -> color_class, Class->h)
+Plot(f6, Color -> color_fruits, Class->h)    
+
+
+select_order(_x) = If (Order(_x) == 0 Or Order(_x) == 2) Then True Else False
+Plot(f6, Show->select_order, Class->h)
+
+
+select_order2(_x) = If (Order(_x) == 0) Then False Else True
+Plot(f6, Show->select_order2, Class->h)
+
+
+select_order3(_x) = If (Index(Complex(_x, Scale->2)) == 90) Then True Else False
+Plot(f6, Show->select_order3, Class->h)
+
+
+select_order3(_x) = \
+  If (Index(Complex(_x, Scale->2)) == 90)  Or (Index(Complex(_x, Scale->2)) == 91)\
+  Then True Else False
+
+Plot(f6, Show->select_order3, Class->h)
+                            

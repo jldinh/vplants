@@ -1,0 +1,10 @@
+* Frederique Boudon
+* Jean-Baptiste Durand
+* Etienne Farcot
+* Christian Fournier
+* Christophe Godin
+* Yann Guedon
+* Christophe Pradal
+
+.. warning:: Add your name here
+

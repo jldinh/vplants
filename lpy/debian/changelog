@@ -1,0 +1,71 @@
+vplants-lpy (2.4.0~ppa2) trusty; urgency=medium
+
+  * Add a dependency to openalea.vpltk 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Mon, 13 Oct 2014 17:32:24 +0200
+
+vplants-lpy (2.4.0~ppa1) trusty; urgency=medium
+
+  * Port to Trusty 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Thu, 02 Oct 2014 01:33:03 +0200
+
+vplants-lpy (2.1.0~ppa6) quantal; urgency=low
+
+  * Port to quantal
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Tue, 11 Dec 2012 11:34:17 +0100
+
+vplants-lpy (2.1.0~ppa5) precise; urgency=low
+
+  * Merge trunk to this branch 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Tue, 04 Dec 2012 12:11:15 +0100
+
+vplants-lpy (2.1.0~ppa4) precise; urgency=low
+
+  * Fix gcc 4.7 errors 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Mon, 29 Oct 2012 15:40:46 +0100
+
+vplants-lpy (2.1.0~ppa3) precise; urgency=low
+
+  * Switch to dh_python2 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Wed, 12 Sep 2012 15:41:40 +0200
+
+vplants-lpy (2.1.0~ppa2) precise; urgency=low
+
+  * Fix build errors. 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Fri, 06 Apr 2012 10:31:10 +0200
+
+vplants-lpy (2.1.0~ppa1) precise; urgency=low
+
+  *  Release 1.0 on precise  
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Sun, 25 Mar 2012 16:34:06 +0200
+
+vplants-lpy (1.11.0b1~ppa3) oneiric; urgency=low
+
+  * Fix openalea and vplants namespace
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Fri, 06 Jan 2012 17:37:06 +0100
+
+vplants-lpy (1.11.0b1~ppa2) oneiric; urgency=low
+
+  *  libglut to freeglut
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Tue, 06 Dec 2011 12:23:01 +0100
+
+vplants-lpy (1.11.0b1~ppa1) oneiric; urgency=low
+
+  * Release 1.0
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Tue, 06 Dec 2011 10:55:21 +0100
+
+vplants-lpy (1.10.0-1~ppa1) lucid; urgency=low
+
+  * source package automatically created by stdeb 0.6.0
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Thu, 23 Sep 2010 17:16:55 +0200

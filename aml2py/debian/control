@@ -1,0 +1,12 @@
+Source: vplants-aml2py
+Maintainer: Christophe Pradal <christophe.pradal@cirad.fr>
+Section: python
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3~), python-setuptools, debhelper (>= 7), python-openalea.deploy
+
+Package: python-vplants.aml2py
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}
+Breaks: ${python:Breaks}
+Description: Convert aml files into Python files.
+ The aml2py script is a package to convert aml scripts into Python script.

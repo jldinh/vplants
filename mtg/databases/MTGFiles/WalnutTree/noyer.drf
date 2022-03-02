@@ -1,0 +1,45 @@
+# Dressing file for apple trees
+
+SMBPath = ../../SMBFiles
+
+SMBModel entrenoeud = nentn105
+SMBModel Feuille = feuijugl7
+SMBModel Pomme = pommecyl
+
+
+Class U = entrenoeud
+Class S = entrenoeud
+Class B = entrenoeud
+Class E = entrenoeud
+Class Z = Feuille
+
+LeafClass = Z
+
+LeafAlpha = 50 
+LeafBeta  = 144
+LeafLength = 10
+LeafTopDiameter = 10
+LeafBottomDiameter = 500
+
+
+Phyllotaxy = 144
+
+
+MinLength C = 1   
+MinLength E = 10
+MinLength B = 5
+MinLength I = 5
+MinLength U = 1
+
+
+DiameterUnit = 10	
+LengthUnit = 1
+
+Alpha = Relative
+
+DefaultEdge = NONE
+DefaultTrunkCategory = -1
+DefaultAlpha = 60
+DefaultDistance = 10000
+NbPlantsPerLine = 5
+

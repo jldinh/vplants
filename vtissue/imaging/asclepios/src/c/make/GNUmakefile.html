@@ -1,0 +1,2250 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+  <head>
+    <title>GNUmakefile standardise -- Documentation</title>
+  </head>
+
+  <body>
+    <p>
+    <table align=center border=3 cellpadding=5>
+    <tr><td colspan=3><h1>GNUmakefile standardisé -- Documentation</h1></td>
+    </tr>
+    <tr align=center><td > <a href="#AIDEMEMOIRE">Aide-mémoire</a> </td>
+        <td> <a href="#CONTENTS">Table des matières</a> </td>
+        <td> <a href="#TABLEAUX">Liste des tableaux</a> </td>
+    </table>
+
+<p>
+
+<FONT SIZE=+3 color=#109060><b><A NAME=AIDEMEMOIRE>Petit aide-mémoire</a></b></font>
+
+<ol>
+
+<li><FONT SIZE=+1> Générer un fichier objet.</font>
+  <ul>
+  <li> Un <A href="#MAKEEXAMPLEMIN">GNUmakefile minimal</a> suffit pour créer 
+       un objet (compiler un fichier source en un fichier objet).<br>
+       <b>gmake monfichier.o</b> crée le fichier 
+       <b><A href="#VAR_OBJDIR">$(OBJDIR)</a>/monfichier.o</b> à partir 
+       du fichier source <b>monfichier.[c,C,cpp]</b>.
+  <li> <b>gmake monfichier.o</b> force la compilation de
+       <em>monfichier.[c,C,cpp]</em> tandis que 
+       <b>gmake <A href="#VAR_OBJDIR">$(OBJDIR)</a>/monfichier.o</b>
+       ne la réalise que si <em>monfichier.[c,C,cpp]</em> est plus récent que 
+       <em><A href="#VAR_OBJDIR">$(OBJDIR)</a>/monfichier.o</em>.
+  </ul>
+
+<li><FONT SIZE=+1> Générer <em>automatiquement</em> des fichiers objets.</font>
+  <ul>
+  <li> Il suffit de spécifier les fichiers sources à compiler dans l'une
+       des variables <em><A href="#VAR_CFILES">$(CFILES)</a></em> ou
+       <em><A href="#VAR_C++FILES">$(C++FILES)</a></em>
+       (voir <A href="#MAKEAJOUTSRCS">exemple</a>).
+  </ul>
+
+<li><FONT SIZE=+1> Créer <em>automatiquement</em> une librairie.</font>
+  <ul>
+  <li> Cela nécessite que des sources soient spécifiées dans l'une
+       des variables <em><A href="#VAR_CFILES">$(CFILES)</a></em> ou
+       <em><A href="#VAR_C++FILES">$(C++FILES)</a></em>. Si un nom de
+       librairie (extension .a ou .so) est alors donné dans la variable
+       <em><A href="#VAR_LIB">$(LIB)</a></em>, alors les objets compilés à
+       partir des sources sont rassemblés dans la librairie (statique ou
+       dynamique)
+       <b><A href="#VAR_LIBDIR">$(LIBDIR)</a>/<A href="#VAR_LIB">$(LIB)</a></b>
+       (voir <A href="#MAKEAJOUTLIB">exemple</a>).
+  </ul>
+
+<li><FONT SIZE=+1> Générer un binaire exécutable.</font>
+  <ul>
+  <li> Un <A href="#MAKEEXAMPLEMIN">GNUmakefile minimal</a> suffit pour créer 
+       un binaire exécutable (compiler un fichier source en un fichier
+       objet et réaliser l'édition de liens).<br>
+       <b>gmake monfichier</b> crée le fichier 
+       <b><A href="#VAR_OBJDIR">$(OBJDIR)</a>/monfichier.o</b> à partir 
+       du fichier source <b>monfichier.[c,C,cpp]</b>,
+       puis le binaire exécutable 
+       <b><A href="#VAR_BINDIR">$(BINDIR)</a>/monfichier</b>
+       à partir de cet objet.
+  <li> Si des sources sont spécifiées dans l'une des variables
+       <em><A href="#VAR_CFILES">$(CFILES)</a></em> ou
+       <em><A href="#VAR_C++FILES">$(C++FILES)</a></em> (mais pas de
+       librairie), les objets dérivant de ces sources sont ajoutés à
+       l'édition de liens.
+  <li> Si une librairie est spécifiée dans 
+       <em><A href="#VAR_LIB">$(LIB)</a></em>, celle-ci 
+       est ajoutée à l'édition de liens
+       (voir <A href="#MAKEAJOUTEXECS">exemple</a>).
+  <li> Il est en outre possible de rajouter d'autre objets,
+       qui dépendent du binaire à créer,
+       lors de l'édition de liens
+       (voir <A href="#MAKEAJOUTSRCSEXECS">exemple</a>).
+  </ul>
+
+
+<li><FONT SIZE=+1> Générer <em>automatiquement</em> des binaires exécutables.</font>
+  <ul>
+  <li> Il suffit de les spécifier dans la variable
+       <em><A href="#VAR_EXECS">$(EXECS)</a></em>
+       (voir <A href="#MAKEAJOUTEXECS">exemple</a>).
+  </ul>
+
+<li><FONT SIZE=+1> Drapeaux.</font>
+  <ul>
+  <li> Créer automatiquement les répertoires nécessaire :
+       <b><A href="#VAR_CREATE_DIRS">CREATE_DIRS</a></b>.
+  <li> Ne pas écrire les commandes de compilation et d'édition de
+       liens :
+       <b><A href="#VAR_VERBOSE">VERBOSE</a></b>.
+  <li> Ne pas mettre automatiquement à jour les dépendances :
+       <b><A href="#VAR_ALLWAYS_UPDATE_DEPEND">ALLWAYS_UPDATE_DEPEND</a></b>.
+  <li> Compiler le C avec le compilateur C++ :
+       <b><A href="#VAR_cEQUALC">cEQUALC</a></b>.
+  <li> Ne pas vérifier les objets <em>distants</em> :
+       <b><A href="#VAR_DONOTCHECK">DO_NOT_CHECK_DISTANT_OBJS</a></b>.
+  </ul>
+
+<li><FONT SIZE=+1> Inclusions.</font>
+  <ul>
+  <li> S'il existe, le fichier <b>$(HOME)/share/Makefile.vars.addons</b> est
+       automatiquement inclus à la fin du fichier <b>$(ETCDIR)/GNUmakefile.vars</b>.
+  <li> S'il existe, le fichier <b>$(HOME)/share/Makefile.rules.addons</b> est
+       automatiquement inclus à la fin du fichier <b>$(ETCDIR)/GNUmakefile.rules</b>.
+  </ul>
+<li><FONT SIZE=+1> Pour en savoir plus ...</font>
+  <ul>
+  <li> voir ci-dessous.
+  </ul>
+</ol>
+
+<hr>
+
+<FONT SIZE=+3 color=#109060><b><A NAME=CONTENTS>Contents</a></b></font>
+<ol type=A>
+<li> <FONT SIZE=+1><a href="#GETTINGSTARTED">Getting Started</a> </font>
+
+  <ol>
+  <li> <FONT SIZE=+1><em>
+       <A href="#DIREXAMPLE">Répertoire d'exemple</a> 
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#MAKEEXAMPLE1">Mon premier GNUmakefile
+       (<em>target</em> par défaut)</a> 
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#MAKEEXAMPLE1PLUS">Mon premier GNUmakefile
+       (autres <em>targets</em>)</a> 
+       </em></font>
+  </ol>
+
+
+<li> <FONT SIZE=+1><a href="#MAKEFILEWRITING">Écrire un GNUmakefile</a> </font>
+
+  <ol>
+  <li> <FONT SIZE=+1><em>
+       <a href="#MAKEEXAMPLEMIN">Un GNUmakefile minimal</a> 
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#MAKEAJOUTSRCS">La spécification des sources</a> 
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#MAKEAJOUTLIB">La spécification d'une librairie</a> 
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#MAKEAJOUTEXECS">La spécification d'exécutables</a> 
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#MAKEAJOUTSRCSEXECS">La spécification de sources dépendant 
+       d'exécutables</a> 
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#MAKEEXPORTLIB">Exporter une librairie</a> 
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#MAKEEXPORTEXECS">Exporter des exécutables</a> 
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#MAKELINKLIB">Utiliser une autre librairie</a> 
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#MAKEPERSO">Personnaliser son GNUmakefile</a> 
+       </em></font>
+  </ol>
+
+<li> <FONT SIZE=+1><a href="#PRINCIPLES">Principes</a> </font>
+  
+<li> <FONT SIZE=+1><a href="#VARIABLES">Les variables à connaître</a></font>
+
+  <ol>
+  <li> <FONT SIZE=+1><em>
+       <a href="#VARENVIRONNEMENT">L'environnement.</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#VARREPERTOIRES">Les répertoires.</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#VARFILELISTS">Les listes de fichiers.</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#VARDEPEND">Les dépendances.</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#VARMANAGEREG">La gestion des répertoires et des fichiers.</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#VARPRECOMPIL">La précompilation.</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#VARCOMPIL">La compilation (options générales).</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#VARCOMPILC">La compilation C.</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#VARCOMPILC++">La compilation C++.</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#VARLIBSTATIC">Créer une librairie statique.</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#VARLIBDYNAMIC">Créer une librairie dynamique.</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#VARBINARY">Générer un binaire exécutable.</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#VARINTERNES">Les variables internes.</a>
+       </em></font>
+  </ol>
+  
+<li> <FONT SIZE=+1>
+     <a href="#PREDEFTARGETS">Les <em>targets</em> prédéfinies</a>
+     </font>
+  <ol>
+  <li> <FONT SIZE=+1><em>
+       <a href="#PREDEFTARGETSDEPEND">Les dépendances</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#PREDEFTARGETSCLEAN">Les <em>targets</em> de nettoyage</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#PREDEFTARGETSINSTALL">L'installation</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#PREDEFTARGETSUTIL">L'aide</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#PREDEFTARGETSINTERNES">Les <em>targets</em> internes</a>
+       </em></font>
+  </ol>
+
+<li> <FONT SIZE=+1>
+     <a href="#UNDEFTARGETS">Les <em>targets</em> indéfinies</a>
+     </font>
+  <ol>
+  <li> <FONT SIZE=+1><em>
+       <a href="#UNDEF_OBJECTS">Les <em>targets</em> objets</a>
+       </em></font>
+  <li> <FONT SIZE=+1><em>
+       <a href="#UNDEF_BINARY">Les <em>targets</em> binaires exécutables</a>
+       </em></font>
+  </ol>
+
+
+</ol>
+
+<hr>
+
+<FONT SIZE=+3 color=#109060><b><A NAME=TABLEAUX>Liste des tableaux</a></b></font>
+<ol>
+<li> <FONT SIZE=+1><em>
+       <A href="#TAB_MYCPU_MYOS">Valeurs autorisées des variables  
+     $(MYCPU) et $(MYOS)</a>
+       </em></font>
+<li> <FONT SIZE=+1><em>
+       <A href="#TAB_OBJTYPE">Valeurs possibles des types d'objets
+     (variable $(OBJTYPE))</a>
+       </em></font>
+</ol>
+
+<hr>
+
+
+<p>
+<ol type=A>
+
+<li> <FONT SIZE=+1>
+     <A NAME=GETTINGSTARTED>Getting Started</a>
+     </font>
+
+  <ol>
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <A NAME=DIREXAMPLE>Répertoire d'exemple</a> 
+       </em></font><p>
+       Le répertoire 
+       <em>/u/epidaure/2/epicode/exemple/src/</em>
+       contient, outre différents GNUmakefiles,
+       les fichiers suivants:
+       <ul type=disc>
+       <li> <em>ImageIO.c, gif.c, iris.c</em><br>
+            qui vont servir à construire une librairie.
+       <li> <em>ImageIO.h, gif.h, iris.h</em><br>
+            qui sont les 
+            <em>includes</em> liés aux fichiers précédents. Toutefois, 
+            seul l'inclusion de <em>ImageIO.h</em> est nécessaire pour
+            l'utilisation de la librairie.
+       <li> <em>imageRead.c, imageCopy.c</em><br> 
+            qui sont des fichiers
+            sources principaux (<em>main</em>) d'exemple pour
+            l'utilisation de la librairie.
+       <li> <em>hello.c, hello2.c, hello2_proc.c</em><br>
+            qui sont d'autres fichiers d'exemples.
+       </ul>
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <A NAME=MAKEEXAMPLE1>Mon premier GNUmakefile</a> 
+       (<em>target</em> par défaut)</em></font><p>
+       Dans le répertoire 
+       <em><A href="#DIREXAMPLE">/u/epidaure/2/epicode/exemple/src/</a></em>
+    se trouvent quelques fichiers sources et includes.
+    Pour les compiler, le GNUmakefile (fichier GNUmakefile) suivant suffit.
+
+    <FONT color=#901050><PRE>
+##################################################
+ETCDIR=/u/epidaure/2/epicode/make
+include $(ETCDIR)/GNUmakefile.vars 
+
+CREATE_DIRS=TRUE
+
+CFILES = ImageIO.c \
+	iris.c \
+	gif.c
+
+LIB = ImageIO.a
+
+include $(ETCDIR)/GNUmakefile.rules
+##################################################
+    </PRE></font>
+
+    L'exécution de ce makefile (<em>`gmake`</em>), 
+    sans but (<em>target</em>), va faire les tâches
+    suivantes (sous réserve qu'aucun résultat n'était déjà 
+    présent, faire <em>`gmake realclean`</em> pour s'en assurer) :
+    <ul type=circle>
+    <li> Puisqu'il existe des sources 
+         (dans <em><A href="#VAR_CFILES">$(CFILES)</a></em>)
+      <ul type=disc>
+      <li> Créer un répertoire 
+           <em><A href="#VAR_OBJDIR">$(OBJDIR)</a></em>
+      <li> Créer un fichier de dépendances
+           <em><A href="#VAR_DEPEND">$(DEPEND)</a></em>
+      <li> Compiler les objets correspondant aux fichiers sources
+           <em><A href="#VAR_CFILES">$(CFILES)</a></em>
+           dans le répertoire 
+           <em><A href="#VAR_OBJDIR">$(OBJDIR)</a></em>
+      </ul>
+    <li> Puisqu'il existe une librairie 
+         <em><A href="#VAR_LIB">$(LIB)</a></em>
+      <ul type=disc>
+      <li> Créer un répertoire 
+           <em><A href="#VAR_LIBDIR">$(LIBDIR)</a></em>
+      <li> Rassembler ces objets dans la librairie 
+           <em>$(LIBDIR)/$(LIB)</em>
+      </ul>
+    </ul>
+
+    La tâche (<em>target</em>) par défaut n'est que la première
+    tâche rencontrée dans le GNUmakefile, ici elle se nomme
+    <b><A href="#TARGETS_DEFAULT">default</a></b>.
+    Un comportement identique à la commande <em>`gmake`</em>
+    peut donc être obtenu par <em>`gmake default`</em>.<p>
+
+    Il faut noter la présence et l'importance de la variable
+    <em><A href="#VAR_CREATE_DIRS">CREATE_DIRS</a></em> qui
+    permet, lorsque sa valeur est <b>TRUE</b>, de créer les 
+    répertoires nécessaires et donc d'éviter de les gérer
+    <em>à la main</em>.
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <A NAME=MAKEEXAMPLE1PLUS>Mon premier GNUmakefile</a> 
+       (autres <em>targets</em>)</em></font><p>
+    Ce premier GNUmakefile offre d'autres fonctionnalités.
+    <ul type=circle>
+    <p>
+    <li> Quelques buts permettant de 
+         <em><a href="#PREDEFTARGETSCLEAN">nettoyer</a></em> 
+         les répertoires.
+    <p>
+    <li> Quelques buts donnant une
+         <em><a href="#PREDEFTARGETSUTIL">aide</a></em>.
+    <p>
+    <li> L'<em><a href="#PREDEFTARGETSINSTALL">installation</a></em>
+         n'effectuera que la tâche par defaut
+         <b><A href="#TARGETS_DEFAULT">default</a></b> puisqu'aucun
+         <a href="#VARREPERTOIRES">répertoire</a> d'installation
+         n'est spécifié.
+    <p>
+    <li> Les 
+         <a href="#UNDEF_BINARY">règles implicites</a> permettent 
+         de générer des binaires exécutables. Par exemple
+         <ul type=disc>
+         <li> <em>'gmake imageCopy'</em> va créer, puisque 
+         <em>imageCopy.c</em> existe un fichier objet
+         <em>obj/$(BASEDIR)/imageCopy.o</em>. 
+         Ensuite ce fichier objet sera linké avec la librairie pour
+         donner un fichier binaire
+         <em>bin/$(BASEDIR)/imageCopy</em>.
+         </ul>
+    </ul>
+  </ol>
+
+
+<p>
+<li> <FONT SIZE=+1>
+     <A NAME=MAKEFILEWRITING>Écrire un GNUmakefile</a>
+     </font>
+
+  <ol>
+
+  <p> 
+  Cette partie s'appuie toujours sur le même
+  <em><A href="#DIREXAMPLE">répertoire d'exemple</a></em>.
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <A NAME=MAKEEXAMPLEMIN>Un GNUmakefile minimal</a> 
+       </em></font><p>
+       Un GNUmakefile, bâti sur les principes présentés ici,
+       doit contenir au minimum ceci (fichier GNUmakefile.1).
+
+    <FONT color=#901050><PRE>
+##################################################
+ETCDIR=/u/epidaure/2/epicode/make
+include $(ETCDIR)/GNUmakefile.vars 
+
+CREATE_DIRS=TRUE
+
+#
+# Les ajouts doivent etre faits ici
+#
+#
+#
+
+include $(ETCDIR)/GNUmakefile.rules
+##################################################
+    </PRE></font>
+    
+    <ul type=square>
+    <li> L'exécution de ce makefile (<em>`gmake -f GNUmakefile.1`</em>), 
+    sans but (<em>target</em>), ne fait rien.
+    <li> Les buts prédéfinis, de 
+    <em><a href="#PREDEFTARGETSCLEAN">nettoyage</a></em> ou 
+    d'<em><a href="#PREDEFTARGETSUTIL">aide</a></em>, sont
+    disponibles.<br>
+    Ainsi, <em>`gmake -f GNUmakefile.1 print VAR=CC`</em> donnera
+    la valeur de la variable <em><a href="#VAR_CC">$(CC)</a></em>.
+    <li> En outre, il est possible de compiler en objets les sources
+    présentes dans le répertoire, grâce aux 
+    <a href="#UNDEF_OBJECTS">règles implicites</a>.<br>
+    Ainsi, <em>`gmake -f GNUmakefile.1 obj/$(BASEDIR)/iris.o`</em> 
+    créera le répertoire <em>obj/$(BASEDIR)</em> et compilera 
+    le fichier source <em>iris.c</em>.
+    <li> La création du répertoire n'est possible que parce que la 
+    variable
+    <em><A href="#VAR_CREATE_DIRS">CREATE_DIRS</a></em> est
+    à <b>TRUE</b>.
+    <li> Les ajouts pour personnaliser ce GNUmakefile devront être
+    faits entre les 2 lignes <em>include ...</em>.
+    </ul>
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <A NAME=MAKEAJOUTSRCS>La spécification des sources</a> 
+       </em></font><p>
+       Deux variables,
+       <em><A href="#VAR_CFILES">$(CFILES)</a></em> pour 
+       les fichiers source C et
+       <em><A href="#VAR_C++FILES">$(C++FILES)</a></em>
+       pour les fichiers source C++, permettent de spécifier
+       certains fichiers source. Exemple dans le fichier
+       GNUmakefile.2.
+
+    <FONT color=#901050><PRE>
+##################################################
+ETCDIR=/u/epidaure/2/epicode/make
+include $(ETCDIR)/GNUmakefile.vars 
+
+CREATE_DIRS=TRUE
+
+CFILES = ImageIO.c \
+	iris.c \
+	gif.c
+
+include $(ETCDIR)/GNUmakefile.rules
+##################################################
+    </PRE></font>
+
+    Ce GNUmakefile a les mêmes fonctionnalités que le GNUmakefile 
+    précédent. De plus,
+    <ul type=square>
+    <li> L'exécution de ce makefile (<em>`gmake -f GNUmakefile.2`</em>), 
+    sans but (<em>target</em>), crée les objets correspondants 
+    aux fichiers sources spécifiés.
+    <li> ATTENTION, ces objets seront ceux à inclure dans une
+    librairie, si elle est spécifiée. Aussi, il ne faut pas
+    mettre les sources correspondant à des exécutables.
+    </ul>
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <A NAME=MAKEAJOUTLIB>La spécification d'une librairie</a> 
+       </em></font><p>
+       Dans un 
+       <A href="#MAKEEXAMPLE1">premier exemple</a>, nous avions
+       spécifié, par l'intermédiaire de la variable
+       <em><A href="#VAR_LIB">$(LIB)</a></em>,
+       une librairie statique <em>ImageIO.a</em>.
+       Le fichier GNUmakefile.3 spécifie une librairie
+       dynamique <em>ImageIO.so</em>. C'est un mécanisme interne
+       qui permet de faire la distinction selon le suffixe,
+       et donc de choisir le 
+       <em>bon</em> mécanisme de construction de la librairie.
+
+    <FONT color=#901050><PRE>
+##################################################
+ETCDIR=/u/epidaure/2/epicode/make
+include $(ETCDIR)/GNUmakefile.vars 
+
+CREATE_DIRS=TRUE
+
+CFILES = ImageIO.c \
+	iris.c \
+	gif.c
+
+LIB = ImageIO.so
+
+include $(ETCDIR)/GNUmakefile.rules
+##################################################
+    </PRE></font>
+
+    Ce GNUmakefile a les mêmes fonctionnalités que le GNUmakefile 
+    précédent. De plus,
+    <ul type=square>
+    <li> L'exécution de ce makefile (<em>`gmake -f GNUmakefile.3`</em>), 
+    sans but (<em>target</em>), crée les objets correspondant aux
+    sources et les assemble dans la librairie 
+    <em><A href="#VAR_LIBDIR">$(LIBDIR)</a>/ImageIO.so</em>.
+    <li> La librairie spécifiée dans la variable
+         <em><A href="#VAR_LIB">$(LIB)</a></em>
+         sera linkée avec les exécutables compilés localement,
+         c'est-à-dire avec le même GNUmakefile.
+    <li> Comme la librairie existe, la compilation des exécutables
+    d'exemple d'utilisation de la librairie est possible.<br>
+    Exemple, 
+    <em>`gmake -f GNUmakefile.3 imageRead`</em> crée le binaire 
+    exécutable 
+    <em><A href="#VAR_BINDIR">$(BINDIR)</a>/imageRead</em>.
+  
+    </ul>
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <A NAME=MAKEAJOUTEXECS>La spécification d'exécutables</a> 
+       </em></font><p>
+       Une variable, 
+       <em><A href="#VAR_EXECS">$(EXECS)</a></em>
+       sert à spécifier les exécutables à créer à partir de fichier
+       sources principaux (<em>main</em>) présents dans le répertoire.
+       Le fichier GNUmakefile.4 est identique au 
+       <A href="#MAKEEXAMPLE1">premier exemple</a>, avec l'ajout
+       de cette nouvelle variable.
+
+    <FONT color=#901050><PRE>
+##################################################
+ETCDIR=/u/epidaure/2/epicode/make
+include $(ETCDIR)/GNUmakefile.vars 
+
+CREATE_DIRS=TRUE
+
+CFILES = ImageIO.c \
+	iris.c \
+	gif.c
+
+LIB = ImageIO.a
+
+EXECS = imageCopy \
+	imageRead
+
+include $(ETCDIR)/GNUmakefile.rules
+##################################################
+    </PRE></font>
+
+    <ul type=square>
+    <li> L'exécution de ce makefile (<em>`gmake -f GNUmakefile.4`</em>), 
+    sans but (<em>target</em>), génère les mêmes
+    résultats que le GNUmakefile du
+    <A href="#MAKEEXAMPLE1">premier exemple</a>.
+    De plus, les objets correspondant aux fichiers 
+    <em>imageCopy.c</em> et <em>imageRead.c</em> sont créés
+    dans le répertoire
+    <em><A href="#VAR_OBJDIR">$(OBJDIR)</a></em> et les binaires
+    <em>imageCopy</em> et <em>imageRead</em> sont créés
+    dans le répertoire
+    <em><A href="#VAR_BINDIR">$(BINDIR)</a></em>.
+    </ul>    
+
+
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <A NAME=MAKEAJOUTSRCSEXECS>La spécification de sources
+       dépendant d'exécutables</a> 
+       </em></font><p>
+       Plusieurs mécanismes peuvent permettre d'obtenir un binaire
+       exécutable. 
+
+       <ol>
+       <p>
+       <li> Si rien n'est spécifié dans le GNUmakefile, (voir 
+       <A href="#MAKEEXAMPLEMIN">exemple</a>),
+       <b>`gmake hello`</b> va créer l'objet 
+       <em><A href="#VAR_OBJDIR">$(OBJDIR)</a>/hello.o</em>
+       puis le binaire exécutable 
+       <em><A href="#VAR_BINDIR">$(BINDIR)</a>/hello</em>
+       à partir de cet objet.
+
+       <p>
+       <li> Si des fichiers sources sont spécifiés, (voir 
+       <A href="#MAKEAJOUTSRCS">exemple</a>),
+       <b>`gmake hello`</b> va créer les objets dérivés de ces
+       sources (tâche par défaut), ainsi que  l'objet 
+       <em><A href="#VAR_OBJDIR">$(OBJDIR)</a>/hello.o</em>
+       puis le binaire exécutable 
+       <em><A href="#VAR_BINDIR">$(BINDIR)</a>/hello</em>
+       à partir de tous ces objets.
+
+       <p>
+       <li> Si des fichiers sources et une librairie sont spécifiés, (voir 
+       <A href="#MAKEAJOUTLIB">exemple</a>),
+       <b>`gmake hello`</b> va créer les objets dérivés de ces
+       sources et les rassembler dans la librairie, ainsi que  l'objet 
+       <em><A href="#VAR_OBJDIR">$(OBJDIR)</a>/hello.o</em>
+       puis le binaire exécutable 
+       <em><A href="#VAR_BINDIR">$(BINDIR)</a>/hello</em>
+       à partir de cet objet et de la librairie.
+       
+       </ol>
+       Toutefois, un exécutable peut nécessiter d'autres objets que
+       ceux disponibles dans la librairie.
+       Il se pose donc la question de rajouter des objets à l'édition
+       de liens, qui dépendent de l'exécutable à créer. 
+    <FONT color=#901050><PRE>
+##################################################
+ETCDIR=/u/epidaure/2/epicode/make
+include $(ETCDIR)/GNUmakefile.vars 
+
+CREATE_DIRS=TRUE
+
+#
+# on liste les objets dans $(EXEC)OBJS
+#
+hello2OBJS = $(OBJDIR)/hello2_proc.o
+#
+# on rajoute une dependance pour provoquer 
+# la compilation
+#
+$(BINDIR)/hello2 hello2 : $(hello2OBJS)
+
+include $(ETCDIR)/GNUmakefile.rules
+##################################################
+    </PRE></font>
+    L'exemple ci-dessus (<em>GNUmakefile.10</em>)
+    répond à cette préoccupation. Le binaire exécutable
+    <em>hello2</em> (de fichier source <em>hello2.c</em>)
+    a besoin d'une procédure présente dans <em>hello2_proc.c</em>.
+    Deux points sont nécessaires.
+    <ol>
+    <li> <em>Spécifier les objets nécessaires pour la création de
+         l'exécutable.</em><br>
+         La liste de ces objets se range dans la variable
+         <em>$(nom_du_binaireOBJS)</em>.
+    <li> <em>Spécifier les dépendances dudit binaire par rapport à ces 
+         objets.</em><br>
+         Cette dépendance est nécessaire pour créer automatiquement
+         les objets de <em>$(nom_du_binaireOBJS)</em>
+    </ol>
+    <b>`gmake -f GNUmakefile.10 hello2`</b> va donc créer les objets
+    <em><A href="#VAR_OBJDIR">$(OBJDIR)</a>/hello2_proc.o</em> et
+    <em><A href="#VAR_OBJDIR">$(OBJDIR)</a>/hello2.o</em>, et 
+    l'exécutable <em><A href="#VAR_BINDIR">$(BINDIR)</a>/hello2</em>
+    à partir de ces deux objets.
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <A NAME=MAKEEXPORTLIB>Exporter une librairie</a> 
+       </em></font><p>
+
+       <ul type=square>
+       <li> L'export (ou l'installation) d'une librairie est un mécanisme
+       important (nécessaire&#160;?) qui permet aux utilisateurs
+       de disposer d'une version stable
+       de la librairie (celle qui est installée), et aux développeurs
+       de faire évoluer une autre version de la librairie.
+
+       <li> Exporter (ou installer) une librairie nécessite d'exporter 
+       la librairie proprement dite (celle référencée par la variable
+       <em><A href="#VAR_LIB">$(LIB)</a></em>) ainsi que les fichiers
+       d'inclusion nécessaires.
+
+       <li> La spécification de ces fichiers d'inclusion à exporter pour
+       l'installation se fait au travers de deux variables,
+       <em><A href="#VAR_CHEADERS">$(CHEADERS)</a></em> pour 
+       les fichiers d'inclusion C et
+       <em><A href="#VAR_C++HEADERS">$(C++HEADERS)</a></em>
+       pour les fichiers d'inclusion C++.
+
+       <li> Il faut ensuite spécifier les répertoires destination pour ces
+       fichiers d'inclusion, et pour la librairie, par l'intermédiaire
+       des deux variables
+       <em><A HREF="#VAR_INSTALLHEADERSDIR">${INSTALLHEADERSDIR}</a></em>
+       et
+       <em><A HREF="#VAR_INSTALLLIBDIR">${INSTALLLIBDIR}</a></em>.
+       <p>
+       <li> Il ne peut y avoir exportation que vers un répertoire
+       destination qui a été explicitement spécifié par l'utilisateur, 
+       afin de faire de  ce mécanisme une démarche volontaire. 
+       Sans spécification d'un répertoire destination, il ne peut y
+       avoir export.
+       <p>
+       <li> Afin de rendre ce mécanisme encore plus volontaire, il
+       n'y a pas création automatique des répertoires destinations
+       s'ils n'existent pas.
+       </ul>
+
+       <p>
+       Le fichier GNUmakefile.5 illustre ce mécanisme.
+
+    <FONT color=#901050><PRE>
+##################################################
+ETCDIR=/u/epidaure/2/epicode/make
+include $(ETCDIR)/GNUmakefile.vars 
+
+CREATE_DIRS=TRUE
+
+CFILES = ImageIO.c \
+	iris.c \
+	gif.c
+
+LIB = ImageIO.a
+
+CHEADERS = ImageIO.h 
+
+INSTALLLIBDIR = /u/epidaure/2/epicode/make/exemple/install/$(LIBDIR)/
+INSTALLHEADERSDIR = /u/epidaure/2/epicode/make/exemple/install/include/
+
+include $(ETCDIR)/GNUmakefile.rules
+##################################################
+    </PRE></font>
+
+    <ul type=square>
+    <li> L'exécution de ce makefile (<em>`gmake -f GNUmakefile.5`</em>), 
+    sans but (<em>target</em>), génère les mêmes
+    résultats que le GNUmakefile du
+    <a href="#MAKEEXAMPLE1">premier exemple</a>.
+    <li> L'exécution du but prédéfini
+    <b><A HREF="#TARGETS_INSTALL">install</a></b>
+    (<em>`gmake -f GNUmakefile.5 install`</em>) réalise les mêmes
+    actions que le 
+    <A HREF="#TARGETS_DEFAULT">but par défaut</a> plus l'exportation 
+    du fichier d'inclusion et de la librairie vers les répertoires
+    destinations spécifiés.
+    </ul>
+
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <A NAME=MAKEEXPORTEXECS>Exporter des exécutables</a> 
+       </em></font><p>
+
+       <ul type=square>
+       <li> L'export (ou l'installation) permet de mettre à la
+       disposition des utilisateurs des versions stables des binaires
+       exécutables en cours de développement.
+       <li> Exporter ces exécutables nécessite de les connaître,
+       ce qui se fait par l'intermédiaire de la variable
+       <em><A href="#VAR_EXECS">$(EXECS)</a></em>.
+       <li> Il faut ensuite spécifier le répertoire destination, 
+       par l'intermédiaire de la variable
+       <em><A HREF="#VAR_INSTALLHEADERSDIR">${INSTALLHEADERSDIR}</a></em>.
+       <p>
+       <li> Comme pour la 
+       <a href="#MAKEEXPORTLIB">librairie</a> ,
+       il ne peut y avoir exportation que vers un répertoire
+       destination qui a été explicitement spécifié par l'utilisateur, 
+       afin de faire de  ce mécanisme une démarche volontaire. 
+       Sans spécification d'un répertoire destination, il ne peut y
+       avoir export.
+       <p>
+       <li> Afin de rendre ce mécanisme encore plus volontaire, il
+       n'y a pas création automatique du répertoire destination
+       s'il n'existe pas.
+       </ul>
+
+       <p>
+       Le fichier GNUmakefile.6 illustre ce mécanisme.
+
+    <FONT color=#901050><PRE>
+##################################################
+ETCDIR=/u/epidaure/2/epicode/make
+include $(ETCDIR)/GNUmakefile.vars 
+
+CREATE_DIRS=TRUE
+
+CFILES = ImageIO.c \
+	iris.c \
+	gif.c
+
+LIB = ImageIO.a
+
+EXECS = imageCopy \
+	imageRead
+
+INSTALLBINDIR = /u/epidaure/2/epicode/make/exemple/install/$(BINDIR)/
+
+include $(ETCDIR)/GNUmakefile.rules
+##################################################
+    </PRE></font>
+
+    <ul type=square>
+    <li> L'exécution de ce makefile (<em>`gmake -f GNUmakefile.6`</em>), 
+    sans but (<em>target</em>), génère les mêmes
+    résultats que le GNUmakefile lors de
+    <a href="#MAKEAJOUTEXECS">la spécification d'exécutables</a>.
+    <li> L'exécution du but prédéfini
+    <b><A HREF="#TARGETS_INSTALL">install</a></b>
+    (<em>`gmake -f GNUmakefile.6 install`</em>) réalise les mêmes
+    actions que le 
+    <A HREF="#TARGETS_DEFAULT">but par défaut</a> plus l'exportation 
+    des deux binaires exécutables
+    vers le répertoire
+    destination spécifié.
+    </ul>
+
+
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <A NAME=MAKELINKLIB>Utiliser une autre librairie</a> 
+       </em></font><p>
+       
+       Il suffit rajouter les options et les chemins dans les
+       paramètres adéquats, de préférence avec l'opérateur <b>+=</b>.
+       Par exemple, les paramètres concernés peuvent être :
+       <ul type=circle>
+       <li> <b><A href="#VAR_CPPFLAGS">CPPFLAGS</a></b>, les options
+            de précompilation.
+       <li> <b><A href="#VAR_IFLAGS">IFLAGS</a></b>, les chemins
+            de recherche des fichiers d'inclusion.
+       <li> <b><A href="#VAR_LDPATH">LDPATH</a></b>, les chemins
+            de recherche des librairies à l'édition de liens.
+       <li> <b><A href="#VAR_LDLIBS">LDLIBS</a></b>, les librairies
+            à ajouter à l'édition de liens.
+       <li> <b><A href="#VAR_RPFLAGS">RPFLAGS</a></b>, les chemins
+            de recherche des librairies à l'exécution.
+ 
+       </ul>
+       
+       <p>
+       Un premier exemple avec l'utilisation (artificielle) de la librairie
+       epidaure (GNUmakefile.7).
+
+     <FONT color=#901050><PRE>
+##################################################
+ETCDIR=/u/epidaure/2/epicode/make
+include $(ETCDIR)/GNUmakefile.vars 
+
+CREATE_DIRS=TRUE
+
+CFILES = ImageIO.c \
+	iris.c \
+	gif.c
+
+LIB = ImageIO.a
+
+EXECS = imageCopy \
+	imageRead
+
+EPIDIR = /u/epidaure/user/epidaure/Epidaure/lib/
+IFLAGS += -I$(EPIDIR)/noyau/include/
+CPPFLAGS += -D_ANSI_ -UNO_PROTO
+LDLIBS += $(EPIDIR)/${MYCPU}-lib/epidaure.a
+
+include $(ETCDIR)/GNUmakefile.rules
+##################################################
+    </PRE></font>
+
+       <p>
+       Un second exemple, toujours avec l'utilisation (artificielle) de la librairie
+       epidaure (GNUmakefile.8).
+
+     <FONT color=#901050><PRE>
+##################################################
+ETCDIR=/u/epidaure/2/epicode/make
+include $(ETCDIR)/GNUmakefile.vars 
+
+CREATE_DIRS=TRUE
+
+CFILES = ImageIO.c \
+	iris.c \
+	gif.c
+
+LIB = ImageIO.a
+
+EXECS = imageCopy \
+	imageRead
+
+EPIDIR = /u/epidaure/user/epidaure/Epidaure/lib/
+IFLAGS += -I$(EPIDIR)/noyau/include/
+CPPFLAGS += -D_ANSI_ -UNO_PROTO
+LDPATH += -L$(EPIDIR)/${MYCPU}-lib/
+LDLIBS += -lepidaure
+
+include $(ETCDIR)/GNUmakefile.rules
+##################################################
+    </PRE></font>
+
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <A NAME=MAKEPERSO>Personnaliser son GNUmakefile</a> 
+       </em></font><p>
+
+       La personnalisation du GNUmakefile peut se faire soit en
+       redéfinissant certaines variables, un peu comme pour 
+       l'<a href="#MAKELINKLIB">utilisation d'une autre librairie</a>,
+       soit en utilisant le mécanisme de priorité
+       (<em>overridding</em>) des variables.
+
+       <p>
+       Le fichier GNUmakefile.perso illustre ce mécanisme.
+
+    <FONT color=#901050><PRE>
+##################################################
+ETCDIR=/u/epidaure/2/epicode/make
+include $(ETCDIR)/GNUmakefile.vars 
+
+CREATE_DIRS=TRUE
+
+CFILES = ImageIO.c \
+	iris.c \
+	gif.c
+
+LIB = ImageIO.a
+
+EXECS = imageCopy \
+	imageRead
+
+#
+# Une librairie statique en mode debug
+# On efface les objets puis on passe les
+# "bonnes" variables 
+# - l'optimisation = -g (mode debug)
+# - un nouveau nom de librairie
+# - on utilise ce GNUmakefile (pour que les 
+#   executables soient aussi compiles en debug)
+#
+debug-staticlib : clean
+	${MAKE} -f GNUmakefile.perso OPT=-g LIB=debug-ImageIO.a
+
+#
+# On peut faire le meme travail dans un repertoire 
+# objet different, si on veut conserver les sources
+# compiles en optimise et en debug.
+# 
+# la librairie elle-meme peut etre mise dans un 
+# repertoire special
+#
+debug-dynamiclib : clean
+	${MAKE} -f GNUmakefile.perso OBJDIR=obj/debug/$(MYCPU) \
+        OPT=-g LIBDIR=lib/debug/$(MYCPU) LIB=ImageIO.so
+
+include $(ETCDIR)/GNUmakefile.rules
+##################################################
+    </PRE></font>
+
+
+  </ol>
+
+
+
+
+
+
+
+<p>
+<li> <FONT SIZE=+1>
+     <a NAME=PRINCIPLES>Principes</a>
+     </font>
+
+
+
+
+
+
+
+<p>
+<li> <FONT SIZE=+1>
+     <A NAME=VARIABLES>Les variables à connaître</a>
+     </font>
+     <p>
+     Pour connaître la valeur d'une variable, voir le but prédéfini
+     <b><A HREF="#TARGETS_PRINT">print</a></b>.
+     <p>
+
+     <ol>
+     <p><li> <FONT SIZE=+1><em>
+             <A NAME=VARENVIRONNEMENT>L'environnement.</a>
+             </em></font>
+     <p><ul type=circle>
+     <li> <b><A NAME=VAR_MYCPU>MYCPU</a></b><br>
+          Cette variable désigne le type d'architecture de la machine
+          sur laquelle le GNUmakefile est exécuté. Les architectures
+          supportées sont données dans le 
+          <A href="#TAB_MYCPU_MYOS">tableau suivant</a>.<p>
+
+          <A NAME=TAB_MYCPU_MYOS></A>
+          <table align=center border=1 cellpadding=2>
+          <tr><th>Valeur de <A href="#VAR_UNAMES">$(UNAMES)</a></th>
+              <th>Valeur de <A href="#VAR_MYCPU">$(MYCPU)</a></th>
+              <th>Valeur de <A href="#VAR_UNAMER">$(UNAMER)</a></th>
+              <th>Valeur de <A href="#VAR_MYOS">$(MYOS)</a></th>
+          </tr>
+          <tr align=center><td>OSF1</td> <td>alpha</td> <td>V3.2</td> <td>3.2</td> 
+          </tr>
+          <tr align=center><td>OSF1</td> <td>alpha</td> <td>V4.0</td> <td>4.0</td> 
+          </tr>
+          <tr align=center><td>Linux</td> <td>linux</td> 
+                           <td colspan=2> inutilisé</td>
+          </tr>
+          <tr align=center><td>SunOS</td> <td>solaris</td> 
+                           <td colspan=2> inutilisé</td>
+          </tr>
+          <tr align=center><td>IRIX64</td> <td>sgi</td> 
+                           <td colspan=2> inutilisé</td>
+          </tr>
+          <caption align=bottom> 
+                    Tableau :
+                    Valeurs autorisées des variables <A href="#VAR_MYCPU">$(MYCPU)</a>
+                    et <A href="#VAR_MYOS">$(MYOS)</a> au 24 août 1998.
+          </caption>
+          </table><p>
+          Les variables
+          <A href="#VAR_UNAMES">$(UNAMES)</a>
+          et <A href="#VAR_UNAMER">$(UNAMER)</a> contiennent
+          respectivement les résultats des commandes 
+          <em>`uname -s`</em> et <em>`uname -r`</em>.
+          <p>
+      
+
+     <li> <b><A NAME=VAR_INTERNECPU>INTERNECPU</a></b><br>
+          Cette variable prend la valeur de <A href="#VAR_MYCPU">$(MYCPU)</a>,
+          sauf si celle-ci ne se conforme pas au
+          <A href="#TAB_MYCPU_MYOS">tableau donné</a>.
+          Dans ce cas, <A href="#VAR_INTERNECPU">$(INTERNECPU)</a> prend 
+          la valeur de $(MYCPU) indiquée par le <A href="#TAB_MYCPU_MYOS">tableau</a>.
+      
+     <li> <b><A NAME=VAR_MYOS>MYOS</a></b><br>
+          Cette variable désigne la version du système d'exploitation
+          de la machine sur laquelle le GNUmakefile est exécuté. 
+          Les versions
+          supportées sont données dans le 
+          <A href="#TAB_MYCPU_MYOS">tableau</a>.
+
+     <li> <b><A NAME=VAR_INTERNEOS>INTERNEOS</a></b><br> 
+          Cette variable prend la valeur de <A href="#VAR_MYOS">$(MYOS)</a>,
+          sauf si celle-ci ne se conforme pas au
+          <A href="#TAB_MYCPU_MYOS">tableau donné</a>.
+          Dans ce cas, <A href="#VAR_INTERNEOS">$(INTERNEOS)</a> prend 
+          la valeur de $(MYOS) indiquée par le <A href="#TAB_MYCPU_MYOS">tableau</a>.
+ 
+     <li> <b><A NAME=VAR_OBJTYPE>OBJTYPE</a></b><br>
+          Cette variable désigne le type d'objet généré par la
+          compilation. Les types autorisés et les options de
+          compilation et d'édition de liens correspondantes sont
+          indiqués dans le <A href="#TAB_OBJTYPE">tableau suivant</a>.<p>
+
+<A NAME=TAB_OBJTYPE></A>
+<table align=center border=1 cellpadding=2>
+<tr><th>Valeur de <A href="#VAR_OBJTYPE">$(OBJTYPE)</a></th>
+    <th>Valeur de <A href="#VAR_CSTYLE">$(CSTYLE)</a></th>
+    <th>Valeur de <A href="#VAR_LSTYLE">$(LSTYLE)</a></th>
+</tr>
+<tr align=center><td><em>chaîne vide</em></td> 
+                 <td><em>chaîne vide</em></td> 
+                 <td><em>chaîne vide</em></td> 
+</tr>
+<tr align=center><td>32_M2</td> <td>-mips2 -o32</td> <td>-o32</td> 
+</tr>
+<tr align=center><td>32_ABI</td> <td>-mips1 -o32 -abi</td> <td>-o32</td> 
+</tr>
+<tr align=center><td>N32_M3</td> <td>-mips3 -n32</td> <td>-n32</td> 
+</tr>
+<tr align=center><td>N32_M4</td> <td>-mips4 -n32</td> <td>-n32</td> 
+</tr>
+<tr align=center><td>R32</td> <td>-r32</td> <td>-r32</td> 
+</tr>
+<tr align=center><td>64_M3</td> <td>-mips3 -64</td> <td>-64</td> 
+</tr>
+<tr align=center><td>64_M4</td> <td>-mips4 -64</td> <td>-64</td> 
+</tr>
+<tr align=center><td>32</td> <td colspan=2> <em>id.</em> OBJTYPE=32_M2</td>
+</tr>
+<tr align=center><td>N32</td> <td colspan=2> <em>id.</em> OBJTYPE=N32_M3</td>
+</tr>
+<tr align=center><td>64</td> <td colspan=2> <em>id.</em> OBJTYPE=64_M3</td>
+</tr>
+          <caption align=bottom> 
+                    Tableau :
+                    Valeurs possibles des types d'objets <A href="#VAR_OBJTYPE">$(OBJTYPE)</a>
+                    (valables seulement sur silicon) au 24 août 1998.
+          </caption>
+</table>
+<p>
+          <FONT SIZE=+1><b>Attention</b></font>
+          <ul type=disc>
+          <li> La valeur de <A href="#VAR_OBJTYPE">$(OBJTYPE)</a> doit 
+               être donnée <em>avant</em> l'inclusion du fichier
+               <em>GNUmakefile.vars</em> (voir les 
+               <a href="#MAKEEXAMPLE1">exemples de GNUmakefiles</a>),
+               ou exister dans les
+               variables d'environnement, pour être prise en compte.
+          <li> Il n'y a pas vérification de la conformité de la valeur 
+               de la variable par rapport au 
+               <A href="#TAB_OBJTYPE">tableau de référence</a>.
+          </ul>
+
+     <li> <b><A NAME=VAR_INTERNEOBJTYPE>INTERNEOBJTYPE</a></b><br>
+          Cette variable prend la valeur de <A href="#VAR_OBJTYPE">$(OBJTYPE)</a>,
+          si l'architecture sur laquelle est exécuté le GNUmakefile
+          supporte différents types d'objets.
+     
+     </ul>
+      
+     <p><li> <FONT SIZE=+1><em>
+             <A NAME=VARREPERTOIRES>Les répertoires.</a>
+             </em></font>
+     <p><ul type=circle>
+     <li> <b><A NAME=VAR_BASEDIR>BASEDIR</a></b><br>
+          La base du nom des répertoires. Si l'environnement est OK, 
+          cette variable est égale à
+          <em><A href="#VAR_MYCPU">$(MYCPU)</a><A href="#VAR_MYOS">$(MYOS)</a></em> ou à
+          <em><A href="#VAR_MYCPU">$(MYCPU)</a><A href="#VAR_MYOS">$(MYOS)</a>/<A href="#VAR_OBJTYPE">$(OBJTYPE)</a></em>.
+          <p>
+          En fait un certain nombre de vérifications sont réalisées et 
+          la définition interne de cette variable est
+          soit <em><A href="#VAR_INTERNECPU">$(INTERNECPU)</a><A href="#VAR_INTERNEOS">${INTERNEOS}</a></em>,
+          soit <em><A href="#VAR_INTERNECPU">$(INTERNECPU)</a><A href="#VAR_INTERNEOS">${INTERNEOS}</a>/<A href="#VAR_INTERNEOBJTYPE">$(INTERNEOBJTYPE)</a></em>. 
+          <p>
+          Pour connaitre les valeurs de ces variables, utiliser le but 
+          prédéfini <b><A HREF="#TARGETS_PRINTENV">printenv</a></b>.
+      <p>
+      <li> <b><A NAME=VAR_OBJDIR>OBJDIR</a></b><br>
+          Le répertoire local pour les objets.<br>
+          Par défaut, c'est 
+          <em>obj/<A HREF="#VAR_BASEDIR">${BASEDIR}</a></em>.
+     <li> <b><A NAME=VAR_LIBDIR>LIBDIR</a></b><br>
+          Le répertoire local pour les librairies.<br>
+          Par défaut, c'est 
+          <em>lib/<A HREF="#VAR_BASEDIR">${BASEDIR}</a></em>.
+     <li> <b><A NAME=VAR_BINDIR>BINDIR</a></b><br>
+          Le répertoire local pour les binaires exécutables.<br>
+          Par défaut, c'est 
+          <em>bin/<A HREF="#VAR_BASEDIR">${BASEDIR}</a></em>.
+     <p>
+     <li> <b>PWD</b><br>
+          Le répertoire courant.
+     <p>
+     <li> <b><A NAME=VAR_INSTALLDIR>INSTALLDIR</a></b><br>
+          Répertoire générique d'installation. Cette variable permet 
+          de donner des valeurs aux trois répertoires d'installation
+          (librairie, binaires, headers).
+          <br>
+          Si <A HREF="#VAR_INSTALLLIBDIR">INSTALLLIBDIR</a> n'est pas 
+          instanciée, alors sa valeur sera
+          <em>$(INSTALLDIR)/<A HREF="#VAR_LIBDIR">${LIBDIR}</a></em>.
+          <br>
+          Si <A HREF="#VAR_INSTALLBINDIR">INSTALLBINDIR</a> n'est pas 
+          instanciée, alors sa valeur sera
+          <em>$(INSTALLDIR)/<A HREF="#VAR_BINDIR">${BINDIR}</a></em>.
+          <br>
+          Si <A HREF="#VAR_INSTALLHEADERSDIR">INSTALLHEADERSDIR</a> n'est pas 
+          instanciée, alors sa valeur sera
+          <em>$(INSTALLDIR)/include</em>.
+
+     <li> <b><A NAME=VAR_INSTALLLIBDIR>INSTALLLIBDIR</a></b><br>
+          Le répertoire où installer les librairies. Il est initialisé 
+          à rien. Si sa valeur n'est pas donnée dans le GNUmakefile,
+          et s'il existe une librairie 
+          (<em><A href="#VAR_LIB">$(LIB)</a></em>),
+          celle-ci ne pourra pas être
+          installée automatiquement par le but prédéfini
+          <b><A HREF="#TARGETS_INSTALL">install</a></b>
+          ou <b><A HREF="#TARGETS_INSTALLLIB">installlib</a></b>.
+
+     <li> <b><A NAME=VAR_INSTALLBINDIR>INSTALLBINDIR</a></b><br>
+          Le répertoire où installer les binaires exécutables. Il est initialisé 
+          à rien. Si sa valeur n'est pas donnée dans le GNUmakefile,
+          et s'il existe des binaires exécutables 
+          (<em><A href="#VAR_EXECS">$(EXECS)</a></em>),
+          ceux-ci ne pourront pas être
+          installés automatiquement par le but prédéfini
+          <b><A HREF="#TARGETS_INSTALL">install</a></b>
+          ou <b><A HREF="#TARGETS_INSTALLEXECS">installexecs</a></b>.
+
+     <li> <b><A NAME=VAR_INSTALLHEADERSDIR>INSTALLHEADERSDIR</a></b><br>
+          Le répertoire où installer les <em>includes</em>. Il est initialisé 
+          à rien. Si sa valeur n'est pas donnée dans le GNUmakefile,
+          et s'il existe des <em>includes</em>
+          (<em><A HREF="#VAR_CHEADERS">$(CHEADERS)</a></em> ou 
+          <em><A HREF="#VAR_C++HEADERS">$(C++HEADERS)</a></em>),
+          ceux-ci ne pourront pas être
+          installés automatiquement par le but prédéfini
+          <b><A HREF="#TARGETS_INSTALL">install</a></b>
+          ou <b><A HREF="#TARGETS_INSTALLHEADERS">installheaders</a></b>.
+     </ul>
+
+     <p><li> <FONT SIZE=+1><em>
+             <A NAME=VARFILELISTS>Les listes de fichiers.</a>
+             </em></font>
+     <p><ul type=circle>
+     <li> <b><A NAME=VAR_CFILES>CFILES</a></b><br>
+          La listes des fichiers sources 
+          C à compiler pour former une librairie.<br>
+          A partir d'un fichier source de la 
+          forme
+          <em>dir/fichier.c</em>, le fichier objet correspondant
+          est <em>dir/<A href="#VAR_OBJDIR">$(OBJDIR)</a>/fichier.o</em>.<p>
+          Les fichiers présents dans 
+          <em><A href="VAR_EXECS">$(EXECS)</a></em> ne doivent
+          pas être également présents dans <em>CFILES</em>.
+
+     <li> <b><A NAME=VAR_C++FILES>C++FILES</a></b><br>
+          La listes des fichiers sources
+          C++ à compiler pour former une librairie.<br>
+          A partir d'un fichier source de la 
+          forme
+          <em>dir/fichier.C</em>, le fichier objet correspondant
+          est <em>dir/<A href="#VAR_OBJDIR">$(OBJDIR)</a>/fichier.o</em>..<p>
+          Les fichiers présents dans 
+          <em><A href="VAR_EXECS">$(EXECS)</a></em> ne doivent
+          pas être également présents dans <em>C++FILES</em>.
+
+
+     <li> <b>FILES</b><br>
+          La listes de tous les fichiers sources C et C++.
+
+     <li> <b><A NAME=VAR_CHEADERS>CHEADERS</a></b><br>
+          La listes des fichiers <em>includes</em> C à exporter
+          avec la librairie lors de 
+          l'<A HREF="#TARGETS_INSTALL">installation</a>.
+
+     <li> <b><A NAME=VAR_C++HEADERS>C++HEADERS</a></b><br>
+          La listes des fichiers <em>includes</em> C++ à exporter
+          avec la librairie lors de 
+          l'<A HREF="#TARGETS_INSTALL">installation</a>.
+
+     <li> <b><A NAME=VAR_EXECS>EXECS</a></b><br>
+          La liste des binaires exécutables à générer et à exporter
+          lors de l'<A HREF="#TARGETS_INSTALL">installation</a>. 
+          Pour chacun
+          des noms, on regarde s'il existe un fichier .c ou .C de 
+          même nom, et on se sert soit de 
+          <em><A href="#VAR_COMPILEC">$(COMPILE.c)</a></em>
+          puis de 
+          <em><A href="#VAR_LINKC">$(LINK.c)</a></em>,
+          soit de 
+          <em><A href="#VAR_COMPILEC++">$(COMPILE.C)</a></em>
+          puis de 
+          <em><A href="#VAR_LINKC++">$(LINK.C)</a></em>,
+          pour générer le binaire exécutable correspondant.
+
+     <li> <b><A NAME=VAR_LIB>LIB</a></b><br>
+          Le nom de la librairie à créer avec les fichiers objets
+          générés à partir des fichiers sources
+          <em><A href="#VAR_CFILES">$(CFILES)</a></em> ou
+          <em><A href="#VAR_C++FILES">$(C++FILES)</a></em>.
+          Cette librairie est ajoutée aux librairies 
+          <em><A href="#VAR_LDLIBS">$(LDLIBS)</a></em>
+          à ajouter à l'édition de liens pour 
+          la générations des binaires.<br>
+
+     </ul>
+
+     <p><li> <FONT SIZE=+1><em>
+             <A NAME=VARDEPEND>Les dépendances.</a>
+             </em></font>
+     <p> 
+     Un fichier de dépendances est nécessaire pour savoir
+     quoi recompiler lorsque quelque chose a été modifié.<br>
+     Par défaut, le fichier de dépendances est créé s'il n'existe pas
+     ou si un des fichiers de
+     <A href="#VAR_ALLLOCALFILES">$(ALLLOCALFILES)</a>
+     ou de
+     <A href="#VAR_MYHEADERS">$(MYHEADERS)</a>
+     est modifié. Ce dernier comportement peut être modifié 
+     en positionnant le flag
+     <A href="#VAR_ALLWAYS_UPDATE_DEPEND">ALLWAYS_UPDATE_DEPEND</a>
+     à <b>FALSE</b> : cela permet
+     à l'utilisateur de ne 
+     pas le remettre à jour dès qu'un fichier est modifié.
+
+     <p><ul type=circle>
+     <li> <b><A NAME=VAR_MAKEDEPEND>MAKEDEPEND</a></b><br>
+          La commande pour créer les fichiers de dépendances.
+
+     <li> <b><A NAME=VAR_DEPFLAGS>DEPFLAGS</a></b><br>
+          Les options à passer à 
+          <em><A href="#VAR_MAKEDEPEND">$(MAKEDEPEND)</a></em>
+          pour créer les fichiers de dépendances.<br>
+          Certaines autres options sont également
+          passées à 
+          <em><A href="#VAR_MAKEDEPEND">$(MAKEDEPEND)</a></em>, il s'agit
+          de <em><A href="#VAR_CPPFLAGS">${CPPFLAGS}</a></em>, 
+          <em><A href="#VAR_IFLAGS">${IFLAGS}</a></em>,
+          et  <em><A href="#VAR_I++FLAGS">${I++FLAGS}</a></em>.
+
+     <li> <b><A NAME=VAR_DEPEND>DEPEND</a></b><br>
+          Le nom du fichier des dépendances.
+
+     <li> <b><A NAME=VAR_ALLWAYS_UPDATE_DEPEND>ALLWAYS_UPDATE_DEPEND</a></b><br>
+          C'est un <em>flag</em>. Si sa valeur est <b>FALSE</b>
+          (en MAJUSCULES),
+          alors le fichier de dépendances n'est pas recréé dès qu'un
+          fichier de 
+          <A href="#VAR_ALLLOCALFILES">$(ALLLOCALFILES)</a> (les
+          fichiers sources locaux pour la librairie et les fichiers
+          sources des exécutables) ou de
+          <A href="#VAR_MYHEADERS">$(MYHEADERS)</a> (les fichiers
+          headers) a été modifié.<p>
+          On peut toujours forcer ce fichier à être recrée grâce au 
+          but <b><A href="#TARGETS_DEPEND">depend</a></b>.
+
+     </ul>
+     <p>Autres variables relatives :
+     <ul type=circle>
+     <li><A href="#VAR_DEPENDDIR">$(DEPENDDIR)</a>
+     <li><A href="#VAR_DEPENDCOMMAND">$(DEPENDCOMMAND)</a>
+     <li><A href="#VAR_EXECDEPENDCOMMAND">$(EXECDEPENDCOMMAND)</a>
+     <li><b><A href="#TARGETS_DEPEND">depend</a></b>
+     </ul>
+
+     <p><li> <FONT SIZE=+1><em>
+             <A NAME=VARMANAGEREG>La gestion des répertoires et des fichiers.</a>
+             </em></font>
+     <p><ul type=circle>
+     <li> <b><A NAME=VAR_CREATE_DIRS>CREATE_DIRS</a></b><br>
+          C'est un <em>flag</em>. Si sa valeur est <b>TRUE</b>
+          (en MAJUSCULES),
+          ce qui est conseillé, les répertoires qui n'existent pas 
+          (sauf les répertoires destination pour 
+          l'<A HREF="#TARGETS_INSTALL">installation</a>)
+          seront créés. Sinon, un message d'erreur sera affiché.
+     <li> <b>UMASK</b><br>
+          Masque de création des répertoires locaux.
+     <li> <b>MAKEDIR</b><br>
+          La commande pour créer (éventuellement) les répertoires.
+          Si la valeur de 
+          <em><A HREF="#VAR_CREATE_DIRS">$(CREATE_DIRS)</a></em>
+          est <b>TRUE</b>, les répertoires locaux inexistants sont
+          créés, sinon un message d'erreur est généré.
+	
+     <p>
+     <li> <b><A NAME=VAR_CHMOD>CHMOD</a></b><br>
+          La commande pour modifier les permissions des fichiers lors
+          de l'<a href="#PREDEFTARGETSINSTALL">installation</a> des 
+          fichiers <em>includes</em>, de la librairie ou des 
+          binaires exécutables.
+
+     <li> <b><A NAME=VAR_CHMODOPTIONS>CHMODOPTIONS</a></b><br>
+          Les options passées à la commande 
+          <em><A HREF="#VAR_CHMOD">$(CHMOD)</a></em> pour la modification 
+          des permissions des fichiers installés.
+
+     </ul>
+
+     <p><li> <FONT SIZE=+1><em>
+             <A NAME=VARPRECOMPIL>La précompilation.</a>
+             </em></font>
+     <p><ul type=circle>
+     <li> <b><A NAME=VAR_CPPFLAGS>CPPFLAGS</a></b><br>
+          Options de précompilation.<br>
+          Cette option est passée à 
+          <em><A href="#VAR_MAKEDEPEND">$(MAKEDEPEND)</a></em>,
+          <em><A href="#VAR_COMPILEC">$(COMPILE.c)</a></em>, et
+          <em><A href="#VAR_COMPILEC++">$(COMPILE.C)</a></em>.
+     </ul>
+
+     <p><li> <FONT SIZE=+1><em>
+             <A NAME=VARCOMPIL>La compilation (options générales).</a>
+             </em></font>
+     <p><ul type=circle>
+
+     <li> <b><A NAME=VAR_VERBOSE>VERBOSE</a></b><br>
+          C'est un <em>flag</em>. Si sa valeur est <em>TRUE</em>
+          (en MAJUSCULES), ce qui est la valeur par défaut, alors 
+          les commandes de compilation,
+          <em><A href="#VAR_COMPILEC">$(COMPILE.c)</a></em> et
+          <em><A href="#VAR_COMPILEC++">$(COMPILE.C)</a></em>,
+          d'édition de liens pour des exécutables,
+          <em><A href="#VAR_LINKC">$(LINK.c)</a></em> et
+          <em><A href="#VAR_LINKC++">$(LINK.C)</a></em>,
+          ou pour une 
+          <A href="#VARLIBDYNAMIC">librairie dynamique</a>,
+          et d'<A href="#VARLIBSTATIC">archivage statique</a>
+          seront affichées.
+
+ 
+     <li> <b><A NAME=VAR_DONOTCHECK>DO_NOT_CHECK_DISTANT_OBJS</a></b><br>
+          C'est un <em>flag</em>. Si sa valeur n'est pas <em>TRUE</em>
+          (en MAJUSCULES),
+          alors la mise à jour des objets correpondant aux fichiers
+          distants
+          (un fichier distant est de la forme 
+           <em>dir/.../dir/toto.c</em> alors qu'un fichier 
+           local est de la forme <em>toto.c</em>)
+          sera vérifiée systématiquement. Le temps d'exécution du
+          GNUmakefile en sera rallongé d'autant.
+
+     <li> <b><A NAME=VAR_CSTYLE>CSTYLE</a></b><br>
+          Options de compilation liées au type d'objets 
+          <A href="#VAR_OBJTYPE">$(OBJTYPE)</a> voulu 
+          (voir le <A href="#TAB_OBJTYPE">tableau</a>).
+          Donc certaines options de compilation 
+          qui seront ajoutées à
+          <em><A href="#VAR_CFLAGS">$(CFLAGS)</a></em> et à
+          <em><A href="#VAR_C++FLAGS">$(C++FLAGS)</a></em>.
+
+     <li> <b><A NAME=VAR_cEQUALC>cEQUALC</a></b><br>
+          C'est un <em>flag</em>. Si sa valeur est <em>TRUE</em>
+          (en MAJUSCULES), alors les sources C (suffixe <em>.c</em>)
+          sont considérées comme des sources C++, c'est-à-dire
+          compilées avec
+          <em><A href="#VAR_COMPILEC++">$(COMPILE.C)</a></em> et
+          <em><A href="#VAR_LINKC++">$(LINK.C)</a></em>.
+     </ul>
+   
+     <p><li> <FONT SIZE=+1><em>
+             <A NAME=VARCOMPILC>La compilation C.</a>
+             </em></font>
+     <p>
+     Par défaut, les fichiers ayant un suffixe <em>.c</em> sont
+     considérés comme des sources C. Il est possible de les considérer 
+     comme des fichiers C++ en instanciant la variable
+     <b><A href="#VAR_cEQUALC">cEQUALC</a></b> à <b>TRUE</b>.
+     <ul type=circle>
+     <p>
+     <li> <b><A NAME=VAR_CC>CC</a></b><br>
+          Le compilateur. Il est égal
+          à <em>$(CC_${INTERNECPU})</em>.<br>
+          Il peut donc y avoir un compilateur par
+          architecture.<br>
+          Ce compilateur sert pour compiler (créer un fichier objet)
+          avec $(OBJDIR)
+          <em><A href="#VAR_COMPILEC">$(COMPILE.c)</a></em>, 
+          et éditer des liens pour
+          créer un binaire exécutable avec 
+          <em><A href="#VAR_LINKC">$(LINK.c)</a></em>.
+
+     <li> <b><A NAME=VAR_OPT>OPT</a></b><br>
+          Option d'optimisation. Elle est égale
+          à <em>$(OPT_${INTERNECPU})</em>.<br>
+          Il peut donc y avoir une option d'optimisation par
+          architecture.<br>
+          Cette option est passée à
+          <em><A href="#VAR_COMPILEC">$(COMPILE.c)</a></em> et
+          <em><A href="#VAR_LINKC">$(LINK.c)</a></em>.
+
+     <li> <b><A NAME=VAR_CFLAGS>CFLAGS</a></b><br>
+          Options de compilation. Elles sont égales
+          à <em>$(CFLAGS_${INTERNECPU})+<A href="#VAR_CSTYLE">$(CSTYLE)</a></em>.<br>
+          Il peut donc y avoir des options de compilation
+          différentes selon les architectures.<br>
+          Ces options sont passées à
+          <em><A href="#VAR_COMPILEC">$(COMPILE.c)</a></em>.
+
+     <li> <b><A NAME=VAR_IFLAGS>IFLAGS</a></b><br>
+          Options de recherche des fichiers d'inclusion.
+          Elles sont égales
+          à <em>$(IFLAGS_${INTERNECPU})</em>.<br>
+          Il peut donc y avoir des options de compilation
+          différentes selon les architectures.<br>
+          Ces options sont de la forme
+          <em>-Ichemin_ou_chercher_les_includes</em>.<br>
+          Ces options sont passées à
+          <em><A href="#VAR_COMPILEC">$(COMPILE.c)</a></em>, 
+          <em><A href="#VAR_LINKC">$(LINK.c)</a></em>, 
+          <em><A href="#VAR_COMPILEC++">$(COMPILE.C)</a></em>, et 
+          <em><A href="#VAR_LINKC++">$(LINK.C)</a></em>.
+
+     <p>
+     <li> <b><A NAME=VAR_COMPILEC>COMPILE.c</a></b><br>
+          C'est la commande invoquée pour générer un fichier objet à
+          partir d'un fichier source C.
+          <p>
+          <em>COMPILE.c = 
+          <A href="#VAR_CC">$(CC)</a> 
+          <A href="#VAR_CPPFLAGS">$(CPPFLAGS)</a> 
+          <A href="#VAR_CFLAGS">$(CFLAGS)</a>
+          <A href="#VAR_OPT">${OPT}</a>
+          <A href="#VAR_CSTYLE">${CSTYLE}</a>
+          <A href="#VAR_IFLAGS">${IFLAGS}</a>
+          -c</em>
+
+     <p>
+     <li> <b><A NAME=VAR_LINKC>LINK.c</a></b><br>
+          C'est la commande invoquée pour générer un binaire exécutable
+          à partir d'un fichier objet provenant d'un fichier C
+          et éventuellement de la librairie.
+          <p>
+          <em>LINK.c = 
+          <A href="#VAR_CC">$(CC)</a> 
+          <A href="#VAR_OPT">${OPT}</a>
+          <A href="#VAR_CSTYLE">${CSTYLE}</a>
+          <A href="#VAR_IFLAGS">${IFLAGS}</a>
+          -o <A href="#VAR_BINDIR">$(BINDIR)</a>/$(notdir $@) 
+          ${OBJDIR}/$(notdir $@).o 
+          $(LINKOBJS) $($(notdir $@)OBJS)
+          <A href="#VAR_LDPATH">${LDPATH}</a>
+          <A href="#VAR_RPFLAGS">${RPFLAGS}</a>
+          <A href="#VAR_LDLIBS">${LDLIBS}</a>
+          </em>
+          <p>
+          <em>$(LINKOBJS)</em> contiendra les objets déduits des
+          fichiers sources 
+          (<em><A href="#VAR_CFILES">$(CFILES)</a></em> ou
+          <em><A href="#VAR_C++FILES">$(C++FILES)</a></em>)
+          s'il n'existe pas de librairie
+          (si <em><A href="#VAR_LIB">$(LIB)</a></em> n'est pas
+          instanciée).
+          <br>
+          <em>$($@OBJS)</em> peut contenir des objets dépendant de
+          l'exécutable à créer (à utiliser avec précaution et parcimonie).
+  
+     </ul>
+
+     <p><li> <FONT SIZE=+1><em>
+             <A NAME=VARCOMPILC++>La compilation C++.</a>
+             </em></font>
+     <p>
+     Par défaut, les fichiers ayant un suffixe <em>.C</em> sont
+     considérés comme des sources C++. 
+     <ul type=circle>
+     <p>
+     <li> <b><A NAME=VAR_C++>C++</a></b><br>
+          Le compilateur. Il est égal
+          à <em>$(C++_${INTERNECPU})</em>.<br>
+          Il peut donc y avoir un compilateur par
+          architecture.<br>
+          Ce compilateur sert pour compiler (créer un fichier objet)
+          avec 
+          <em><A href="#VAR_COMPILEC++">$(COMPILE.C)</a></em>, 
+          et éditer des liens pour
+          créer un binaire exécutable avec 
+          <em><A href="#VAR_LINKC++">$(LINK.C)</a></em>.
+
+     <li> <b><A NAME=VAR_OPT++>OPT++</a></b><br>
+          Option d'optimisation. Elle est égale
+          à <em>$(OPT++_${INTERNECPU})</em>.<br>
+          Il peut donc y avoir une option d'optimisation par
+          architecture.<br>
+          Cette option est passée à
+          <em><A href="#VAR_COMPILEC++">$(COMPILE.C)</a></em> et
+          <em><A href="#VAR_LINKC++">$(LINK.C)</a></em>.
+
+     <li> <b><A NAME=VAR_C++FLAGS>C++FLAGS</a></b><br>
+          Options de compilation. Elles sont égales
+          à <em>$(C++FLAGS_${INTERNECPU})+<A href="#VAR_CSTYLE">$(CSTYLE)</a></em>.<br>
+          Il peut donc y avoir des options de compilation
+          différentes selon les architectures.<br>
+          Ces options sont passées à
+          <em><A href="#VAR_COMPILEC++">$(COMPILE.C)</a></em>.
+
+     <li> <b><A NAME=VAR_I++FLAGS>I++FLAGS</a></b><br>
+          Options de recherche des fichiers d'inclusion.
+          Elles sont égales
+          à <em>$(I++FLAGS_${INTERNECPU})</em>.<br>
+          Il peut donc y avoir des options de compilation
+          différentes selon les architectures.<br>
+          Ces options sont de la forme
+          <em>-Ichemin_ou_chercher_les_includes</em>.<br>
+          Ces options sont passées, ainsi que 
+          <A href="#VAR_IFLAGS">$(IFLAGS)</a>,
+          à
+          <em><A href="#VAR_COMPILEC++">$(COMPILE.C)</a></em>, et 
+          <em><A href="#VAR_LINKC++">$(LINK.C)</a></em>.
+
+     <p>
+     <li> <b><A NAME=VAR_COMPILEC++>COMPILE.C</a></b><br>
+          C'est la commande invoquée pour générer un fichier objet à
+          partir d'un fichier source C++.
+          <p>
+          <em>COMPILE.C = 
+          <A href="#VAR_C++">$(C++)</a> 
+          <A href="#VAR_CPPFLAGS">$(CPPFLAGS)</a> 
+          <A href="#VAR_C++FLAGS">$(C++FLAGS)</a>
+          <A href="#VAR_OPT++">${OPT++}</a>
+          <A href="#VAR_CSTYLE">${CSTYLE}</a>
+          <A href="#VAR_IFLAGS">${IFLAGS}</a>
+          <A href="#VAR_I++FLAGS">${I++FLAGS}</a>
+          -c</em>
+
+     <p>
+     <li> <b><A NAME=VAR_LINKC++>LINK.C</a></b><br>
+          C'est la commande invoquée pour générer un binaire exécutable
+          à partir d'un fichier objet provenant d'un fichier C++
+          et éventuellement de la librairie.
+          <p>
+          <em>LINK.C = 
+          <A href="#VAR_C++">$(C++)</a> 
+          <A href="#VAR_OPT++">${OPT++}</a>
+          <A href="#VAR_CSTYLE">${CSTYLE}</a>
+          <A href="#VAR_IFLAGS">${IFLAGS}</a>
+          <A href="#VAR_I++FLAGS">${I++FLAGS}</a>
+          -o <A href="#VAR_BINDIR">$(BINDIR)</a>/$(notdir $@) 
+          ${OBJDIR}/$(notdir $@).o 
+          $(LINKOBJS) $($(notdir $@)OBJS)
+          <A href="#VAR_LDPATH">${LDPATH}</a>
+          <A href="#VAR_RPFLAGS">${RPFLAGS}</a>
+          <A href="#VAR_LDLIBS">${LDLIBS}</a>
+          </em>
+          <p>
+          <em>$(LINKOBJS)</em> contiendra les objets déduits des
+          fichiers sources 
+          (<em><A href="#VAR_CFILES">$(CFILES)</a></em> ou
+          <em><A href="#VAR_C++FILES">$(C++FILES)</a></em>)
+          s'il n'existe pas de librairie
+          (si <em><A href="#VAR_LIB">$(LIB)</a></em> n'est pas
+          instanciée).
+          <br>
+          <em>$($@OBJS)</em> peut contenir des objets dépendant de
+          l'exécutable à créer (à utiliser avec précaution et parcimonie).
+
+     </ul>
+
+     <p><li> <FONT SIZE=+1><em>
+             <A NAME=VARLIBSTATIC>Créer une librairie statique.</a>
+             </em></font>
+     <p> S'il existe une librairie 
+     (<em><A href="#VAR_LIB">$(LIB)</a></em>)
+     dont le suffixe est .a et des fichiers sources 
+     (<em><A href="#VAR_CFILES">$(CFILES)</a></em> ou
+     <em><A href="#VAR_C++FILES">$(C++FILES)</a></em>)
+     alors les objets créés à partir de ces sources
+     seront archivés dans une librairie statique.
+     <p><ul type=circle>
+     <li> <b><A NAME=VAR_AR>AR</a></b><br>
+          Commande pour créer et mettre à jour une librairie
+          statique.
+     <li> <b><A NAME=VAR_ARFLAGS>ARFLAGS</a></b><br>
+          Options à passer à <em>$(AR)</em>.
+     <li> <b><A NAME=VAR_RANLIB>RANLIB</a></b><br>
+          Commande pour créer un index du contenu d'une librairie
+          statique. Elle est égale
+          à <em>$(RANLIB_${INTERNECPU})</em>.<br>
+          Il peut donc y avoir une commande par
+          architecture, sur certaines d'entre elles cette 
+          commande est obsolète, sur d'autres elle est nécessaire
+          pour pouvoir utiliser la librairie statique.
+     </ul>
+
+     <p><li> <FONT SIZE=+1><em>
+             <A NAME=VARLIBDYNAMIC>Créer une librairie dynamique.</a>
+             </em></font>
+     <p> S'il existe une librairie 
+     (<em><A href="#VAR_LIB">$(LIB)</a></em>)
+     dont le suffixe est .so et des fichiers sources 
+     (<em><A href="#VAR_CFILES">$(CFILES)</a></em> ou
+     <em><A href="#VAR_C++FILES">$(C++FILES)</a></em>)
+     alors les objets créés à partir de ces sources
+     seront archivés dans une librairie statique.
+     <p><ul type=circle>
+     <li> <b><A NAME=VAR_LD>LD</a></b><br>
+          Commande pour créer une librairie dynamique. LD est égal à <em>$(LD_$(C++))</em>
+	 et dépend donc du compilateur utilisé.
+     <li> <b><A NAME=VAR_LD_LOCATION_FILE>LD_LOCATION_FILE</a></b><br>
+          Certaines architectures (dec-alpha, silicon graphics) utilisent  
+          un fichier pour conserver quelques informations utiles sur
+          la libraire dynamique. Cette variable contient le nom de
+          ce fichier. 
+          Il vaut mieux ne pas l'initialiser mais laisser la valeur par
+          défaut.<br>
+          ATTENTION, un disfonctionnement a été observé pour un
+          système de fichier sous linux et une compilation sous SGI.
+     <li> <b><A NAME=VAR_LSTYLE>LSTYLE</a></b><br>
+          Options d'édition de liens liées au type d'objets 
+          <A href="#VAR_OBJTYPE">$(OBJTYPE)</a> voulu
+          (voir le <A href="#TAB_OBJTYPE">tableau</a>).
+     <li> <b><A NAME=VAR_LDFLAGS>LDFLAGS</a></b><br>
+          Options pour
+          <em><A href="#VAR_LD">$(LD)</a></em>. Elles sont égales
+          à <em>$(LDFLAGS_$(INTERNECPU)_$(LD)</em>.<br>
+          Il peut donc y avoir des options
+          différentes selon les architectures et les compilateurs. Les
+          options sur les architectures dec-alpha et silicon graphics
+          comprennent une référence au fichier 
+          <em><A href="#VAR_LD_LOCATION_FILE">$(LD_LOCATION_FILE)</a></em>. Sur
+	  sgi, la variable <em><A href="#VAR_LSTYLE">$(LSTYLE)</A></em> permet
+	  de définir le type d'objet construit.
+          
+     <li> <b><A NAME=VAR_LOADLIBSFORSHAREDLIB>LOADLIBSFORSHAREDLIB</a></b><br>
+          Librairies à ajouter à l'édition de liens pour les
+          librairies dynamiques avec 
+          <em><A href="#VAR_LD">$(LD)</a></em>.<br>
+          On peut spécifier les chemins menant à ces librairies avec
+          la variable 
+          <em><A href="#VAR_LDPATH">${LDPATH}</a></em>.
+     </ul>
+
+
+     <p><li> <FONT SIZE=+1><em>
+             <A NAME=VARBINARY>Générer un binaire exécutable.</a>
+             </em></font>
+     <p><ul type=circle>
+
+     <li> <b><A NAME=VAR_LDPATH>LDPATH</a></b><br>
+          Options de recherche des librairies au moment de 
+          l'édition de liens.
+          Ces options sont de la forme
+          <em>-Lchemin_ou_chercher_les_librairies</em>.<br>
+          Cette option est passée à
+          <em><A href="#VAR_LINKC">$(LINK.c)</a></em> et
+          <em><A href="#VAR_LINKC++">$(LINK.C)</a></em>
+          pour les binaires mais également à
+          <em><A href="#VAR_LD">$(LD)</a></em>
+          pour les librairies dynamiques.
+          
+     <li> <b><A NAME=VAR_RPFLAGS>RPFLAGS</a></b><br>
+          Options de recherche des librairies au moment de 
+          l'exécution. Elles sont égales à
+          <em>$(RPFLAGS_${INTERNECPU})</em>.<br>
+          Elles peuvent (doivent) donc être différentes selon
+          les architectures.<br>
+          Ces options sont de la forme
+          <em>-rpath chemin_ou_chercher_les_librairies</em>.<br>
+          Cette option est passée à
+          <em><A href="#VAR_LINKC">$(LINK.c)</a></em> et
+          <em><A href="#VAR_LINKC++">$(LINK.C)</a></em>
+          pour la générations des binaires.
+      <li> <b><A NAME=VAR_LDLIBS>LDLIBS</a></b><br>
+          Librairies à ajouter à l'édition de liens pour 
+          la générations des binaires.<br>
+          Cette option est passée à
+          <em><A href="#VAR_LINKC">$(LINK.c)</a></em> et
+          <em><A href="#VAR_LINKC++">$(LINK.C)</a></em>.
+     </ul>
+
+
+
+     <p><li> <FONT SIZE=+1><em>
+             <A NAME=VARINTERNES>Les variables internes.</a>
+             </em></font>
+     <p>
+     Ces variables ne sont pas documentées (pour l'instant), elle
+     interviennent dans les 
+     <a href="#PRINCIPLES">principes</a>
+     sous-jacents de ces
+     GNUmakefiles. Si elles sont listées ici, c'est pour éviter
+     qu'elles soient utilisées par inadvertance.
+ 
+     <p><ul type=circle>
+     <li> <b><A NAME=VAR_ADDONSDIR>ADDONSDIR</a></b><br>
+     Répertoire où trouver les fichiers d'inclusion automatique
+      (par défaut: $(HOME)/share).
+
+     <p>
+     <li> <b><A NAME=VAR_ADDONSVARSFILE>ADDONSVARSFILE</a></b><br>
+      Nom du fichier d'inclusion automatique à la fin de GNUMakefile.vars
+     (par défaut: Makefile.vars.addons).
+
+     <p>
+     <li> <b><A NAME=VAR_ADDONSRULESFILE>ADDONSRULESFILE</a></b><br>
+     Nom du fichier d'inclusion automatique à la fin de GNUMakefile.rules
+      (par défaut: Makefile.rules.addons).
+
+     <p>
+     <li> <b><A NAME=VAR_ADDONS_INCLUDED>ADDONS_INCLUDED</a></b><br>
+     Liste des fichiers inclus par le mécanisme d'inclusion
+     automatique de fichiers de configuration. Cette variable existe dans un but 
+     de vérification dudit mécanisme.
+     Jusqu'alors, un maximum de 5 fichiers peuvent être inclus automatiquement.
+
+     <p>
+     <li> <b><A NAME=VAR_OBJS>OBJS</a></b><br>
+
+     <p>
+     <li> <b><A NAME=VAR_COMPLETENAMEEXECS>COMPLETENAMEEXECS</a></b><br>
+
+     <p>
+     <li> <b><A NAME=VAR_MYFILES>MYFILES</a></b><br>
+
+     <p>
+     <li> <b><A NAME=VAR_ALLLOCALFILES>ALLLOCALFILES</a></b><br>
+          Cette variable regroupe les fichiers des variables
+          <A href="#VAR_LOCALFILES">${LOCALFILES}</a>, et
+          <A href="#VAR_EXECSFILES">$(EXECSFILES)</a>.
+
+     <p>
+     <li> <b><A NAME=VAR_HEADERS>HEADERS</a></b><br>
+
+     <p>
+     <li> <b><A NAME=VAR_MYHEADERS>MYHEADERS</a></b><br>
+          Cette variable regroupe les fichiers headers des variables
+          <A href="#VAR_HEADERS">$(HEADERS)</a>,
+          <A href="#VAR_CHEADERS">$(HEADERS)</a>, et
+          <A href="#VAR_C++HEADERS">$(HEADERS)</a>.
+
+     <p>
+     <li> <b><A NAME=VAR_MYEXECS>MYEXECS</a></b><br>
+
+     La liste de tous les exécutables.
+
+     <p>
+     <li> <b><A NAME=VAR_EXECSOBJS>EXECSOBJS</a></b><br>
+
+     <p>
+     <li> <b><A NAME=VAR_EXECSFILES>EXECSFILES</a></b><br>
+
+     <p>
+     <li> <b><A NAME=VAR_MYLIB>MYLIB</a></b><br>
+
+     Le nom local complet de la librairie, c'est-à-dire
+     <A href="#VAR_LIBDIR">$(LIBDIR)</a>/<A href="#VAR_LIB">$(LIB)</a>.
+
+     <p>
+     <li> <b><A NAME=VAR_SHELL>SHELL</a></b><br>
+
+     <p>
+     <li> <b><A NAME=VAR_DEPENDDIR>DEPENDDIR</a></b><br>
+     Le nom du répertoire contenant le fichier des dépendances,
+     ce nom dérive de <A href="#VAR_DEPEND">$(DEPEND)</a>.
+
+     <p>
+     <li> <b><A NAME=VAR_DEPENDCOMMAND>DEPENDCOMMAND</a></b><br>
+     La commande exécutée par la tâche 
+     <b><A href="#TARGETS_DEPEND">depend</a></b>. Cela peut être juste
+     l'écriture d'un message d'erreur s'il n'y a pas de fichiers
+     sources, la génération effective des dépendances étant effectuée
+     par la commande de la variable
+     <A href="#VAR_EXECDEPENDCOMMAND">$(EXECDEPENDCOMMAND)</a>.
+   
+    
+     
+     <p>
+     <li> <b><A NAME=VAR_EXECDEPENDCOMMAND>EXECDEPENDCOMMAND</a></b><br>
+     La commande qui va effectivement être lancée pour créer le
+     fichier <A href="#VAR_DEPEND">$(DEPEND)</a>. Cette commande n'est 
+     créé que si la variable
+     <A href="#VAR_ALLLOCALFILES">$(ALLLOCALFILES)</a>
+     n'est pas vide.
+     <p>
+     <em>
+     EXECDEPENDCOMMAND = 
+     <A href="#VAR_MAKEDEPEND">${MAKEDEPEND}</a> 
+     -f<A href="#VAR_DEPEND">${DEPEND}</a>
+     -- <A href="#VAR_CPPFLAGS">${CPPFLAGS}</a>
+     <A href="#VAR_IFLAGS">$(IFLAGS)</a> 
+     <A href="#VAR_I++FLAGS">${I++FLAGS}</a> -- 
+     <A href="#VAR_DEPFLAGS">${DEPFLAGS}</a> 
+     <A href="#VAR_ALLLOCALFILES">${ALLLOCALFILES}</a>
+     </em>
+
+     <p>
+     <li> <b>TARGETSTOBEDONE</b><br>
+
+     <p>
+     <li> <b><A NAME=VAR_UNAMES>UNAMES</a></b><br>
+     Cette variable contient le résultat de la commande
+     <em>`uname -s`</em>.
+
+     <p>
+     <li> <b><A NAME=VAR_UNAMER>UNAMER</a></b><br>
+     Cette variable contient le résultat de la commande
+     <em>`uname -r`</em>.
+
+
+     </ul>
+  </ol>
+
+
+<p>
+<li> <FONT SIZE=+1>
+     <A NAME=PREDEFTARGETS>Les <em>targets</em> prédéfinies</a>
+     </font>
+  <ol>
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <a NAME=PREDEFTARGETSDEPEND>Les dépendances</a>
+       </em></font>
+
+     <p>
+     <ul type=circle>
+ 
+     <li> <b><A NAME=TARGETS_DEPEND>depend</a></b><br>
+          Ce but permet de recréer le fichier de dépendances
+          <em><A href="#VAR_DEPEND">$(DEPEND)</a></em>. 
+          Il peut être particulièrement utile lorsqu'il ne 
+          dépend plus des fichiers sources et d'inclusion,
+          c'est-à-dire lorsque la valeur de la variable 
+          <b><A href="#VAR_ALLWAYS_UPDATE_DEPEND">ALLWAYS_UPDATE_DEPEND</a></b>
+          est <b>FALSE</b>.
+     </ul>
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <a NAME=PREDEFTARGETSCLEAN>Les <em>targets</em> de nettoyage</a>
+       </em></font>
+
+     <p>
+     <ul type=circle>
+ 
+     <li> <b><A NAME=TARGETS_CLEAN>clean</a></b><br>
+          Cette tâche permet de <em>nettoyer</em> le répertoire
+          des résultats intermédiaires (les objets) et des backups
+          (*~) par la commande :<br>
+          <em>rm -f *~ <A href="#VAR_OBJS">$(OBJS)</a></em>
+              
+
+     <p>
+     <li> <b><A NAME=TARGETS_CLOBBER>clobber</a></b><br>
+          Cette tâche <em>dépend</em> du but
+          <b><A href="#TARGETS_CLEAN">clean</a></b>,
+          qui sera donc exécuté.
+          De plus le fichier des dépendances
+          <em><A href="#VAR_DEPEND">$(DEPEND)</a></em>,
+          la librairie 
+          <em><A href="#VAR_LIB">$(LIB)</a></em>,
+          et les binaires exécutables listés dans
+          <em><A href="#VAR_EXECS">$(EXECS)</a></em>
+          sont effacés. La commande est :<br>
+          <em>rm -f
+              <A href="#VAR_DEPEND">$(DEPEND)</a>
+              <A href="#VAR_LIB">$(LIB)</a>
+              <A href="#VAR_COMPLETENAMEEXECS">$(COMPLETENAMEEXECS)</a></em>
+     <p>
+     <li> <b><A NAME=TARGETS_REALCLEAN>realclean</a></b><br>
+          Cette tâche <em>dépend</em> du but
+          <b><A href="#TARGETS_CLOBBER">clobber</a></b>,
+          qui sera donc exécuté.
+          Les tâches de <em>nettoyage</em> 
+          <b><A href="#TARGETS_CLEAN">clean</a></b> et
+          <b><A href="#TARGETS_CLOBBER">clobber</a></b>
+          efface les résultats générés sur une architecture. Ce but
+          efface les répertoires contenant les résultats générés sur
+          toutes les architectures par la commande :<br>
+          <em>rm -f obj lib bin</em><br>
+          Remarque : ce n'est pas très propre, et cela demanderait à
+          être amélioré.
+     </ul>
+
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <a NAME=PREDEFTARGETSINSTALL>L'installation</a>
+       </em></font>
+       <p>
+       Ce mécanisme
+       permet d'<em>installer</em> les fichiers <em>includes</em>, 
+       la librairie, et les binaires exécutables dans des
+       répertoires qui doivent être définis dans le GNUmakefile.
+       <p>
+       Ces répertoires ne seront pas créés automatiquement, il faut
+       donc les créer <em>manuellement</em>.
+       <p>
+          Ce mécanisme d'<em>installation</em> doit être utilisé
+          lorsque la librairie ou les exécutables seront utilisés par
+          d'autres. Cela permet d'avoir une version stable pour les
+          autres, tout en continuant un développement local.
+       <p>
+       Trois premiers buts réalisent juste une <em>copie</em> :
+       <b><A href="#TARGETS_INSTALLHEADERS">installheaders</a></b>,
+       <b><A href="#TARGETS_INSTALLLIB">installlib</a></b>, et
+       <b><A href="#TARGETS_INSTALLEXECS">installexecs</a></b>.
+       Un but plus général 
+       <b><A href="#TARGETS_INSTALL">install</a></b>,
+      réalise ces trois copies plus une vérification des 
+      <A href="#TARGETS_DEFAULT">tâches par défaut</a>.
+       
+      <P>
+      Si la variable <em><A HREF="#VAR_CHMODOPTIONS">$(CHMODOPTIONS)</a></em>
+      n'est pas vide, les permissions des fichiers <em>installés</em>
+      sont modifiées par la commande 
+      <em><A HREF="#VAR_CHMOD">$(CHMOD)</a></em>
+      avec les options
+      <em><A HREF="#VAR_CHMODOPTIONS">$(CHMODOPTIONS)</a></em>.
+      
+     <p>
+     <ul type=circle>
+ 
+     <li> <b><A NAME=TARGETS_INSTALLLIB>installlib</a></b><br>
+          Permet d'<em>installer</em> 
+          la librairie
+          dans un
+          répertoire qui doit être défini dans le GNUmakefile.
+          <ul type=disc>
+          <li> S'il existe une librairie (dans la variable
+               <em><A href="#VAR_LIB">$(LIB)</a></em>),
+               et si la valeur de la variable 
+               <em><A HREF="#VAR_INSTALLLIBDIR">${INSTALLLIBDIR}</a></em> 
+               a été fixée dans le 
+               GNUmakefile, alors la librairie est recopiée 
+               du répertoire 
+               <em><A href="#VAR_LIBDIR">$(LIBDIR)</a></em> (avec
+               <em>rsync -ut</em>) vers le répertoire 
+               <em><A HREF="#VAR_INSTALLLIBDIR">${INSTALLLIBDIR}</a></em>.
+          </ul>
+
+     <p>
+     <li> <b><A NAME=TARGETS_INSTALLHEADERS>installheaders</a></b><br>
+          Permet d'<em>installer</em> 
+          les fichiers <em>includes</em>
+          dans un
+          répertoire qui doit être défini dans le GNUmakefile.
+          <ul type=disc>
+          <li> S'il existe des fichiers <em>includes</em> dans les
+               variables 
+               <em><A HREF="#VAR_CHEADERS">$(CHEADERS)</a></em> ou
+               <em><A HREF="#VAR_C++HEADERS">$(C++HEADERS)</a></em>, 
+               et si la valeur de la variable 
+               <em><A HREF="#VAR_INSTALLHEADERSDIR">${INSTALLHEADERSDIR}</a></em>
+               a été fixée dans le 
+               GNUmakefile, alors les fichiers <em>includes</em> 
+               sont recopiés avec la commande <em>rsync</em>, avec les 
+               options <em>-Rut</em>.<br>
+               De cette façon, un fichier <em>include</em> de la
+               forme <em>dir/include.h</em> est recopié en
+               <em><A HREF="#VAR_INSTALLHEADERSDIR">${INSTALLHEADERSDIR}</a>/dir/include.h</em>.
+          </ul>
+
+     <p>
+     <li> <b><A NAME=TARGETS_INSTALLEXECS>installexecs</a></b><br>
+          Permet d'<em>installer</em> 
+          les binaires exécutables
+          dans un
+          répertoire qui doit être défini dans le GNUmakefile.
+          <ul type=disc>
+          <li> S'il existe des binaires exécutables (dans la variable
+               <em><A href="#VAR_EXECS">$(EXECS)</a></em>, 
+               et si la valeur de la variable 
+               <em><A HREF="#VAR_INSTALLBINDIR">${INSTALLBINDIR}</a></em>
+               a été fixée dans le 
+               GNUmakefile, alors ces binaires exécutables sont
+               recopiés du répertoire 
+               <em><A href="#VAR_BINDIR">$(BINDIR)</a></em>
+               (avec <em>rsync -ut</em>) vers le répertoire 
+               <em><A HREF="#VAR_INSTALLBINDIR">${INSTALLBINDIR}</a></em>.
+
+          </ul>
+
+     <p>
+     <li> <b><A NAME=TARGETS_INSTALL>install</a></b><br>
+          Permet d'<em>installer</em> les fichiers <em>includes</em>, 
+          la librairie, et les binaires exécutables dans des
+          répertoires qui doivent être définis dans le GNUmakefile.<br>
+
+          Ce but vérifie que les 
+          <A href="#TARGETS_DEFAULT">tâches par défaut</a>
+          sont à jour et réalise l'installation (si possible)
+          des fichiers <em>includes</em>, 
+          de la librairie, et des binaires exécutables,
+          par exécution des buts
+          <b><A href="#TARGETS_INSTALLHEADERS">installheaders</a></b>,
+          <b><A href="#TARGETS_INSTALLLIB">installlib</a></b>, et
+          <b><A href="#TARGETS_INSTALLEXECS">installexecs</a></b>.
+     </ul>
+    
+  
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <a NAME=PREDEFTARGETSUTIL>L'aide</a>
+       </em></font>
+
+     <ul type=circle>
+     <p>     
+     <li> <b><A NAME=TARGETS_PRINT>print</a></b><br>
+          Permet de connaître la valeur d'une variable dont le nom est 
+          contenu dans la variable VAR. Exemple:<br>
+          <FONT color=#901050><PRE>
+          % gmake print VAR=CC            
+          CC = gcc
+          </PRE></font>
+          Il ne faut pas oublier que la valeur d'une variable peut
+          dépendre de l'architecture de la machine sur laquelle est
+          exécuté le `gmake`.
+
+     <p>     
+     <li> <b><A NAME=TARGETS_HELP>help</a></b><br>
+
+     <p>     
+     <li> <b><A NAME=TARGETS_HELPVARS>helpvars</a></b><br>
+
+     <p>     
+     <li> <b><A NAME=TARGETS_PRINTVARS>printvars</a></b><br>
+
+     <p>     
+     <li> <b><A NAME=TARGETS_PRINTENV>printenv</a></b><br>
+     Affiche des informations sur l'environnement
+     (architecture, OS, type d'objet), sur les valeurs
+     de cet environnement utilisées en interne, et les
+     noms des répertoires dérivés.
+
+     <p>     
+     <li> <b><A NAME=TARGETS_PRINTC>printC</a></b><br>
+          Donne des informations sur un compilateur C prédéfini.
+          <FONT color=#901050><PRE>
+          % gmake printC VAR=gcc
+          Compilateur =  gcc
+            Les variables instanciees sont de la forme VAR_gcc
+            Exemple CC_gcc
+                    Initialisation
+               CC     =  gcc
+               OPT    =  -O
+               CFLAGS =  -ansi -Wall -Wtraditional -fsigned-char -fsigned-bitfields
+               IFLAGS = 
+          </PRE></font>
+
+     <p>     
+     <li> <b><A NAME=TARGETS_PRINTC++>printC++</a></b><br>
+          Donne des informations sur un compilateur C++ prédéfini.
+          <FONT color=#901050><PRE>
+          % gmake printC++ VAR=g++
+          Compilateur =  g++
+            Les variables instanciees sont de la forme VAR_g++
+            Exemple C++_g++
+          Initialisation
+               C++      =  g++
+               OPT++    =  -O
+               C++FLAGS =  -ansi -Wall -Wtraditional -fsigned-char -fsigned-bitfields -fguiding-decls
+               I++FLAGS = 
+          </PRE></font>
+
+     </ul>
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <a NAME=PREDEFTARGETSINTERNES>Les <em>targets</em> internes</a>
+       </em></font>
+     <ul type=circle>
+     <p>
+     <li> <b><A NAME=TARGETS_DEFAULT>default</a></b><br>
+          La tâche par défaut, c'est celle qui est exécutée lorsque
+          aucune tâche n'est spécifiée. Elle réalise les actions suivantes.
+    <ul type=square>
+    <li> S'il existe des sources 
+         (dans <em><A href="#VAR_CFILES">$(CFILES)</a></em> ou
+          <em><A href="#VAR_C++FILES">$(C++FILES)</a></em>)
+      <ul type=disc>
+      <li> Créer un répertoire 
+           <em><A href="#VAR_OBJDIR">$(OBJDIR)</a></em>
+      <li> Créer un fichier de dépendances
+           <em><A href="#VAR_DEPEND">$(DEPEND)</a></em>
+      <li> Compiler les objets correspondant aux fichiers sources
+           <em><A href="#VAR_CFILES">$(CFILES)</a></em> ou
+           <em><A href="#VAR_C++FILES">$(C++FILES)</a></em>
+           dans le répertoire 
+           <em><A href="#VAR_OBJDIR">$(OBJDIR)</a></em>
+      </ul>
+    <li> S'il existe une librairie 
+         <em><A href="#VAR_LIB">$(LIB)</a></em>
+         et des fichiers sources
+         (dans <em><A href="#VAR_CFILES">$(CFILES)</a></em> ou
+         <em><A href="#VAR_C++FILES">$(C++FILES)</a></em>)
+      <ul type=disc>
+      <li> Créer un répertoire 
+           <em><A href="#VAR_LIBDIR">$(LIBDIR)</a></em>
+      <li> Rassembler les objets correspondant aux fichiers sources
+           dans la librairie 
+           <em><A href="#VAR_LIBDIR">$(LIBDIR)</a>/<A href="#VAR_LIB">$(LIB)</a></em>
+      </ul>
+    <li> S'il existe des exécutables 
+         (dans <em><A href="#VAR_EXECS">$(EXECS)</a></em>)
+      <ul type=disc>
+      <li> Créer un répertoire 
+           <em><A href="#VAR_BINDIR">$(BINDIR)</a></em>
+      <li> Compiler les objets correspondant aux sources
+           des exécutables et les mettre dans 
+           <em><A href="#VAR_OBJDIR">$(OBJDIR)</a></em>
+      <li> Éditer les liens pour ces objets et en faire des binaires
+           exécutables placés dans 
+           <em><A href="#VAR_BINDIR">$(BINDIR)</a></em>
+      </ul>
+     </ul>
+
+     <p>
+     <li> <b><A NAME=TARGETS_DEFAULTTARGET>defaulttarget</a></b><br>
+
+     </ul>
+
+
+  </ol>
+
+<p>
+<li> <FONT SIZE=+1>
+     <A NAME=UNDEFTARGETS>Les <em>targets</em> indéfinies</a>
+     </font>
+  <p>
+  Que se passe-t-il lorsque un but est demandé mais qui n'est pas 
+  défini explicitement dans le GNUmakefile ? 
+  Certaines règles implicites essayent alors de prendre le relai. 
+
+  <ol>
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <a NAME=UNDEF_OBJECTS>Les <em>targets</em> objets</a>
+       </em></font>
+       <p>
+       <em>'gmake mon_fichier.o'</em><br>
+       Il faut que le fichier <em>mon_fichier.c</em> ou
+       <em>mon_fichier.C</em> existe. La compilation est alors
+       effectuée 
+       (<em><A href="#VAR_COMPILEC">$(COMPILE.c)</a></em> ou
+       <em><A href="#VAR_COMPILEC++">$(COMPILE.C)</a></em>)
+       si le fichier objet n'est pas à jour selon 
+       les règles de dépendances.<br>
+
+  <p>
+  <li> <FONT SIZE=+1><em>
+       <a NAME=UNDEF_BINARY>Les <em>targets</em> binaires exécutables</a>
+       </em></font>
+       <p>
+       <em>'gmake mon_fichier'</em><br>
+       Il faut que le fichier <em>mon_fichier.c</em> ou
+       <em>mon_fichier.C</em> existe. 
+       Si une librairie <em><A href="#VAR_LIB">$(LIB)</a></em>
+       est spécifiée, elle est éventuellement mis à jour. 
+       Le fichier objet est compilé
+       (<em><A href="#VAR_COMPILEC">$(COMPILE.c)</a></em> ou
+       <em><A href="#VAR_COMPILEC++">$(COMPILE.C)</a></em>),
+       puis l'édition de liens est réalisée 
+       (<em><A href="#VAR_LINKC">$(LINK.c)</a></em> ou
+       <em><A href="#VAR_LINKC++">$(LINK.C)</a></em>),
+       pour générer le
+       binaire exécutable.
+
+  </ol>
+
+
+
+</ol>
+
+
+<hr>
+    <address><a href="mailto:greg@cajal.inria.fr">Gregoire Malandain</a></address>
+<!-- Created: Fri Jun 26 14:37:49 MET DST 1998 -->
+<!-- hhmts start -->
+Last modified: Mon Nov 30 16:01:57 MET 1998
+<!-- hhmts end -->
+  </body>
+</html>

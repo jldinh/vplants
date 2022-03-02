@@ -1,0 +1,110 @@
+import numpy as np
+import openalea.plantgl.all  as pgl
+
+class Grid:
+   def __init__(self, voxelsize = (1,1,1), origin = (0,0,0), upper = (10,10,10), default_value = 0):
+      self.indexing = pgl.Grid3Indexing(voxelsize,origin,upper)
+      self.values = np.ones(self.indexing.size()) * default_value
+      self.maxvalue = None
+   def representation(self):
+       mat = pgl.Material('mblue',(0,0,200),transparency=0.8)
+       mat2 = pgl.Material('mblue',(200,0,0),transparency=0.8)
+       if not self.maxvalue: self.maxvalue = max(self.values)
+       if self.maxvalue <= 0: return pgl.Scene()
+       sc = pgl.Scene()
+       for i, v in enumerate(self.values):
+           size = v/(2*self.maxvalue)
+           if size > 1e-2:
+             sc += pgl.Shape(pgl.Translated(self.indexing.getVoxelCenterFromId(i),pgl.Box(self.indexing.getVoxelSize()*size)),mat,i)
+           else:
+             sc += pgl.Shape(pgl.Translated(self.indexing.getVoxelCenterFromId(i),pgl.Box(self.indexing.getVoxelSize()*0.1)),mat2,i)
+       return sc
+   
+   def size(self): 
+       return self.indexing.size()
+   def getValueAt(self,pos):
+       return self.values[self.indexing.cellIdFromPoint(pos)]
+   def setValueAt(self,pos, value):
+       self.values[self.indexing.cellIdFromPoint(pos)] = value
+   def __contains__(self,pos):
+       return pgl.BoundingBox(self.indexing.getLowerCorner(),self.indexing.getUpperCorner()).contains(pos)
+
+nb_steps = 100
+initial_view = 2
+
+maxvalue = 10
+xdim = 5
+ydim = 5
+zdim = 5
+grid = Grid(origin = (-xdim,-ydim,-zdim), upper = (xdim,ydim,-0.01), default_value = 1)
+grid.values = np.random.random(grid.size())*maxvalue+1
+dn = 0.5
+dw = 0.2
+dnw = 0.05
+dr = 0.001
+
+def nbgs(idx):
+    ref = list(idx)
+    res = []
+    dim = grid.indexing.dimensions()
+    for d in xrange(3):
+      if ref[d] > 0 : 
+        lres = list(ref)
+        lres[d] -= 1
+        res.append(lres)
+      if ref[d] < dim[d]-1 : 
+        lres = list(ref)
+        lres[d] += 1
+        res.append(lres)
+    return res
+
+dt = 0.01
+
+def EndEach():
+  newvalues = np.ones(grid.indexing.size())
+  for i,v in enumerate(grid.values):
+      idx = grid.indexing.index(i)
+      lnbg = nbgs(idx)
+      delta = sum([grid.values[grid.indexing.cellId(ng)] for ng in lnbg]) - v * len(lnbg)
+      newvalues[i] = v + delta * dt
+  grid.values = newvalues
+
+Axiom: [ @Tp(0,0,-1) @Ts(0.01) | f(0.1) [ +(10) A(0) ?P ] /(180) [ +(10) A(0) ?P ]] G(grid)
+
+derivation length: nb_steps
+production:
+consider: N
+
+A(x) ?P(v) :
+   if v in grid:
+     w = grid.getValueAt(v)
+     dnl = dn * w / maxvalue
+     if  w > 0 :
+       grid.setValueAt(v, w-dw)
+       if w > 2 and x % 0.6 < 0.01 :
+         nproduce /(135.5)[ ^(90) N(dn,v,0.01) A(0) ?P ] 
+       nproduce N(dnl,v,0.01)
+     else:
+       dnl = 0.05
+       nproduce N(dnl,v,0.01)
+     produce A(x+dnl) ?P
+   else: produce
+
+N(dnv,p,r) > x([ N(dnv3,p3,r3)]) N(dnv2,p2,r2):
+     w = grid.getValueAt(p)
+     inc = 0
+     if  w > 0 :
+       inc = dr
+       grid.setValueAt(p, w-dnw)
+     if sum(r3,0) + r2 > r:
+       inc += (sum(r3,0)+r2-r)
+     produce N(dnv,p,r+inc)
+
+interpretation:
+
+G(grid) --> @g(grid.representation())
+
+N(l,o,r) --> F(l,r)
+
+A(x) --> [,(4)@O(0.1)]
+endlsystem

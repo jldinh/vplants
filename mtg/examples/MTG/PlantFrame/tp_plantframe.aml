@@ -1,0 +1,566 @@
+amapmod_dir = AMAPMOD_DIR
+examples_dir = amapmod_dir + "/examples/MTG/PlantFrame/"
+databases_dir = amapmod_dir + "/databases/MTGFiles/AppleTree/"
+
+#################################
+#################################
+g1 = MTG(examples_dir + "monopodial_plant.mtg")
+
+################
+# Scale Option
+################
+
+Quest: Visualize the plant contained in the MTG file using the 
+following functions:
+PlantFrame, MTGRoot(), Plot
+
+----------------------------------
+f=PlantFrame(MTGRoot())
+Plot(f)
+----------------------------------
+
+Quest: At which scale is the plant visualized ?
+
+----------
+scale 1
+----------
+
+Quest: Visualize the same plant at scale 2, 3 and 4
+
+----------------------------------
+f2=PlantFrame(MTGRoot(),Scale->2)
+Plot(f2)
+
+f3=PlantFrame(MTGRoot(),Scale->3)
+Plot(f3)
+
+f4=PlantFrame(MTGRoot(),Scale->4)
+Plot(f4)
+----------------------------------
+
+####################
+# Translate Option
+####################
+
+Quest: Translate the plant representation at scale 4 to point [10.0,15.0,0.0]
+
+----------------------------------
+f1=PlantFrame(MTGRoot(),Scale->4, Translate->[10.0,15.0,0.0])
+Plot(f1)
+----------------------------------
+
+##########################
+# Insertion angle options
+##########################
+
+Quest: Change the default insertion angle of branches to 90 deg 
+
+----------------------------------
+angle(_x) = 90
+f1=PlantFrame(MTGRoot(),Alpha->angle,Scale->4)
+Plot(f1)
+----------------------------------
+
+###################
+# Diameter options
+###################
+
+Quest: Use the feature "diam" available in the MTG file to give a top 
+diameter to plant entities in the MTG representation at scale 4
+
+----------------------------------
+dia(_x)=Feature(_x,"diam")
+
+# Applies a within-scale constraint to compute the
+# bottom diameter of the branch 
+
+f1=PlantFrame(MTGRoot(),Scale->4,TopDiameter->dia)
+Plot(f1)
+----------------------------------
+
+Quest: At the same scale, give an explicit value to bottom diameters
+ which is twice as large as the measured diameter.
+
+----------------------------------
+dia2(_x)=2*dia(_x)
+f1=PlantFrame(MTGRoot(),Scale->4,TopDiameter->dia, BottomDiameter->dia2)
+Plot(f1)
+----------------------------------
+
+Quest: Change the above diameter function so that only the bottom diameter 
+of branches is explicitly defined (for example 1.5)
+
+----------------------------------
+# Controls the bottom diameter of branches only
+dia3(_x)=If Rank(_x) == 0 And Order(_x) == 1 Then 1.5 Else Undef
+f1=PlantFrame(MTGRoot(),Scale->4,TopDiameter->dia, BottomDiameter->dia3)
+Plot(f1)
+----------------------------------
+
+#######################################
+# Definition of the visualized branching system
+#######################################
+
+Quest: Find the first entity at scale 3 of the first branch of the plant
+ (from the bottom).
+Plot the geometric representation of the branching system 
+corresponding to this entity at scale 4.  
+
+----------------------------------
+is_branch_basis(_x) = If Order(_x) == 1 And Rank(_x) == 0 Then True Else False
+
+bases_3 = Foreach _x In VtxList(Scale->3) : Select(_x,is_branch_basis(_x))
+
+f5 = PlantFrame(bases_3@1, Scale->4)
+Plot(f5)
+----------------------------------
+
+Quest: Plot geometric representation at scale 4 of the branching
+system corresponding to the first branch of the plant
+
+----------------------------------
+bases_4 = Foreach _x In VtxList(Scale->4) : Select(_x,is_branch_basis(_x))
+
+f6 = PlantFrame(bases_4@1, Scale->4)
+Plot(f6)
+----------------------------------
+
+
+#######################################
+# Option TrunkDist
+#######################################
+
+Quest: Create an array containing all the branches of the plant.
+Plot the geometric representations at scale 4, of all these branches in the
+same plot, as if they were independent branching systems.
+
+----------------------------------
+f7 = PlantFrame(bases_4, Scale->4, TrunkDist->20)
+Plot(f7)
+----------------------------------
+
+
+#################################
+#################################
+g1 = MTG(examples_dir + "length.mtg")
+
+
+########################
+# Length option 
+########################
+
+Quest: Plot the MTG at scale 3 and explain the geometric type,
+dimensions, position and orientation of the different constituents using
+information about Dressing Data in the AMAPmod reference manual.
+
+What is the default geometric model ?
+What are the default length and diameters ? 
+What is the default insertion angle ?
+
+----------------------------------
+# Default symbol is tapered cylinder
+# Default length is 10, default diameters are 1 
+# Default insertion angle is 30 degrees
+
+f1 = PlantFrame(MTGRoot(),Scale->3)
+Plot(f1)
+----------------------------------
+
+Quest: Change the default length of constituents according to the
+following rules:
+- constituents from the trunk should have a length decrease 
+  as a power 3 of their rank
+- constituents from the branches should have a constant value
+different from the default one
+
+----------------------------------
+# the default length is 10
+# A polynomialy decreasing function of the rank
+
+len(_x) = If Order(_x) == 0 Then 0.0001*Rank(_x)^3+0.3 Else 2.0
+
+f1 = PlantFrame(MTGRoot(),Scale->3, Length->len)
+Plot(f1)
+----------------------------------
+
+Quest: Change the default length of constituents according to the
+following rule:
+
+- the length of a constituent should be proportional to the difference
+of index with respect to its predecessor. 
+
+(This would be the case for instance when indexes are measures of the
+length to this node from the bottom of the branch)
+
+----------------------------------
+len(_x) = If Father(_x) != Undef Then Abs(Index(Father(_x))-Index(_x)) Else Index(_x)
+
+color1(_x) = If (Index(Father(_x))-Index(_x)) < 0 Then Green Else Red
+
+f1 = PlantFrame(MTGRoot(),Scale->3, Length->len)
+Plot(f1, Color->color1)
+----------------------------------
+
+
+
+###############################
+###############################
+g1 = MTG(examples_dir +"origin.mtg")
+
+
+Quest: Plot a plant representation showing vertices that have 3D
+coordinates in the MTG in red (use origine.drf).
+
+----------------------------------
+dr = DressingData(examples_dir + "origin.drf")
+color_measured(_x) = If Feature(_x, "XX") != Undef Then Red Else Green
+
+f1 = PlantFrame(MTGRoot(),Scale->3, \
+                DressingData->dr)
+
+Plot(f1, Color->color_measured)
+----------------------------------
+
+Quest: Plot the same representation in which the origin of the first
+plant component has been modified to [0.0,100.0,0.0].
+
+----------------------------------
+f2 = PlantFrame(MTGRoot(),Scale->3, \
+                Origin->[0.0,100.0,0.0],\
+                DressingData->dr)
+
+Plot(f2, Color->color_measured)
+----------------------------------
+
+###############################
+###############################
+g1 = MTG(examples_dir + "coordinates_with_no_value.mtg")
+
+Quest: Plot a plant representation of this purely topological MTG,
+with a diameter of 10 units.
+
+----------------------------------
+diam(_x) = 10
+
+f1 = PlantFrame(MTGRoot(),TopDiameter->diam, Scale->3)
+Plot(f1)
+----------------------------------
+
+
+###############################
+###############################
+g1 = MTG(examples_dir + "coordinates.mtg")
+
+Quest: Plot a plant representation of this MTG (having a topology
+identical to that of "coordinates_with_no_value.mtg" ) showing
+vertices that have 3D coordinates in the MTG in red.
+
+----------------------------------
+color_measured(_x) = If Feature(_x, "XX") != Undef Then Red Else Green
+
+f1 = PlantFrame(MTGRoot(),Scale->3)
+Plot(f1, Color->color_measured)
+----------------------------------
+
+########################
+#  User-defined length
+########################
+
+Quest: Change the length of vertex 46 only
+
+# Overridding default behaviour using a user-defined function
+# Does not work on entities whose length is interpolated (e.g. 46)
+
+----------------------------------
+len(_x) = If _x == 46 Then 50 Else Undef
+
+color_measured(_x) = If Feature(_x, "XX") != Undef Then Red Else Green
+color_measured2(_x) = \
+  If _x == 51 \
+  Then Black \
+  Else color_measured(_x) 
+
+f1 = PlantFrame(MTGRoot(),Scale->3, Length->len)
+Plot(f1, Color->color_measured2)
+----------------------------------
+
+
+Quest: Change the length of vertex 51 only. What can be remarked ?
+
+----------------------------------
+len(_x) = If _x == 51 Then 50 Else Undef
+f1 = PlantFrame(MTGRoot(),Scale->3, Length->len)
+Plot(f1, Color->color_measured2)
+
+# conclusion:
+# the length of an entity can be changed only if the entity
+# length was not implicitly defined by interpolation
+----------------------------------
+
+########################
+#  LengthAlgo option
+########################
+
+Quest: Use a plantframe option that enables you
+to compute automatically the length of entities
+between two measured entities as the index difference
+of these entities.
+
+----------------------------------
+# Automatic length between two measurements
+
+# consecutive index difference is used to compute the length of a vertex
+f2 = PlantFrame(MTGRoot(),Scale->3, \
+                LengthAlgo->UseIndexes)
+Plot(f2, Color->color_measured)
+----------------------------------
+
+Quest: Take into account that the index of entities represent the distance from the top of the entity to the bottom of the branch
+
+----------------------------------
+f3 = PlantFrame(MTGRoot(),Scale->3, \
+                LengthAlgo->UseAxisIndexes)
+Plot(f3)
+----------------------------------
+
+Quest: Show the difference between the two representations
+
+----------------------------------
+difference(_x) = If Abs(Length(f3,_x)-Length(f2,_x))>0.0001 Then Red Else Black
+
+Plot(f3, Color->difference)
+----------------------------------
+
+
+###############################
+###############################
+g1 = MTG(examples_dir + "leaf_axis.mtg")
+
+
+####################
+# EulerAngles option
+####################
+
+Quest: Use the following functions to plot a plant frame using Euler
+angles only for leaves (symbol F in the MTG)
+
+xx(_x) =  0.0
+yy(_x) =  0.0
+zz(_x) =  If Class(_x) != 'F' Then ToReal(Rank(_x)) Else Undef
+aa(_x) =  0.0
+bb(_x) =  0.0
+cc(_x) =  0.0
+
+leaf_len(_x) = If Class(_x) == 'F' Then 5 Else Undef
+leaf_dia(_x) = If Class(_x) == 'F' Then 5 Else Undef
+
+
+---------------------------------
+eulerf(_x) = If Class(_x) == 'F' Then True Else False
+
+dr = DressingData(examples_dir + "leaf_axis.drf")
+f1 = PlantFrame(MTGRoot(),Scale->3, \
+                XX->xx, \
+                YY->yy, \
+                ZZ->zz, \
+                Length-> leaf_len, \
+                TopDiameter->leaf_dia,\
+                BottomDiameter->leaf_dia,\
+                EulerAngles->eulerf,AA->aa,BB->bb,CC->cc, \
+                DressingData->dr)
+Plot(f1)
+---------------------------------
+
+
+Quest: Modify these functions to control 
+
+1. plant phyllotaxy
+2. insertion angles of leaves
+3. roling angle of leaves
+
+---------------------------------
+aa(_x) =  If Father(_x) != Undef Then Rank(Father(_x))*30.0 Else 0.0
+bb(_x) =  If Father(_x) != Undef Then -Rank(Father(_x))*5.0 Else 0.0
+cc(_x) =  If Father(_x) != Undef Then Rank(Father(_x))*10.0 Else 0.0
+---------------------------------
+
+
+
+###############################
+###############################
+g1 = MTG(examples_dir + "sympodial_plant.mtg")
+
+###########################
+#      Mode Option
+###########################
+
+Quest: This plant is sympodial : apparent axes (at scale 2) are
+complex components that contain several botanical axes (at scale
+3). Plot a plant representation at scale 3 that reflects the
+organisation of apparent axes.
+
+----------------------------------
+f1=PlantFrame(MTGRoot(),Scale->3)
+Plot(f1)
+
+f1=PlantFrame(MTGRoot(),Scale->3,Mode->Sympodial)
+Plot(f1)
+----------------------------------
+
+
+###############################
+###############################
+g = MTG(databases_dir + "wij10.mtg")
+
+
+###########################
+#      Dressing Data
+###########################
+
+Quest: find the plant with index 10 and visualize it at scale 4
+
+----------------------------------
+plants = VtxList(Scale->1)
+plant(_i) = (Foreach _v In plants: Select(_v, Index(_v)==_i))@1
+
+p10 = plant(10)
+f4 = PlantFrame(p10, Scale->4)
+Plot(f4)
+----------------------------------
+
+Quest: Load the dressing data contained in the dressing file wij10.drf
+(in the examples directory) and compute a new PlantFrame using this data.
+
+---------------------------------- 
+dr1 = DressingData(examples_dir + "wij10.drf") 
+f5 = PlantFrame(p10, Scale->4, DressingData->dr1)
+Plot(f5) 
+---------------------------------- 
+
+Quest: Change the default diameter and length default values of entities B, C, E
+
+Quest: Copy the dressing file in your current directory. Use this new
+dressing file to represent plant entities at scale 4 by different
+geometric models.
+
+---------------------------------- 
+Linux> cp examples_dir/"wij10.drf" my_wij10.drf
+
+In this new dressing file
+
+SMBModel node = nentn103
+or
+SMBModel node = pommecyl
+
+(try several geometric models) then
+
+back to AML> :
+
+dr2 = DressingData("my_wij10.drf") 
+f5 = PlantFrame(p10, Scale->4, DressingData->dr2)
+Plot(f5) 
+---------------------------------- 
+
+Quest: To distinguish entities that correspond to fruits at scale 4 it
+is necessary to test their complex and to check whether they are
+fruiting growth units (Class I). Define a function h(_x) that
+associates entities from scale 4 that correspond to fruits with a new
+Class W.
+
+----------------------------------
+h(_x) = If Class(Complex(_x)) == 'I' Then 'W' Else Undef 
+----------------------------------
+
+Quest: Check what type of basic geometric model is used to represent
+entities of type W in the dressing file. Plot a geometric
+representation of the PlantFrame that makes use of this new geometric
+model
+
+----------------------------------
+f5 = PlantFrame(p10, Scale->4, DressingData->dr1)
+Plot(f5, Class->h)
+----------------------------------
+
+Quest: Resize each fruit in the plant representation by scaling their
+bounding box up to 50x50x50
+
+----------------------------------
+diam(_x) = If h(_x) == 'W' Then 50 Else Undef
+f5 = PlantFrame(p10, Scale->4, DressingData->dr1, TopDiameter->diam, BottomDiameter->diam, Length->diam)
+Plot(f5, Class->h))
+----------------------------------
+
+
+Quest: Change function the way the diameter of fruit is computed so as to suppress the effect of interpolation on the basis of fruits 
+
+----------------------------------
+diam(_x) = If h(_x) == 'W' Then 50 Else \
+           If h(Successor(_x)) == 'W' Then 10 Else Undef
+f6 = PlantFrame(p10, Scale->4, DressingData->dr1, TopDiameter->diam, BottomDiameter->diam, Length->diam)
+Plot(f6, Class->h)
+----------------------------------
+
+######################################################################
+#    Coloring plant representation to explore architecture
+######################################################################
+
+Quest: Use colors to distinguish entities with different orders at
+scale 4.
+
+----------------------------------
+color_order(_v) = \
+  Switch Order(_v) \
+  Case 0 : Green \
+  Case 1 : Red \ 
+  Case 2 : Blue \
+  Case 3 : Yellow \ 
+  Case 4 : Violet \
+  Default : White
+
+Plot(f6, Color -> color_order, Class->h)
+----------------------------------
+
+
+Quest: Use colors to distinguish entities with different types
+(Classes) at scale 4
+
+----------------------------------
+color_class(_x) = \
+  If Class(Complex(_x, Scale->3)) == 'I' \
+  Then Violet \
+  Else \
+    Switch Class(_x) \
+    Case 'B' : Green \ 
+    Case 'C' : Red \
+    Case 'E' : Black \
+    Default : Yellow
+
+Plot(f6, Color -> color_class, Class->h)
+----------------------------------
+
+
+Quest: Show all entities that are not part of the trunk
+
+----------------------------------
+select_order(_x) = If (Order(_x) == 0) Then False Else True
+Plot(f6, Show->select_order, Class->h)
+----------------------------------
+
+
+Quest: Show only entities belonging to a 90 annual shoot. (The annual
+shoot year is represented by the index of entities at scale 2)
+
+----------------------------------
+select_order(_x) = If (Index(Complex(_x, Scale->2)) == 90) Then True Else False
+Plot(f6, Show->select_order, Class->h)
+----------------------------------
+
+
+Quest: Plot a colored map of the distances (in number of internodes from the basis of the plant leading to a given entity) 
+
+-------------------
+interpol_fun(_x) = Height(_x)
+
+Plot(f6, Interpol->interpol_fun)
+-------------------
+

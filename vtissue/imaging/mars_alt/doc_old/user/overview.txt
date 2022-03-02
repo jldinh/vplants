@@ -1,0 +1,16 @@
+
+Mars Alt is a pipeline primarly designed to track cell lineages at different time steps.
+It is the result of `Romain Fernandez' PhD <http://www.inria.fr/sophia/asclepios/Publications/Gregoire.Malandain/fernandez-phd-2010.pdf>`_.
+
+The original version was based on shell scripts calling binaries, and using the chain needed a high level of computer
+knowledge.
+
+To make the Mars Alt pipeline usable for researchers outside the VirtualPlants team, an effort has been made to
+port the original code to the Openalea Platform and diffuse the tools as part of the VPlants.VTissue package, freely.
+The new version is now Python based, with dependencies to Numpy, Scipy and VPlants.Tissue, Openalea and binaries
+contrinuted by the INRIA Asclepios team as well as binaries from the original version.
+
+New developments and improvements will happen in this new version as it is a lot easier to use - in our opinion - than
+the original one.
+
+The VirtualPlant team and friends.

@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/images" >
+        <file>icons/Raratonga_Mask.png</file>
+        <file>icons/alien.png</file>
+        <file>icons/azureusicon2.png</file>
+        <file>icons/cube2.png</file>
+        <file>icons/displaybasecell.png</file>
+        <file>icons/displaypumps.png</file>
+        <file>icons/displaywall.png</file>
+        <file>icons/fishy01.png</file>
+        <file>icons/fishy02.png</file>
+        <file>icons/fishy03.png</file>
+        <file>icons/fishy04.png</file>
+        <file>icons/fishy05.png</file>
+        <file>icons/fishy06.png</file>
+        <file>icons/fishy07.png</file>
+        <file>icons/fishy08.png</file>
+        <file>icons/fishy09.png</file>
+        <file>icons/fishy10.png</file>
+        <file>icons/fishy11.png</file>
+        <file>icons/fishy12.png</file>
+        <file>icons/fishy13.png</file>
+        <file>icons/lowerAIADegr.png</file>
+        <file>icons/lowerAIAProd.png</file>
+        <file>icons/normalize.png</file>
+        <file>icons/riseAIADegr.png</file>
+        <file>icons/riseAIAProd.png</file>
+        <file>icons/selectAIASink.png</file>
+        <file>icons/selectAIASource.png</file>
+        <file>icons/selectCell.png</file>
+        <file>icons/selectWall.png</file>
+        <file>icons/select_cell.png</file>
+        <file>icons/select_wall.png</file>
+    </qresource>
+</RCC>

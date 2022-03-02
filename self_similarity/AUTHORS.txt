@@ -1,0 +1,6 @@
+This file must contain the list of the package authors
+
+Romain Azais
+Anne-Laure Gaillard
+Pascal Ferraro
+Frederic Boudon

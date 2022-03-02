@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/image" >
+        <file>apply.png</file>
+        <file>clear_values.png</file>
+        <file>fill_value.png</file>
+        <file>load_state.png</file>
+        <file>pick_value.png</file>
+        <file>save_state.png</file>
+        <file>set_value.png</file>
+    </qresource>
+</RCC>

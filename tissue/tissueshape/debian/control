@@ -1,0 +1,16 @@
+Source: vplants-tissue-tissueshape
+Maintainer: Christophe Pradal <christophe.pradal@cirad.fr>
+Section: python
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3~), python-setuptools (>= 0.6b3), debhelper (>= 7),  python-openalea.deploy
+
+
+Package: python-vplants.tissueshape
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-openalea, python-openalea.container, python-openalea.svgdraw, python-vplants.celltissue
+Provides: ${python:Provides}
+Description: basic functions to deal with tissue geometry
+ .
+ contains a set of functions that manipulate meshes
+ to create and display tissue shapes
+ .

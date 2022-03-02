@@ -1,0 +1,7 @@
+If(Exists(output_dir_geom,Type->Directory)==False)Then Mkdir(output_dir_geom) Else True
+
+num = If(num == "num") Then 1 Else num
+
+is_first_component_test(_e,_c) = If _c == Undef Then False Else If ComponentRoots(_c)[1-1] == _e Then True Else False
+
+pnDp(_e,_n) = If(_n == Undef or _n == 0) Then 0 Else If _n == 1 Then 4 Else If _n == 2 Then 2 Else If _n == 3 Then If is_first_component(_e) Then 2 Else 1 Else If _n == 4 Then 1 Else 0

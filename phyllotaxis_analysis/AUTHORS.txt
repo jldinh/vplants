@@ -1,0 +1,7 @@
+﻿Developer:
+    - Yassin Refahi
+Contributors:
+    - Etienne Farcot 
+    - Yann Guédon
+    - Christophe Godin
+

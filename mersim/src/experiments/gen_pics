@@ -1,0 +1,12 @@
+#!/bin/bash
+for f in *.pov; 
+do 
+    povray $f +FN +W800 +H600 +Q0 -D #-O/media/IOMEGA_HDD/mersim-tmp/$f.png
+    #for ff in $(ls *.tga);
+    #do
+    #    convert $ff $ff.png
+    #    rm $ff
+    #done
+done
+ls -v1 *.png > list.txt
+./gen_movie

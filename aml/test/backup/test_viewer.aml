@@ -1,0 +1,166 @@
+
+amapmod_dir = "../../../"
+amapmod_dir = "../../"
+
+#######################################
+# Trees with increasing topological complexity
+#######################################
+
+g1 = MTG(amapmod_dir + "examples/Topology/mtg1.mtg")
+f = PlantFrame(0)
+color (_x) = Switch Class(_x) Case 'A':Red Case 'B': Green Case 'C': Blue Default: Black
+Plot(f,Color->color)
+
+g2 = MTG(amapmod_dir + "examples/Topology/mtg2.mtg")
+f = PlantFrame(0)
+Plot(f,Color->color)
+
+g3 = MTG(amapmod_dir + "examples/Topology/mtg3.mtg")
+f = PlantFrame(0)
+Plot(f,Color->color)
+
+bdr3 = DressingData(amapmod_dir + "examples/Topology/mtg3.drf")
+f = PlantFrame(0, DressingData->bdr3)		# Defines a phyllotaxy = 120° 
+Plot(f,Color->color)
+
+#########################################
+# Simple multiscale with 3 scales 
+#########################################
+
+g = MTG(amapmod_dir + "examples/Topology/mtg5.mtg")
+
+diam1(_x) = 10
+diam2(_x) = If (Father(_x)== -1) \
+           Then 1 \
+           Else If Successor(_x) == -1 Then 0.2 Else Undef
+len(_x) = 1
+c(_x) = Switch Rank(_x) Case 0:Green Case 1: Red Case 2: Blue Default: Yellow
+
+
+# the diameter is one unit 
+# while the trunk is approximated with 20 units of default size 10 (using a multiscale inference) 
+f = PlantFrame(1,Scale->2)
+Plot(f, Color->color)  
+
+# to correct this the diameter can be redefined
+f = PlantFrame(1,Scale->2, TopDiameter->diam1)
+Plot(f, Color->color)   
+
+# Now diameter of branches are too big:
+f = PlantFrame(1,Scale->3, TopDiameter->diam1)
+Plot(f, Color->color)
+
+# to correct this 
+
+f = PlantFrame(1, Scale->3, TopDiameter->diam2, BottomDiameter->diam2, Length->len)
+Plot(f, Color->c)
+
+
+# Changes the symbol used to represent a vertex
+# changes the phyllotaxy
+
+dr1 = DressingData(amapmod_dir + "examples/Topology/mtg5.drf")
+f1 = PlantFrame(1,Scale->3,TopDiameter->diam2,BottomDiameter->diam2,Length->len, DressingData->dr1)
+Plot(f1, Color->c)
+
+
+
+###################################
+#
+#  Measuring plants with geometry
+#
+###################################
+
+# PROBLEM OF NON DEFINED ORIGINS !!!!!!!!!!
+mtg2 = MTG(amapmod_dir + "examples/Topology/ballamb4.mtg")
+
+f3 = PlantFrame(2,Scale->4)	# branch
+f4 = PlantFrame(1,Scale->4)	# complete branching system
+
+colorgu(_x) = If ((Order(Complex(_x))/2)*2) == Order(Complex(_x)) Then Red Else Yellow
+colorpous(_x) = \
+  Switch Index(Complex(_x)) \
+  Case 90 : Red \
+  Case 91 : Yellow \
+  Case 92 : Green \
+  Case 93 : Blue \
+  Case 94 : Violet \
+  Default : LightBlue
+
+Plot(f3,Color->colorgu)
+Plot(f4,Color->colorpous)
+
+###################################
+#
+#    A digitized Apple Tree
+#
+###################################
+
+g  = MTG(amapmod_dir + "databases/MTGFiles/AppleTree/agraf.mtg")
+
+dr1 = DressingData(amapmod_dir + "databases/MTGFiles/AppleTree/agraf.drf")
+f1 = PlantFrame(1, Scale->3, DressingData->dr1)
+Plot(f1)
+
+#   virtual leaves
+##########################
+
+# Fonction calculant directement les distance euclidiennes
+# length_en(_f, _x) = EDist(TopCoord(_f, _x),BottomCoord(_f, _x))
+
+# meilleur fonction : Length = fonction systeme
+(#
+tab_length_en = Foreach _v In VtxList(Scale->3) : Length(f1,_v)
+tab_length_en_int = Foreach _i In tab_length_en : ToInt(Rint(_i))
+histo_en = Histogram(tab_length_en_int)
+#)
+
+leaf_dia(_x) = 6*ToInt(If Length(f1,_x) < 10 Then 100 Else If Length(f1,_x) > 40 Then 400 Else Length(f1,_x)*10)
+leaf_len(_x) = If Length(f1,_x) > 30 Then leaf_dia(_x)/40 Else leaf_dia(_x)/10
+
+nbleaves(_v)=  If (Index(Complex(_v,Scale->2))==96) Then 1 Else 0
+verticille(_v)=1
+lalpha(_v)= 60
+leaf_color(_v)=Green
+leaves1=VirtualPattern("Leaf",WhorlSize->verticille, PatternNumber->nbleaves,Color->leaf_color,TopDiameter->leaf_dia, Length->leaf_len)
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+
+(#
+
+# For a change in the coordinate system:
+
+xx2(_v) = Feature(_v, "XX2")
+yy2(_v) = Feature(_v, "YY2")
+zz2(_v) = Feature(_v, "ZZ2")
+
+f2 = PlantFrame(1, Scale->4, XX->xx2, YY->yy2, ZZ->zz2)
+
+
+# filtering vertices of a PlantFrame
+
+filter_func(_x) = If Order(_x) == 1 Then True Else False
+
+Plot(f1, Filter->filter_func)
+
+#)
+
+#   virtual fruits 
+##########################
+
+nbfruits(_v)=If Index(Complex(_v,Scale->2))==96 And Class(_v) == 'F' Then 1 Else 0
+fruit_color(_v)= Red
+fruit1=VirtualPattern("Fruit",WhorlSize->verticille, PatternNumber->nbfruits,Color->fruit_color)
+Plot(f1,VirtualFruits->fruit1,DressingData->dr1)
+
+###################################
+#
+#  Digitized Walnut Tree (15 years)
+#
+###################################
+ g2 = MTG(amapmod_dir + "databases/MTGFiles/WalnutTree/noylum2.mtg")
+#g2 = MTG(amapmod_dir + "databases/MTGFiles/WalnutTree/boutdenoylum2.mtg")     
+bot_dia(_x) = If Rank(_x) == 0 Then Feature(Complex(_x), "TopDia") Else Undef
+dr1 = DressingData(amapmod_dir + "databases/MTGFiles/WalnutTree/noyer.drf")
+f2 = PlantFrame(1,Scale->3, BottomDiameter->bot_dia, DressingData->dr1)
+Plot(f2)
+

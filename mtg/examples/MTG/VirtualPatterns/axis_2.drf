@@ -1,0 +1,22 @@
+SMBPath = ../../../databases/SMBFiles
+SMBModel internode = nentn105
+SMBModel leaf = feui136
+
+Class U = internode
+Class B = internode
+Class E = internode
+
+Class Z = leaf
+LeafClass = Z
+
+# To have a leaf approximately of the same size 
+# as an internode (the default length of an internode is 10)
+
+LeafTopDiameter = 10
+LeafBottomDiameter = 10
+LeafLength = 10
+
+
+
+
+LeafAlpha = 160

@@ -1,0 +1,20 @@
+# -*-python-*-
+Import( "env" )
+
+lib_env = env.Clone()
+qt_version = int(lib_env['QT_VERSION'])
+if qt_version == 4:
+    lib_env.EnableQt4Modules( [ 'QtCore'])
+
+includes= lib_env.ALEAGlob('*.h')
+sources= lib_env.ALEAGlob('*.cpp')
+
+# Add defines to export symbols on Windows
+DEFINES= list(lib_env['CPPDEFINES'])
+DEFINES.append('TOOLS_MAKEDLL')
+
+inc= lib_env.ALEAIncludes( "plantgl/tool", includes )
+
+lib = lib_env.ALEALibrary( "pgltool", 
+                           sources, 
+                           CPPDEFINES = DEFINES )

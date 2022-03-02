@@ -1,0 +1,360 @@
+amapmod_dir = "../../devlp/AMAPmod/" 
+examples_dir = amapmod_dir + "examples/MTG/PlantFrame/"
+
+#################################
+#################################
+g1 = MTG(examples_dir + "monopodial_plant.mtg")
+
+plants = VtxList(Scale->1)
+
+################
+# Scale Option
+################
+
+f2=PlantFrame(plants@1)
+Plot(f2)
+
+f3=PlantFrame(plants@1,Scale->3)
+Plot(f3)
+
+f4=PlantFrame(plants@1,Scale->4)
+Plot(f4)
+
+#######################################
+# Definition of the branching system
+#######################################
+
+is_branch_basis(_x) = If Order(_x) == 1 And Rank(_x) == 0 Then True Else False
+
+bases_3 = Foreach _x In VtxList(Scale->3) : Select(_x,is_branch_basis(_x))
+bases_4 = Foreach _x In VtxList(Scale->4) : Select(_x,is_branch_basis(_x))
+
+# To display in Red the selected macro constituent at scale 3
+
+color_constituent(_x) = \
+  If Complex(_x) == bases_3@1 \
+  Then Red \
+  Else Black 
+
+Plot(f4, Color->color_constituent)
+
+f5 = PlantFrame(bases_3@1, Scale->4)
+Plot(f5)
+
+# To display in Red the selected branching system at scale 4
+
+color_bases(_x) = \
+  If _x == Undef \
+  Then Black \
+  Else \
+    If  _x == bases_4@1 \
+    Then Red \
+    Else color_bases(Father(_x))
+
+Plot(f4, Color->color_bases)
+
+f6 = PlantFrame(bases_4@1, Scale->4)
+Plot(f6)
+
+# Plotting a set of branching systems
+
+f7 = PlantFrame(bases_4, Scale->4, TrunkDist->20)
+Plot(f7)
+
+####################
+# Translate Option
+####################
+
+f1=PlantFrame(plants@1,Scale->4, Translate->[10.0,15.0,0.0])
+Plot(f1)
+
+###################
+# Diameter options
+###################
+
+dia(_x)=Feature(_x,"diam")
+
+# Applies a within-scale constraint to compute the
+# bottom diameter of the branch 
+f1=PlantFrame(plants@1,Scale->4,TopDiameter->dia)
+Plot(f1)
+
+# Gives an explicit value to bottom diameter of elements 
+dia2(_x)=2*dia(_x)
+f1=PlantFrame(plants@1,Scale->4,TopDiameter->dia, BottomDiameter->dia2)
+Plot(f1)
+
+# Controls the bottom diameter of branches only
+dia3(_x)=If Rank(_x) == 0 And Order(_x) == 1 Then 0.8 Else Undef
+f1=PlantFrame(plants@1,Scale->4,TopDiameter->dia, BottomDiameter->dia3)
+Plot(f1)
+
+##########################
+# Insertion angle options
+##########################
+
+angle(_x) = 90
+f1=PlantFrame(plants@1,Alpha->angle,Scale->4)
+Plot(f1)
+
+#################################
+#################################
+g1 = MTG(examples_dir + "length.mtg")
+
+
+########################
+# Length option 
+########################
+
+# Default length
+
+plants = VtxList(Scale->1)
+f1 = PlantFrame(plants@1,Scale->3)
+Plot(f1)
+
+# A polynomialy decreasing function of the rank
+
+len(_x) = If Order(_x) == 0 Then 0.0001*Rank(_x)^3+0.3 Else 2.0
+f1 = PlantFrame(plants@1,Scale->3, Length->len)
+Plot(f1)
+
+# Length is defined by the difference of consecutive indexes
+# ex: indexes are measures of the length to this node from
+# the bottom of the branch
+
+len(_x) = If Father(_x) != Undef Then Abs(Index(Father(_x))-Index(_x)) Else Index(_x)
+color1(_x) = If (Index(Father(_x))-Index(_x)) < 0 Then Green Else Red
+f1 = PlantFrame(plants@1,Scale->3, Length->len)
+Plot(f1, Color->color1)
+
+
+###############################
+###############################
+g1 = MTG(examples_dir + "sympodial_plant.mtg")
+
+###########################
+#      Mode Option
+###########################
+
+plants = VtxList(Scale->1)
+
+f1=PlantFrame(plants@1,Scale->3)
+Plot(f1)
+
+f1=PlantFrame(plants@1,Scale->3,Mode->Sympodial)
+Plot(f1)
+
+###############################
+###############################
+g1 = MTG(examples_dir + "origin.mtg")
+
+plants = VtxList(Scale->1)
+color_measured(_x) = If Feature(_x, "XX") != Undef Then Red Else Green
+
+dr = DressingData(examples_dir + "origin.drf")
+
+# test de Origin de PDir et SDir
+
+f1 = PlantFrame(plants@1,Scale->3, \
+                DressingData->dr)
+
+Plot(f1, Color->color_measured)
+
+f2 = PlantFrame(plants@1,Scale->3, \
+                Origin->[0.0,100.0,0.0],\
+                DressingData->dr)
+
+Plot(f2, Color->color_measured)
+
+###############################
+###############################
+g1 = MTG(examples_dir + "coordinates_with_no_value.mtg")
+
+diam(_x) = 10
+plants = VtxList(Scale->1)
+f1 = PlantFrame(plants@1,TopDiameter->diam, Scale->3)
+Plot(f1)
+
+
+###############################
+###############################
+g1 = MTG(examples_dir + "coordinates.mtg")
+
+##################
+# Default length
+##################
+
+color_measured(_x) = If Feature(_x, "XX") != Undef Then Red Else Green
+
+plants = VtxList(Scale->1)
+f1 = PlantFrame(plants@1,Scale->3)
+Plot(f1, Color->color_measured)
+
+########################
+#  User-defined length
+########################
+
+# Overridding default behaviour using a user-defined function
+# Does not work on entities whose length is interpolated (e.g. 46)
+
+len(_x) = If _x == 51 Then 50 Else Undef
+
+color_measured(_x) = If Feature(_x, "XX") != Undef Then Red Else Green
+color_measured2(_x) = \
+  If _x == 51 \
+  Then Black \
+  Else color_measured(_x) 
+
+f1 = PlantFrame(plants@1,Scale->3, Length->len)
+Plot(f1, Color->color_measured2)
+
+
+########################
+#  LengthAlgo option
+########################
+
+# Automatic length between two measurements
+
+# consecutive index difference is used to compute the length of a vertex
+f2 = PlantFrame(plants@1,Scale->3, \
+                LengthAlgo->UseIndexes)
+
+Plot(f2)
+Plot(f2, Color->color_measured)
+
+# consecutive index difference is used to compute the length of a vertex
+# and is reset at the beginning of every b
+f3 = PlantFrame(plants@1,Scale->3, \
+                LengthAlgo->UseAxisIndexes)
+
+difference(_x) = If Abs(Length(f3,_x)-Length(f2,_x))>0.0001 Then Red Else Black
+
+
+Plot(f3, Color->difference)
+
+###############################
+###############################
+g1 = MTG(examples_dir + "leaf_axis.mtg")
+
+####################
+# EulerAngles option
+####################
+xx(_x) =  0.0
+yy(_x) =  0.0
+zz(_x) =  If Class(_x) != 'F' Then ToReal(Rank(_x)) Else Undef
+aa(_x) =  0.0 # If Father(_x) != Undef Then Rank(Father(_x))*30.0 Else 0.0
+bb(_x) =  0.0 # If Father(_x) != Undef Then -Rank(Father(_x))*5.0 Else 0.0
+cc(_x) =  0.0 # If Father(_x) != Undef Then Rank(Father(_x))*10.0 Else 0.0
+
+leaf_len(_x) = If Class(_x) == 'F' Then 5 Else Undef
+leaf_dia(_x) = If Class(_x) == 'F' Then 5 Else Undef
+eulerf(_x) = If Class(_x) == 'F' Then True Else False
+
+plants = VtxList(Scale->1)
+dr = DressingData(examples_dir + "leaf_axis.drf")
+f1 = PlantFrame(plants@1,Scale->3, \
+                XX->xx, \
+                YY->yy, \
+                ZZ->zz, \
+                Length-> leaf_len, \
+                TopDiameter->leaf_dia,\
+                BottomDiameter->leaf_dia,\
+                EulerAngles->eulerf,AA->aa,BB->bb,CC->cc, \
+                DressingData->dr)
+Plot(f1)
+
+
+
+####################################################
+# Other example with Euler (two leaves on one axis)
+####################################################
+
+###############################
+g1 = MTG(examples_dir + "euler.mtg")
+
+####################
+# EulerAngles option
+####################
+
+plants = VtxList(Scale->1)
+
+xx(_x) = Feature(_x,"XX")
+yy(_x) = Feature(_x,"YY")
+zz(_x) = Feature(_x,"ZZ")
+
+toRad(_x) = 2*Pi*_x/360
+toDeg(_x) = If _x <= Pi Then (360/(2*Pi)) * _x Else (360/(2*Pi)) * (_x-2*Pi)
+
+aa(_x) =  Feature(_x,"AA")
+bb(_x) =  Feature(_x,"BB")
+cc(_x) =  Feature(_x,"CC")
+
+eulerf(_x) = If Class(_x) == 'F' Then True Else False
+# Foreach _x In VtxList(Scale->3): Select(aa(_x),eulerf(_x))
+
+
+leaf_len(_x) = If Class(_x) == 'F' Then 30 Else Undef
+leaf_dia(_x) = If Class(_x) == 'F' Then 30 Else Undef
+
+color(_x) = If Class(_x) == 'F' Then Red Else Green
+
+dr = DressingData(examples_dir + "euler.drf")
+
+# Plant 1
+
+# PB: les feuilles sont retournées par defaut à 180 degrés !!!!!
+
+f1 = PlantFrame(plants@1,Scale->3, \
+               XX->xx, \
+               YY->yy, \
+               ZZ->zz, \
+               Length->leaf_len, \
+               TopDiameter->leaf_dia, \
+               BottomDiameter->leaf_dia, \
+               DressingData->dr)
+
+Plot(f1, Color->color)
+
+f1 = PlantFrame(plants@1,Scale->3, \
+               XX->xx, \
+               YY->yy, \
+               ZZ->zz, \
+               Length->leaf_len, \
+               TopDiameter->leaf_dia, \
+               BottomDiameter->leaf_dia, \
+               EulerAngles->eulerf,AA->aa,BB->bb,CC->cc, \
+               DressingData->dr)
+
+Plot(f1)
+
+
+
+
+(# Plant 2
+f2 = PlantFrame(plants@2,Scale->3, \
+               XX->xx, \
+               YY->yy, \
+               ZZ->zz, \
+               Length->leaf_len, \
+               TopDiameter->leaf_dia, \
+               BottomDiameter->leaf_dia, \
+               EulerAngles->eulerf,AA->aa,BB->bb,CC->cc, \
+               DressingData->dr)
+Plot(f2, Color->color)
+#)
+
+(# Plant 3
+f3 = PlantFrame(plants@3,Scale->3, \
+               XX->xx, \
+               YY->yy, \
+               ZZ->zz, \
+               Length->leaf_len, \
+               TopDiameter->leaf_dia, \
+               BottomDiameter->leaf_dia, \
+               EulerAngles->eulerf,AA->aa,BB->bb,CC->cc, \
+               DressingData->dr)
+
+
+Plot(f3, Color->color)
+#)
+

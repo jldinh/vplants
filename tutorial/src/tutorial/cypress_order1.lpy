@@ -1,0 +1,87 @@
+import random 
+
+# Parameters #
+##############
+# simulation
+nbsteps = 100
+dx = 0.1
+
+# geometry
+internode_length = 0.3
+length = 1 # branch length
+phi = 45 # phi between branch and internode
+
+# model
+p_init = [0.99, 0.01, 0] # initial probabilities
+P=[[0.35, 0.56, 0.09],   # transition probability matrix
+   [0.85, 0.14, 0.01], 
+   [0.97, 0.03, 0]] 
+
+# stores simulated sequence for post-processing
+output = []  
+
+
+# functions #
+#############
+# return the next state for a given state 's'
+def transition(s):  
+  proba = P[s]            # select the transition distribution for state 's'
+  return draw(proba)
+  
+# draw of the next state
+def draw(proba):  
+  unif = random.uniform(0,1)
+  if unif < proba[0]:
+    return 0
+  elif unif < proba[0]+proba[1]:
+    return 1
+  else:
+    return 2
+
+# for the output (see section "Re-estimated Markov chain parameters from simulated sequences")
+def EndEach(lstring):
+  if getIterationNb() == nbsteps-1:
+    from openalea.aml import *
+    seq = Sequences([output])
+    mc1 = Estimate(seq, "VARIABLE_ORDER_MARKOV", "Ordinary", Order=1)
+    Display(mc1)
+
+
+# Simulation #
+##############
+s0 = draw(p_init) # draw of initial state s0
+
+Axiom: A(s0)
+
+derivation length: nbsteps
+production:
+
+# A -> I R L A
+A(s) :
+  new_s = transition(s)     # next state
+  output.append(int(new_s)) # store the states for output
+  produce I R(90) L(new_s,length) A(new_s)
+
+# branch growth 
+L(s,x) --> L(s,x+dx) 
+
+
+# rendering: convert IRL list to lpy rendering primitives #
+###########################################################
+interpretation:
+
+I : # build of an internode and a node
+  produce ,(1)F(internode_length),(0)F(internode_length/5.)
+
+R(theta) : # make the rotation
+  produce \(theta)
+
+L(s,x) : # build the branches
+  if s == 1:
+    produce [,(2)^(phi)F(x)]                  # green: 1 branch
+  elif s == 2:
+    produce [,(3)^(phi)F(x)][,(3)^(-phi)F(x)] # red: 2 branches
+
+A(u) --> ,(5)F(0.2)@O
+
+endlsystem

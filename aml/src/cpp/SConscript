@@ -1,0 +1,101 @@
+# -*-python-*-
+
+from openalea.sconsx.config import BisonFlex
+
+import os
+bn = os.path.basename
+pj = os.path.join
+
+Import( "env" )
+
+env_aml = env.Clone()
+
+includes = env_aml.ALEAGlob('*.h')
+env_aml.ALEAIncludes("aml",includes)
+
+# Export symbol for windows dll
+if env_aml['compiler'] == 'mingw':
+    LINKFLAGS=["-enable-stdcall-fixup",
+               "-enable-auto-import",
+               "-enable-runtime-pseudo-reloc",
+               "-s"]
+    env_aml.AppendUnique(LINKFLAGS=LINKFLAGS)
+
+sources = Split(""" 
+install.cpp 
+kernel_funs.cpp
+file_funs.cpp
+""")
+
+LIBS = ['vpamlobj', 'vptool']
+
+#if env_aml['compiler'] in ['mingw','msvc']:
+env_aml.EnableQt4Modules( [ 'QtCore', 'QtGui', 'QtOpenGL', 'QtNetwork', 'QtSql', 'QtXml' ])
+#env_aml.EnableQt4Modules(['QtCore','QtGui'])
+
+
+# STAT module
+LIBS += ['vpstat_tool','vpsequence']
+
+stat_src= Split("""
+stat_funs1.cpp
+stat_funs2.cpp
+stat_funs3.cpp
+stat_funs4.cpp
+stat_funs5.cpp
+""")
+sources.extend(stat_src)
+
+
+# PlantGL module
+LIBS += Split("""
+pgltool
+pglgui
+pglmath
+pglalgo
+pglsg""")
+
+pgl_src= Split("""
+viewer_funs.cpp
+geomscene_funs.cpp
+""")
+sources.extend(pgl_src)
+
+# MTG module
+LIBS += ["vpmtg"]
+mtg_src= ["mtg_funs.cpp"]
+sources.extend(mtg_src)
+
+# TreeMatching module
+LIBS += ["vptree_matching"]
+tm_src= ["aml_treematch.cpp"]
+sources.extend(tm_src)
+
+# MSVOXEL module
+# LIBS += ["vpoctree"]
+# octree_src = "msvoxel_funs.cpp"
+# sources.append(octree_src)
+env_aml.AppendUnique(CPPDEFINES=['WITHOUT_MSVOXEL'])
+
+#  FLUX module
+# LIBS += ["vpflux"]
+# flux_src = "flux_funs.cpp"
+# sources.append(flux_src)
+env_aml.AppendUnique(CPPDEFINES=['WITHOUT_FLUX'])
+
+# Build the aml library with all the static aml functions
+env_aml.AppendUnique(LIBS=LIBS)
+libaml = env_aml.ALEALibrary("vpaml", sources)
+
+# Build the program
+LIBS = list(env_aml["LIBS"])
+LIBS.append("vpaml")
+prefix = env_aml['build_prefix']
+
+sources= ["mainaml.cpp","guicon.cpp"]
+
+# Add LIBS dependencies
+if env_aml["WITH_CGAL"]:
+    LIBS.append("CGAL")
+aml_exe = env_aml.ALEAProgram("aml", sources, LIBS=LIBS)
+

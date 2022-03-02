@@ -1,0 +1,22 @@
+<RCC>
+  <qresource prefix="I">
+    <file>icons/analyzeAll.png</file>
+    <file>icons/clear.png</file>
+    <file>icons/copy.png</file>
+    <file>icons/cut.png</file>
+    <file>icons/enter.png</file>
+    <file>icons/exit.png</file>
+    <file>icons/jumelles.png</file>
+    <file>icons/loupe2.png</file>
+    <file>icons/loupe.png</file>
+    <file>icons/matplotlib.png</file>
+    <file>icons/new.png</file>
+    <file>icons/open.png</file>
+    <file>icons/plot.png</file>
+    <file>icons/print.png</file>
+    <file>icons/save.png</file>
+    <file>icons/show.png</file>
+    <file>icons/stop.png</file>
+    <file>icons/vplants.png</file>
+  </qresource>
+</RCC>

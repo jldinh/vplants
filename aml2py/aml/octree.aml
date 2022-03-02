@@ -1,0 +1,63 @@
+#-----------------------------------------------------------------------#
+#
+# Author : Fred Boudon
+# Computation of an octree
+#
+#-----------------------------------------------------------------------#
+# Path Variable.
+Display("!!! Warning !!!")
+Display("AMAPMOD_DIR must be set as an environmental variable in your shell")
+Display("if you don't use a version of AMAPmod installed in /usr/local/")
+
+mtg_dir = AMAPMOD_DIR + "/databases/MTGFiles/AppleTree/"
+
+#-----------------------------------------------------------------------#
+# Computation of a representation of 
+# an appletree at the scale of internodes.
+
+g = MTG( mtg_dir +"agraf.mtg")
+dr = DressingData( mtg_dir +"agraf.drf")
+f = PlantFrame(1, Scale->3, DressingData->dr)
+lt = Plot(f,Display->HIDE)
+
+#-----------------------------------------------------------------------#
+# Computation of an octree
+oct = Octree(lt,Depth->6)
+
+#-----------------------------------------------------------------------#
+# Display of the octree
+Plot(oct,Display->Intersected,Scale->4)
+Plot(oct,Display->Filled)
+Plot(oct,Display->All)
+
+
+#-----------------------------------------------------------------------#
+# Display of the octree with a cut
+# The Cutting Plane will be equal to x == arg.x(), y = arg.y(), z == arg.z().
+Plot(oct,Cut->[10,10,100])
+
+# By default the Cutting Plane value will be equal to the octree center.
+Plot(oct,Cut->True)
+
+
+
+
+#-----------------------------------------------------------------------#
+# Volume of the intersected and filled voxels.
+
+Volume(oct,Scale->5)
+
+
+#-----------------------------------------------------------------------#
+# Detailled Volume of the octree.
+
+# Give the size of the voxels at the different scale
+Volume(oct,Voxel->Size)
+
+# Give a matrix of INT, First Column is for scale, Second column for the number of Filled Voxel
+# the Third for the Intersected Voxel, and the last one for the empty Voxel.
+Volume(oct,Voxel->Count)
+
+# Works with scale option too
+Volume(oct,Voxel->Size,Scale->2)
+Volume(oct,Voxel->Count,Scale->2)

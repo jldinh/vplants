@@ -1,0 +1,19 @@
+A propos de FlowerDemo
+
+Cette démo a été réalisée dans le cadre de l'exposition 'Un Chercheur, Une Manip' du palais de la découverte par l'équipe Virtual Plants.
+
+Développement Interface Graphique et Noyau de Simulation:
+    Frédéric Boudon (CIRAD)
+
+Modèles:
+    Christophe Godin (INRIA)
+    Etienne Farcot   (INRIA)
+    avec l'aide de François Parcy (CNRS)
+
+Une forme, un gène s'inspire fortement d'une première démo réalisée en collaboration avec l'équipe de Jim Hasseloff de l'Université de Cambridge.
+
+Principaux développeurs:
+    Tim Rudge
+    PJ Steiner
+
+Cette démo et son contenu sont publiés sous licence CECILL-C.

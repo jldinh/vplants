@@ -1,0 +1,46 @@
+# -*-python-*-
+
+Import( "env" )
+import os 
+pj = os.path.join
+
+sources = env.ALEAGlob('*.cpp')
+
+if env['compiler'] == 'mingw':
+    LINKFLAGS=["-enable-stdcall-fixup",
+               "-enable-auto-import",
+               "-enable-runtime-pseudo-reloc",
+               "-s"]
+    env.AppendUnique(LINKFLAGS=LINKFLAGS)
+
+LIBS = ['vpamlobj','vpaml','vptool']
+
+env.EnableQt4Modules( [ 'QtCore', 'QtGui', 'QtOpenGL', 'QtNetwork', 'QtSql', 'QtXml' ])
+
+# STAT module
+LIBS += ['vpstat_tool','vpsequence']
+# PlantGL module
+LIBS += Split("""
+pgltool
+pglgui
+pglmath
+pglalgo
+pglsg""")
+
+# MTG module
+LIBS += ["vpmtg"]
+# TreeMatching module
+LIBS += ["vptree_matching"]
+# # MSVOXEL module
+# LIBS += ["vpoctree"]
+# #  FLUX module
+# LIBS += ["vpflux"]
+
+
+env.AppendUnique(LIBS=LIBS)
+env.AppendUnique(CPPDEFINES=['MESSAGE'])
+
+target = '_amlPymodule'
+py_dir = '../aml'
+env.ALEAWrapper( py_dir, target, sources )
+

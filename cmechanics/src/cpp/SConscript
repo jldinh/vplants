@@ -1,0 +1,32 @@
+# -*-python-*-
+import os, re
+
+Import("env")
+
+# 1. Select and install the headers
+
+includes = env.ALEAGlob('*.h', dir='../include')
+env.ALEAIncludes("cmechanics", includes)
+
+# Build shared libraries
+
+# 1. If you have only one shared library:
+# sources = env.ALEAGlob('*.cpp')
+
+# 2. Build first library
+sources = ["geometry_utils.cpp",
+           "mechanics_utils.cpp",
+           "spring.cpp",
+           "spring_fem.cpp",
+           "mass_spring_solver.cpp",
+           ]
+target = "cmechanics"
+
+# Add defines to export symbols on Windows
+DEFINES = list(env['CPPDEFINES'])
+DEFINES.append('CMECHANICS_DLL')
+
+# Build the library
+env.AppendUnique(LIBS = ['pglmath'])
+lib1 = env.ALEALibrary(target, sources, CPPDEFINES=DEFINES)
+

@@ -1,0 +1,89 @@
+
+#######################################################
+#
+#                 3D Digitizing
+#
+# 2 examples: a walnut branch and an entire apple tree
+#
+#######################################################
+
+amapmod_dir = "../../../"
+
+
+###################################
+#
+#  Digitized Walnut Tree (20 years)
+#
+# Database credits: H. Sinoquet
+#
+###################################
+ 
+# g2 = MTG(amapmod_dir + "databases/MTGFiles/WalnutTree/noylum2.mtg")
+
+g2 = MTG(amapmod_dir + "databases/MTGFiles/WalnutTree/boutdenoylum2.mtg")  
+   
+bot_dia(_x) = If Rank(_x) == 0 Then Feature(Complex(_x), "TopDia") Else Undef
+
+dr1 = DressingData("walnut.drf")
+
+f2 = PlantFrame(1,Scale->3, BottomDiameter->bot_dia, DressingData->dr1)
+
+Plot(f2)
+
+###################################################
+#
+#    A digitized Apple Tree
+#
+# Database credits: E. Costes and H. Sinoquet
+#
+###################################################
+
+g  = MTG(amapmod_dir + "databases/MTGFiles/AppleTree/agraf.mtg")
+
+dr1 = DressingData("agraf.drf")
+
+f1 = PlantFrame(1, Scale->3, DressingData->dr1)
+
+Plot(f1)
+
+diam(_x) = Feature(_x,"TopDia")
+
+hasDiameter(_x) = If diam(_x) == Undef Then False Else True
+
+color_diam(_x) = \
+  Switch diam(_x)/50 \
+  Case 0: Red \
+  Case 1: Green \
+  Case 2: Violet \
+  Case 3: LightBlue \
+  Case 4: Blue \
+  Case 5: Yellow \
+  Default: Black 
+
+Plot(f1, Color->color_diam)
+
+topd(_x) =  TopDiameter(f1, _x)
+botd(_x) =  BottomDiameter(f1, _x)
+len(_x)  =  Length(f1, _x)
+
+color_diam2(_x) = \
+  Switch TopDiameter(f1, _x)/5 \
+  Case 0: Red \
+  Case 1: Green \
+  Case 2: Violet \
+  Case 3: LightBlue \
+  Case 4: Blue \
+  Case 5: Yellow \
+  Default: Black 
+
+Plot(f1, Color->color_diam2)
+
+cone_frust_vol(_x) = Pi*len(_x)*(topd(_x)*topd(_x)+topd(_x)*botd(_x)+botd(_x)*botd(_x))/12
+
+# Computing the volume of the tree
+# (in mm3)
+Sum(Foreach _x In Components(1, Scale->3) : cone_frust_vol(_x)) 
+
+interpol_fun(_x) = Height(_x)
+
+Plot(f1, Interpol->interpol_fun)

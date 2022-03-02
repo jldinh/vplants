@@ -1,0 +1,6 @@
+.. note:: Use RST format for the change log or put a link to the wiki
+
+* 21/06/12 : 
+    - Create this package layout
+    - Add 6 tutorials
+

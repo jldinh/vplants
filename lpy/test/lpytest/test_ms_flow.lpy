@@ -1,0 +1,66 @@
+module I,L : scale = 2
+module U,E : scale = 1
+
+nbUnit = 8
+nbINode   = 3
+nodesize = 0.6
+internodesize = 0.8
+unitwidth = 0.3
+nodewidth = 0.4
+
+def EndEach(lstring):
+  #print lstring
+  pass 
+
+Axiom: _(nodewidth)-(90)G
+
+derivation length: nbINode*nbUnit*6
+production:
+
+decomposition:
+
+G :
+  nproduce ELU(1)I(1)
+  for i in xrange(nbINode-1):
+      nproduce I(0)
+  for i in xrange(nbUnit-1):
+    nproduce U(0)
+    for j in xrange(nbINode):
+      nproduce I(0)
+  produce EL
+
+production:
+
+I(1) < I(y) --> I(1)
+I(1) > L --> I(-1)
+L < I(-1) --> I(1)
+I(x) > I(-1) --> I(-1)
+I(x):
+  if x != 0 : produce I(0)
+
+
+
+U(1) > E --> U(-1)
+E < U(-1) --> U(1)
+U(1) < U(y) --> U(1)
+U(x) > U(-1) --> U(-1)
+U(x):
+  if x != 0 : produce U(0)
+
+homomorphism:
+
+U(x) --> f(nodesize)[;(1 if x ==0 else 3)_(unitwidth)F(nbINode*(internodesize+nodesize))]
+I(x) --> f(nodesize/2.);(1 if x ==0 else 2)F(internodesize)f(nodesize/2.)
+
+endlsystem
+###### INITIALISATION ######
+
+__lpy_code_version__ = 1.1
+
+def __initialiseContext__(context):
+	import openalea.plantgl.all as pgl
+	Color_1 = pgl.Material("Color_1" , ambient = (6,4,1) , diffuse = 13.8333 , )
+	Color_1.name = "Color_1"
+	context.turtle.setMaterial(1,Color_1)
+	context.options.setSelection('Optimization',2)
+	context.options.setSelection('String matching',3)

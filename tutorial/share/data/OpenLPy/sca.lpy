@@ -1,0 +1,235 @@
+from openalea.plantgl.all import *
+from random import uniform, seed
+from math import acos, cos, sin, pi, radians
+from random import randint
+
+#import pointcontracteddata as pdata
+import vplants.pointreconstruction.mixmod as mixmod
+
+# set parameters for space colonization algorithm 
+scale = 1
+grow_dist = 5 * scale
+killradius = grow_dist * 0.9
+coneradius = grow_dist * 3.0 
+coneangle = 90.0 
+
+# the initial view to compute the bounding box
+initial_view=0
+
+# the attractors
+
+pscale =50
+hull_surface = Scaled(pscale,Revolution(profile,32))
+
+
+NBATTRACTORS = 5000
+
+def gen_attractors():
+  a = Point3Array(profile.ctrlPointList)
+  a.reverse()
+  a.swapCoordinates(0,1)
+  invprofile = NurbsCurve2D(a)
+  assert QuantisedFunction.checkQuantisableFunction(invprofile)
+  rprofile = QuantisedFunction(invprofile)
+  pbbx = BoundingBox(profile)
+  result = []
+  for i in xrange(NBATTRACTORS):
+      x,y = uniform(pbbx.getXMin(),pbbx.getXMax()), uniform(pbbx.getYMin(),pbbx.getYMax())
+      if x < rprofile(y):
+        result.append(Vector3(Vector3.Cylindrical(x,uniform(0,2*pi),y))*pscale)
+  return result
+
+
+
+attractor_pts = gen_attractors() # pdata.arabido()
+
+# the initial position
+bbx = BoundingBox(PointSet(attractor_pts))
+bottom = plane_pointset_clip(Plane3((0,0,-1),(0,0,bbx.getZMin()+bbx.getZRange()*0.01)),attractor_pts)
+initial_node_pos = centroid_of_group(attractor_pts,bottom)
+
+# initial_node_pos = attractor_pts[attractor_pts.getZMinIndex()]
+
+# place the attractor points into a grid
+attractor_grid = Point3Grid(attractor_pts, 20)
+
+# remove points around first node
+attractor_grid.disable_points(attractor_grid.query_ball_point(initial_node_pos,killradius))
+
+
+def lateral_directions(dir, angle, nb):
+    # compute a whorl of 'nb' buds at branching angles.
+    rotdir = direction(dir.anOrthogonalVector())
+    rotmat = Matrix3.axisRotation(rotdir, radians(angle))
+    v0 = rotmat * dir
+    return [v0]+[ Matrix3.axisRotation(dir, i * 2*pi/nb) *v0 for i in xrange(1,nb)]
+
+nbActiveBud = 1
+Attractors = {}
+conflicts = []
+
+def register_attractors(attractors, pt):
+  """ Check for competition for attractors. 
+      If an attractors is already assign to another bud, 
+      check which is the closest and assign to it. """
+  global Attractors, conflicts
+  todel = []
+  for at in attractors:
+     dist = norm(attractor_pts[at]-pt)
+     if Attractors.has_key(at):
+        if with_conflict: conflicts.append(at)
+        r = Attractors[at]
+        if dist < r[0]:
+          del r[1][r[1].index(at)]
+          r = (dist,attractors)
+        else:
+          todel.append(at)
+     else:
+       r = (dist,attractors)
+     Attractors[at] = r
+  for d in todel:
+      del attractors[attractors.index(d)]
+
+
+
+
+def StartEach():
+  global Attractors, conflicts
+  Attractors = {}
+  conflicts = []
+  backward()
+  if getIterationNb() %2 == 1:
+     useGroup(1)
+  else:
+     useGroup(0)      
+
+def EndEach():
+  if nbActiveBud == 0: Stop()
+  if not with_cone and getIterationNb() %2 == 1:
+    frameDisplay(False)
+
+# the modules
+module DrawAttractors
+module SetInitialPos
+module ANode, SNode
+module Bud
+
+Axiom: SetInitialPos()  ANode(initial_node_pos, Vector3.OZ )  DrawAttractors()
+
+derivation length: 10000
+
+production:
+
+ANode(pt,dir):
+  global nbActiveBud
+  nbActiveBud -= 1
+  nproduce SNode(pt,1)
+  
+  # Lateral Bud computation
+  
+  # Check for a number of direction
+  lateral_dirs = lateral_directions(dir, 90, 4)
+  for lateral_dir in lateral_dirs:
+    
+    # find nearest attractor points in cone of perception of given radius and angle
+    lneighbour_indicies = attractor_grid.query_points_in_cone(pt,lateral_dir,coneradius,radians(coneangle))
+    register_attractors(lneighbour_indicies, pt)
+    if len(lneighbour_indicies) >= min_nb_pt:
+      # generate lateral buds
+      nbActiveBud += 1
+      nproduce Bud(pt, lateral_dir, lneighbour_indicies, True )
+  
+  # Axial bud computation
+  
+  # find nearest attractor points in cone of perception of given radius and angle
+  neighbour_indicies = attractor_grid.query_points_in_cone(pt,dir,coneradius,radians(coneangle))
+  register_attractors(neighbour_indicies, pt)
+  
+  # skip this node if there are no attractor points near it
+  if len(neighbour_indicies) >= 0:
+    nbActiveBud += 1
+    nproduce Bud(pt, dir, neighbour_indicies, False)
+    
+Bud(pt, cdir, atts, lateral) :
+  global nbActiveBud
+  if len(atts) > min_nb_pt : # if enough attractors are available
+    # compute mean direction
+    mean_dir = pointset_mean_direction(pt,attractor_pts,atts)
+    # compute new position
+    new_pt = pt + mean_dir * grow_dist
+    #new_pt = attractor_pts[findClosestFromSubset(new_pt,attractor_pts,atts)[0]]
+    
+    # remove closest attractors
+    attractor_grid.disable_points(attractor_grid.query_ball_point(new_pt,killradius))
+    
+    # produce active nodes
+    if lateral: produce [ANode(new_pt,direction(new_pt-pt))]
+    else : produce ANode(new_pt,direction(new_pt-pt))
+  else:
+    # remove node
+    nbActiveBud -= 1
+    produce
+
+group 1:
+
+# A simple pipe model. For this we compute the number of child in subtree
+SNode(pt, nbchild) >> all([SNode(pt1, nbchild1)]) SNode(pt2,nbchild2) --> SNode(pt,sum(nbchild1)+nbchild2+1)
+SNode(pt, nbchild) >> all([SNode(pt1, nbchild1)])  --> SNode(pt,sum(nbchild1)+1)
+
+group 0:
+interpretation:
+
+ANode(pt, dir) -->  LineTo(pt) SetColor(4) Sphere(0.5*scale)
+
+SNode(pt, nbchild) -->  _( scale*(0.01+0.1 * (nbchild ** 0.5))  )LineTo(pt) # [ SetColor(2) Sphere(0.5*scale) ]
+
+Bud(pt,cdir, atts, lateral):
+  if with_cone:
+    asize = 5*scale
+    nproduce [ SetColor(randint(0,255),randint(0,255),randint(0,255)) LineRel(cdir*asize) f(1*scale) Label(str(len(atts)))
+    for i in atts:
+      nproduce [@M(attractor_pts[i]) Sphere(0.125*scale)] 
+    produce ]
+
+SetInitialPos() --> @M((0,0,0)) SetColor(1) @Gc _(0.1*scale)
+
+DrawAttractors():
+  nproduce @Ge
+  lpoints = attractor_grid.get_enabled_points()
+  if not lpoints.empty():
+    nproduce [@M(0,0,0) @R SetColor(255,0,0) @g(PointSet(lpoints,width=2))]
+  if with_conflict:
+    for i in conflicts:
+      nproduce [,(3) @M(attractor_pts[i]) Sphere(0.2*scale) f(1*scale) Label(str(i))]
+  nproduce [@M(0,0,0) @R ,(10)@g(hull_surface)]
+  
+endlsystem
+###### INITIALISATION ######
+
+__lpy_code_version__ = 1.1
+
+def __initialiseContext__(context):
+	import openalea.plantgl.all as pgl
+	Color_10 = pgl.Material("Color_10" , ambient = (30,60,10) , diffuse = 3 , transparency = 0.91 , )
+	Color_10.name = "Color_10"
+	context.turtle.setMaterial(10,Color_10)
+	context.options.setSelection('Module declaration',1)
+	context.options.setSelection('Warning with sharp module',0)
+	context.options.setSelection('Module matching',0)
+	context.options.setSelection('Early return when no matching',0)
+	context.options.setSelection('Warning with Turtle inconsistency',0)
+	scalars = [('with_cone', False, False, True), ('with_conflict', False, False, True), ('min_nb_pt', 3, 0, 100)]
+	context["__scalars__"] = scalars
+	for n,v,mnv,mxv in scalars:
+		context[n] = v
+	import openalea.plantgl.all as pgl
+	profile = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(-0.00669929, 1.00419, 1),(0.276268, 0.999914, 1),(0.65638, 0.877978, 1),(0.478791, 0.774127, 1),(0.447333, 0.546053, 1),(0.159871, 0.465448, 1),(0.174692, 0.27079, 1),(0.00949464, 0.0796909, 1)]) , 
+	    )
+	profile.name = "profile"
+	panel_0 = ({'active': True, 'visible': True, 'name': 'Panel 3'},[('Curve2D',profile)])
+	parameterset = [panel_0,]
+	context["__functions__"] = []
+	context["__curves__"] = [('profile',profile),]
+	context["__parameterset__"] = parameterset
+	context["profile"] = profile

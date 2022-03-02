@@ -1,0 +1,74 @@
+#-----------------------------------------------------------------------#
+#
+# Author : Fred Boudon
+# Example of use of fonction related to file access.
+#
+#-----------------------------------------------------------------------#
+# Display Help about File Module or File function.
+
+FileHelp()
+FileHelp(Pwd)
+
+#-----------------------------------------------------------------------#
+# Current Working Directory
+
+Display("Current Working Directory is " + CWD)
+Display(Pwd())
+
+#-----------------------------------------------------------------------#
+# The AMAPmod Project.
+#
+# You can affect the value of this global variable with
+# AMAPMOD_DIR variable of your shell.
+
+Display("The AMAPmod Project is in " + AMAPMOD_DIR)
+
+#-----------------------------------------------------------------------#
+# Your home directory.
+
+Display("Your home directory is " + HOME)
+
+#-----------------------------------------------------------------------#
+# Test if directory exist and creation of a directory.
+
+If( Exists(CWD + "/Test")) Then True Else Mkdir(CWD + "/Test")
+
+#-----------------------------------------------------------------------#
+# Change directory.
+
+Cd( CWD + "/Test")
+
+#-----------------------------------------------------------------------#
+# List content of a directory.
+
+Ls()
+Ls(Type->Directory)
+
+#-----------------------------------------------------------------------#
+# Copy of a file.
+
+Copy(AMAPMOD_DIR + "/databases/MTGFiles/AppleTree/agraf.drf","agraf.drf")
+
+#-----------------------------------------------------------------------#
+# Rename a file.
+
+Rename("agraf.drf","braeburn.drf")
+
+#-----------------------------------------------------------------------#
+# Remove a file.
+
+Foreach _f In Ls() : Rm(_f)
+
+
+#-----------------------------------------------------------------------#
+# Clean demo.
+
+Cd("..")
+Rm( CWD + "/Test")
+
+
+
+
+
+
+

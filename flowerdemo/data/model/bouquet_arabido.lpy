@@ -1,0 +1,459 @@
+from math import *
+from openalea.plantgl.all import *
+
+SimulationDuration = 30
+0 # number of plastochrones
+
+# Max Levels
+MaxSAS = 10. # unit not specified
+MaxTFL1 = MaxSAS
+MaxLFY = MaxSAS
+MaxAP1 = MaxSAS
+
+MAXELASTICITY = 1.5
+MAXORDER = 3
+MAXAXISORDER = 3
+
+MAXLEAFORDER = 2
+
+SAS2TFL1SLOPE= 1.  # TFL1 level is prop to SAS
+
+SAS2LFYSENTITIVITY = 3.
+TFL12LFYSENTITIVITY = 1.
+LFYTFL1RATIOTh = 1.
+
+SASMaxRate = 1.
+TFL1MaxRate = 1.
+
+# maximum drop in SAS/TFL1 when creating an axillary meristem
+MAXSASDECREASE = 1.
+MAXTFL1DECREASE = 1.
+
+# Thresholds
+LFYFlowerTh= 1
+LFYLeafTh= 1
+
+
+# Geometry
+enlen  = 1.          # length of an internode (in cm)
+esf = 3.  # scaling factor of a reduced internode
+endiam = enlen/10.   # final diam of an internode (in cm)
+
+FloSize = 2.    # size of the flower (in cm)
+leafsize =.15  # size of a leaf (in cm-
+
+alpha = 137    # phyllotactic angle
+beta  = 50     # initial insertion angle of branches
+
+dt = 1        # one unit of time (used for simulation steps)
+
+BARSHIFT = 10
+BARWIDTH = 8
+
+def growthCurve(minval,maxval,speed,x):
+  return minval + maxval*(1-exp(-speed*x))
+def decreasingCurve (maxval,minval,speed,x):
+  return minval + maxval*(exp(-speed*x))
+def hillcurve(maxval,ordre,inflex,x):
+  return 0.1 + (x**ordre)*(maxval-0.1)/(inflex**ordre + x**ordre)
+
+#internode width
+def iw(age):  
+  return growthCurve(endiam, 5*endiam, 0.001,age)
+
+class MeristemData:
+  def __init__(self, age, order, sas, tfl1, lfy, ap1, inter):
+    self.age = age    # age since created
+    self.order = order
+    self.sas = sas
+    self.tfl1 = tfl1  # level of tfl1 in [0,1]
+    self.lfy = lfy    # level of leafy in [0,1]
+    self.ap1 = ap1
+    self.inter = inter
+
+class InternodeData:
+  def __init__(self, m, ma, inter):
+    self.age = 0
+    self.order1 = m.order
+    self.sas = m.sas
+    self.tfl1 = m.tfl1
+    self.lfy = m.lfy
+    self.ap1 = m.ap1
+    # values for the axillary meristem
+    self.sas2 = ma.sas
+    self.tfl12 = ma.tfl1
+    self.lfy2 = ma.lfy
+    self.ap12 = ma.ap1
+    self.inter = inter
+
+class LeafData:
+  def __init__(self, lsize, lage):
+    self.lsize = lsize
+    self.lage = lage
+    
+class FlowerData:
+  def __init__(self, forder, fage):
+    self.forder = forder
+    self.fage = fage 
+
+eps = 0.01
+
+# When TFL1 is on, LFY should be absent in the meristem
+# Otherwise 
+def LFYLevel(sas,tfl1,ap1):
+  if LFY35S :
+    return MaxLFY
+  if lfymutant:
+    return 0
+  s = min(sas/MaxSAS,1.0)
+  t = min(tfl1/MaxTFL1,1.0)
+  a = min(ap1/MaxAP1,1.0)  
+  lfy = min(SAS2LFY(s),1.0)
+  # inhibitory effect of TFL1 on LFY:
+  #if t > lfy + eps: return 0.
+  #else: return (lfy-t)*MaxLFY
+  return max (0, (lfy-10*t)*MaxLFY)
+  
+def AP1Level(sas,tfl1,lfy):
+# if TFL1 is off AP1 is on or off depending on whether LFY > LFYFlowerTh, otherwise AP1 is 0
+  if ap1mutant:
+    return 0
+  if AP135S :
+    return MaxAP1
+  if lfy > LFYFlowerTh and tfl1 < eps:
+    return MaxAP1
+  return 0.
+  
+def TFL1Level(sas,ap1,lfy):
+# 
+  if tfl1mutant:
+    return 0
+  if TFL135S :
+    return MaxTFL1
+  # TFL1 is prop to SAS (positive correlation)
+  return SAS2TFL1SLOPE * sas
+
+def condAxil(lfy, tfl1):
+  return (lfy < eps or lfy < tfl1)
+  
+def condFlowering(m):
+  #  return m.lfy > LFYFlowerTh and m.tfl1 < TFL1FlowerTh
+  #if m.ap1 <= eps: return m.lfy > LFYFlowerTh
+  # else : r = m.lfy / (m.tfl1+0.5)
+  # print "r= ",r
+  #return r > LFYTFL1RATIOTh
+  #print "m.ap1 = ", m.ap1
+  return m.ap1 > AP1FlowerTh
+
+
+def Start():
+    global MAXAXISORDER
+    if lfymutant or TFL135S:
+        MAXAXISORDER = 2
+    
+module M, Flower, Leaf, Rosette
+
+Axiom:  ;(5)Rosette;(1)@Tp(0,0,1)@Ts(MAXELASTICITY*0.01)M(MeristemData(1,0,MaxSAS/100.,MaxTFL1/100.,0.,0.,1.))L(LeafData(0, 0))#F(FlowerData(0.0 , 0))
+
+derivation length: SimulationDuration
+
+production:
+
+Rosette:
+  nproduce ^(80)_(.05)
+  for i in xrange(12):
+    nproduce Leaf(leafsize*15.+i*.1) &(80)F(.05)^(90)+(137)&(10)
+  produce &(80)
+
+Leaf(length) -->  ParametricSurface(leaf_nerve,leaf_section,leaf_width,length,20,2.)
+
+
+M(m):
+    # STEP1: test whether M is committed to become a flower
+  if condFlowering(m):
+    produce Flower(FlowerData(0,0))
+     
+    # Normalisation
+  u = m.sas/MaxSAS 
+  u = min(u,1.0)
+  
+  # STEP 2 update the gene levels for the meristem at t + dt
+  sasrate = SASFunc(u) # SAS level is indicated from an external curve
+  sastmp = m.sas + sasrate * dt * SASMaxRate #the curve defines growth rates
+  # LFY results from a competition between SAS and TFL1
+  lfytmp = LFYLevel(m.sas,m.tfl1,m.ap1)
+  ap1tmp = AP1Level(m.sas, m.tfl1, m.lfy)
+  tfl1tmp= TFL1Level(m.sas, m.ap1, m.lfy)
+  intertmp = 1.
+  # donne la valeur au scaling factor de facon irreversible
+  if m.inter == esf or (m.lfy > LFYFlowerTh and ap1tmp < eps) : 
+    intertmp = esf
+    
+  if (condAxil(m.lfy, m.tfl1)==False) :
+    #print "COUCOU ----------------", m.order
+    # update of m data at t+dt
+    m.sas = sastmp
+    m.tfl1 = tfl1tmp
+    m.lfy = lfytmp
+    m.ap1 = ap1tmp
+    m.inter = intertmp    
+    m.age += dt
+    produce M(m)
+  
+  else:
+    # computation of axillary meristem (ma) data
+    if SASDECREASEFLAG : dsas = SASdecrease(u)*MAXSASDECREASE
+    else: dsas = 0
+    saslevel = max(m.sas - dsas, 0.0)
+    if TFL135S : tfl1level = MaxTFL1 
+    else: tfl1level = 0.
+    ap1level = 0
+    lfylevel = LFYLevel(saslevel,tfl1level,ap1level)
+    # print "lfylevel", lfylevel
+    # age is 0 at the creation of the meristem  
+    ma= MeristemData(0, m.order+1, saslevel, tfl1level, lfylevel, ap1level, 1.0)
+    
+    nproduce I(InternodeData(m,ma,intertmp))
+    if ma.lfy < LFYLeafTh :
+      if m.order < MAXLEAFORDER : nproduce L(LeafData(FloSize, 1))
+    if m.order < MAXORDER : 
+      nproduce [+(beta)M(ma)]
+  
+  # update of m data at t+dt
+  m.sas = sastmp
+  m.tfl1 = tfl1tmp
+  m.lfy = lfytmp
+  m.ap1 = ap1tmp
+  m.inter = intertmp
+  # print m.inter 
+  
+  m.age += dt
+  
+  #print "order=", m.order, " sas = ", m.sas, " tfl1= ", m.tfl1, "lfy= ", m.lfy, "ap1 = ", m.ap1
+  produce M(m)
+
+I(i):
+  i.age += 1
+  produce I(i)
+
+Flower(i):
+  i.fage += 1.0
+  #print "age fleur= ", i.fage
+
+L(i):
+  i.lage += 1.0
+  #print "age feuille", i.lage
+
+
+
+interpretation:
+maximum depth: 1
+
+# Meristem
+M(m) --> ;(4)f(endiam*1*2)@O(endiam*1*2) 
+
+# Internode (includes the phyllotaxy)
+I(i):
+  o= i.order1
+  #print "order=", o
+  if i.inter == esf:
+    k = (3./5.)**o
+    #print "order= ", o, "k=", k
+    g1 = hillcurve(k*1,5.,10.,i.age) # allongement avec l'age
+  else:
+    g1 = hillcurve(2,5.,10.,i.age)
+  s = enlen*g1*1
+  if i.order1 == 0:
+    if DISPLAY_BARS:
+    # apical meristem on the left, axillary  on the right
+      if SASBARFLAG: 
+        nproduce [;(0)@R _(endiam/10.*BARWIDTH)f(enlen)+(90)f(enlen*BARSHIFT)F(abs(i.sas))]
+        nproduce [;(0)@R/(180) _(endiam/10.*BARWIDTH)f(enlen)+(90)f(enlen*BARSHIFT)F(abs(i.sas2))]
+      if TFL1BARFLAG: 
+        nproduce [;(1)@R       _(endiam/10.*BARWIDTH)f(enlen-enlen/4.)+(90)f(enlen*BARSHIFT)F(abs(i.tfl1))]
+        nproduce [;(1)@R/(180) _(endiam/10.*BARWIDTH)f(enlen-enlen/4.)+(90)f(enlen*BARSHIFT)F(abs(i.tfl12))]
+      if LFYBARFLAG: 
+        nproduce [;(2)@R       _(endiam/10.*BARWIDTH)f(enlen-2*enlen/4.)+(90)f(enlen*BARSHIFT)F(abs(i.lfy))]
+        nproduce [;(2)@R/(180) _(endiam/10.*BARWIDTH)f(enlen-2*enlen/4.)+(90)f(enlen*BARSHIFT)F(abs(i.lfy2))]
+    # print a the difference between lfy and tfl1
+    # nproduce [;(0)@R _(endiam/5.)+(90)f(enlen*(BARSHIFT-1))@L(str(int((i.lfy-i.tfl1)*100)/float(100)))]
+  if i.order1 < MAXAXISORDER :
+    if i.inter == esf : c= 3
+    else: c = 1
+    produce ;(c)_(endiam)F(s)/(alpha)
+  
+Flower(m):
+  #print "flowerage= ", m.fage
+  t= hillcurve(4, 2, 6, m.fage)
+  u= hillcurve(8, 5, 12, m.fage)
+  if m.fage<10:  
+    produce ;(0)F(endiam*FloSize*t)f(endiam*FloSize)@O(endiam*FloSize)
+  else:
+    #print "u=", u, "age", m.fage
+    produce ;(0)F(endiam*FloSize*t);(2)_(0.17)F(endiam*FloSize*u)
+
+# Feuille
+L(i) :
+  x = i.lsize
+  y = i.lage
+  z = growthCurve(0.1, 1, 0.05, y)
+  if x * z > 0:
+      produce [/(90)^(-110)f(endiam)^(90)^(120)+(180);(2)[/(180)@g(leafshape,x*z*2)]]
+
+
+
+
+ParametricSurface(axis,section,width,length,nb_segment,size):
+   dx = 1. / nb_segment
+   x = 0
+   nproduce [/(180) SetGuide(axis,length*size)  
+   if not section is None: nproduce SetContour(section) 
+   nproduce _(width(0)) StartGC()
+   for i in xrange(nb_segment):
+     x = i*dx
+     nproduce F(size*dx*length,size*width(x+dx))
+   nproduce EndGC()]
+
+endlsystem
+
+###### INITIALISATION ######
+
+__lpy_code_version__ = 1.1
+
+def __initialiseContext__(context):
+	import openalea.plantgl.all as pgl
+	Color_3 = pgl.Material("Color_3" , 		ambient = (3,34,149) , 
+		diffuse = 1.20805 , 
+)
+	Color_3.name = "Color_3"
+	context.turtle.setMaterial(3,Color_3)
+	Color_4 = pgl.Material("Color_4" , 		ambient = (60,0,0) , 
+		diffuse = 3 , 
+)
+	Color_4.name = "Color_4"
+	context.turtle.setMaterial(4,Color_4)
+	Color_5 = pgl.Material("Color_5" , 		ambient = (30,60,10) , 
+		diffuse = 3 , 
+)
+	Color_5.name = "Color_5"
+	context.turtle.setMaterial(5,Color_5)
+	Color_10 = pgl.Material("Color_10" , 		ambient = (243,202,239) , 
+		diffuse = 0.670782 , 
+		shininess = 0.65 , 
+)
+	Color_10.name = "Color_10"
+	context.turtle.setMaterial(10,Color_10)
+	Color_11 = pgl.Material("Color_11" , 		ambient = (235,187,227) , 
+		diffuse = 0.69961 , 
+		shininess = 0.688889 , 
+)
+	Color_11.name = "Color_11"
+	context.turtle.setMaterial(11,Color_11)
+	Color_12 = pgl.Material("Color_12" , 		ambient = (227,173,215) , 
+		diffuse = 0.728438 , 
+		shininess = 0.727778 , 
+)
+	Color_12.name = "Color_12"
+	context.turtle.setMaterial(12,Color_12)
+	Color_13 = pgl.Material("Color_13" , 		ambient = (219,159,203) , 
+		diffuse = 0.757265 , 
+		shininess = 0.766667 , 
+)
+	Color_13.name = "Color_13"
+	context.turtle.setMaterial(13,Color_13)
+	Color_14 = pgl.Material("Color_14" , 		ambient = (211,145,191) , 
+		diffuse = 0.786093 , 
+		shininess = 0.805556 , 
+)
+	Color_14.name = "Color_14"
+	context.turtle.setMaterial(14,Color_14)
+	Color_15 = pgl.Material("Color_15" , 		ambient = (203,130,180) , 
+		diffuse = 0.814921 , 
+		shininess = 0.844444 , 
+)
+	Color_15.name = "Color_15"
+	context.turtle.setMaterial(15,Color_15)
+	Color_16 = pgl.Material("Color_16" , 		ambient = (195,116,168) , 
+		diffuse = 0.843749 , 
+		shininess = 0.883333 , 
+)
+	Color_16.name = "Color_16"
+	context.turtle.setMaterial(16,Color_16)
+	Color_17 = pgl.Material("Color_17" , 		ambient = (187,102,156) , 
+		diffuse = 0.872577 , 
+		shininess = 0.922222 , 
+)
+	Color_17.name = "Color_17"
+	context.turtle.setMaterial(17,Color_17)
+	Color_18 = pgl.Material("Color_18" , 		ambient = (179,88,144) , 
+		diffuse = 0.901405 , 
+		shininess = 0.961111 , 
+)
+	Color_18.name = "Color_18"
+	context.turtle.setMaterial(18,Color_18)
+	Color_19 = pgl.Material("Color_19" , 		ambient = (172,74,133) , 
+		diffuse = 0.930233 , 
+)
+	Color_19.name = "Color_19"
+	context.turtle.setMaterial(19,Color_19)
+	context.animation_timestep = 0.001
+	context.options.setSelection('Warning with sharp module',0)
+	context.options.setSelection('Optimization',2)
+	context.options.setSelection('Warning with Turtle inconsistency',0)
+	scalars = [('LFYFlowerTh', 3, 0, 10), ('AP1FlowerTh', 6, 0, 100), ('TFL1BARFLAG', True, False, True), ('LFYBARFLAG', True, False, True), ('SASDECREASEFLAG', True, False, True), ('SASBARFLAG', True, False, True), ('DISPLAY_BARS', False, False, True), ('TFL1NodeTh', 3, 0, 100), ('LFYLeafTh', 3, 0, 100), ('MAXLEAFORDER', 2, 0, 3), ('MAXORDER', 3, 0, 3), ('MAXAXISORDER', 2, 0, 3), ('lfymutant', False, False, True), ('LFY35S', False, False, True), ('ap1mutant', False, False, True), ('AP135S', False, False, True), ('tfl1mutant', False, False, True), ('TFL135S', False, False, True)]
+	context["__scalars__"] = scalars
+	for n,v,mnv,mxv in scalars:
+		context[n] = v
+	import openalea.plantgl.all as pgl
+	SASFunc = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.172558, 1),(0.239777, 0.245624, 1),(0.418668, 0.295074, 1),(0.61541, 0.336172, 1),(1, 0.416758, 1)]) , 
+	    )
+	SASFunc.name = "SASFunc"
+	SASdecrease = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.403202, 1),(0.259016, 0.380821, 1),(0.553929, 0.372436, 1),(0.775013, 0.375816, 1),(1, 0.35605, 1)]) , 
+	    )
+	SASdecrease.name = "SASdecrease"
+	SAS2LFY = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.0471004, 1),(0.127456, 0.180136, 1),(0.332655, 0.305734, 1),(0.555084, 0.331389, 1),(0.739245, 0.503085, 1),(1, 0.539568, 1)]) , 
+	    )
+	SAS2LFY.name = "SAS2LFY"
+	leaf_width = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.1544, 1),(0.130544, 0.108596, 1),(0.272942, 0.31733, 1),(0.30731, 0.902045, 1),(0.633263, 0.89835, 1),(0.965632, 0.818071, 1),(1, 0.198292, 1),(1, 0.0233861, 1)]) , 
+	    )
+	leaf_width.name = "leaf_width"
+	internodelen = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0.00938666, 1),(0.166719, 0.0116702, 1),(0.166719, 0.0123614, 1),(0.195085, 1.00485, 1),(0.199993, 0.988534, 1),(0.800502, 0.989881, 1),(1, 0.989703, 1)]) , 
+	    )
+	internodelen.name = "internodelen"
+	import openalea.plantgl.all as pgl
+	leafshape = pgl.NurbsPatch(	
+	    pgl.Point4Matrix([[(0.00424021, -0.0421157, 0.0379426, 1), (0.000462685, -0.0328747, 0.0378824, 1), (0.059463, 0.00754313, 0.0151824, 1), (0.0408442, 0.0352542, 0.0360307, 1)], [(-0.0468468, -0.078076, 0.350746, 1), (-0.0248441, -0.0145846, 0.360693, 1), (-0.0363768, 0.0344333, 0.314361, 1), (-0.00721214, 0.0403097, 0.304164, 1)], [(0.0152563, -0.263353, 0.285163, 1), (-0.054211, -0.0678734, 0.398789, 1), (-0.0373813, 0.0488064, 0.350543, 1), (0.124392, 0.153129, 0.345825, 1)], [(-0.041435, -0.17079, 0.892088, 1), (-0.103022, -0.149316, 0.658523, 1), (-0.0238535, 0.0983438, 0.661866, 1), (-0.0533067, 0.170166, 0.856167, 1)], [(0.00822778, -0.0743119, 0.946856, 1), (-0.00357924, -0.0407103, 0.948106, 1), (0.0075459, -0.0209496, 0.94316, 1), (0.0296674, 0.000269756, 0.948086, 1)]]) , 
+	    )
+	leafshape.name = "leafshape"
+	panel_0 = ({'active': True, 'visible': True, 'name': 'Functions'},[('Function',SASFunc),('Function',SASdecrease),('Function',SAS2LFY),('Function',leaf_width),('Function',internodelen),('NurbsPatch',leafshape)])
+	import openalea.plantgl.all as pgl
+	leaf_section = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(-0.381608, 0.0446621, 1),(-0.134374, -0.0358736, 1),(0.206508, -0.0260115, 1),(0.433491, 0.0321438, 1)]) , 
+	    )
+	leaf_section.name = "leaf_section"
+	leaf_nerve = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(-0.00769517, 0.0159903, 1),(0.132394, 0.01432, 1),(0.276307, 0.0249185, 1),(0.612995, 0.02553, 1),(1.02202, 0.0376376, 1)]) , 
+	    )
+	leaf_nerve.name = "leaf_nerve"
+	panel_1 = ({'active': True, 'visible': True, 'name': 'Curve2D'},[('Curve2D',leaf_section),('Curve2D',leaf_nerve)])
+	parameterset = [panel_0,panel_1,]
+	context["__functions__"] = [('SASFunc',SASFunc),('SASdecrease',SASdecrease),('SAS2LFY',SAS2LFY),('leaf_width',leaf_width),('internodelen',internodelen),]
+	context["__curves__"] = [('leaf_section',leaf_section),('leaf_nerve',leaf_nerve),]
+	context["__parameterset__"] = parameterset
+	context["SASFunc"] = pgl.QuantisedFunction(SASFunc)
+	context["SASdecrease"] = pgl.QuantisedFunction(SASdecrease)
+	context["SAS2LFY"] = pgl.QuantisedFunction(SAS2LFY)
+	context["leaf_width"] = pgl.QuantisedFunction(leaf_width)
+	context["internodelen"] = pgl.QuantisedFunction(internodelen)
+	context["leafshape"] = leafshape
+	context["leaf_section"] = leaf_section
+	context["leaf_nerve"] = leaf_nerve
+__copyright__ = 'open-source GPL'
+__description__ = '- change the time T to Produce an internode:\n\n- change the time step dt\n\n- change the final internode diameter endiam and length enlen\n'
+__institutes__ = 'INRIA - CIRAD Virtual Plants'
+__authors__ = 'C. Godin, F. Boudon'

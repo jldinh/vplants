@@ -1,0 +1,1893 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Reference guide &mdash; vplants v0.7 documentation</title>
+    <link rel="stylesheet" href="../_static/openalea.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.7',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../_static/oaicon.ico"/>
+    <link rel="top" title="vplants v0.7 documentation" href="../index.html" />
+    <link rel="prev" title="User guide" href="manual.html" /> 
+  </head>
+  <body>
+<div style="background-color: white; text-align: left; padding: 10px 10px 15px 15px">
+</div>
+
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="manual.html" title="User guide"
+             accesskey="P">previous</a> |</li>
+
+
+<li><a href="../../../../../../openalea/doc/_build/html/index.html"> Main home </a>  |&nbsp;</li>
+<li><a href="../../../../../../openalea/doc/_build/html/vplants.html"> vplants packages </a> |&nbsp;</li><li><a href="../contents.html"> Documentation </a> &raquo;</li> 
+      </ul>
+    </div>
+
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../contents.html">
+              <img class="logo" src="../_static/wiki_logo_openalea.png" alt="Logo"/>
+            </a></p>
+            <h3><a href="../contents.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">Reference guide</a><ul>
+<li><a class="reference external" href="#module-openalea.celltissue.config"><tt class="docutils literal"><span class="pre">openalea.celltissue.config</span></tt> module</a></li>
+<li><a class="reference external" href="#module-openalea.celltissue.serial"><tt class="docutils literal"><span class="pre">openalea.celltissue.serial</span></tt> module</a></li>
+<li><a class="reference external" href="#module-openalea.celltissue.tissue"><tt class="docutils literal"><span class="pre">openalea.celltissue.tissue</span></tt> module</a></li>
+<li><a class="reference external" href="#module-openalea.celltissue.tissuedb"><tt class="docutils literal"><span class="pre">openalea.celltissue.tissuedb</span></tt> module</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="manual.html"
+                                  title="previous chapter">User guide</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="../_sources/user/autosum.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="../search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="reference-guide">
+<span id="celltissue-reference"></span><h1><a class="toc-backref" href="#id3">Reference guide</a><a class="headerlink" href="#reference-guide" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference internal" href="#reference-guide" id="id3">Reference guide</a><ul>
+<li><a class="reference internal" href="#module-openalea.celltissue.config" id="id4"><tt class="xref docutils literal"><span class="pre">openalea.celltissue.config</span></tt> module</a></li>
+<li><a class="reference internal" href="#module-openalea.celltissue.serial" id="id5"><tt class="xref docutils literal"><span class="pre">openalea.celltissue.serial</span></tt> module</a></li>
+<li><a class="reference internal" href="#module-openalea.celltissue.tissue" id="id6"><tt class="xref docutils literal"><span class="pre">openalea.celltissue.tissue</span></tt> module</a></li>
+<li><a class="reference internal" href="#module-openalea.celltissue.tissuedb" id="id7"><tt class="xref docutils literal"><span class="pre">openalea.celltissue.tissuedb</span></tt> module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="module-openalea.celltissue.config">
+<h2><a class="toc-backref" href="#id4"><tt class="xref docutils literal"><span class="pre">openalea.celltissue.config</span></tt> module</a><a class="headerlink" href="#module-openalea.celltissue.config" title="Permalink to this headline">¶</a></h2>
+<p>Download the source file <a href="../_downloads/config.py"><strong class="xref">../../src/celltissue/config.py</strong></a>.</p>
+<p>This module defines a Config object to store informations in a nice way</p>
+<dl class="class">
+<dt id="openalea.celltissue.config.Config">
+<em class="property">class </em><tt class="descname">Config</tt><big>(</big><em>name</em>, <em>items=</em><span class="optional">[</span><span class="optional">]</span>, <em>info=''</em><big>)</big><a class="headerlink" href="#openalea.celltissue.config.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.6)" class="reference external" href="http://docs.python.org/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<p>Simple class to manage config files</p>
+<p>Allow to access all properties defined into a python
+file using the dot operator.</p>
+<p>Constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><cite>name</cite> (str) - name of this config</p>
+</li>
+<li><dl class="first docutils">
+<dt><cite>items</cite> (list of <a title="openalea.celltissue.config.ConfigItem" class="reference internal" href="#openalea.celltissue.config.ConfigItem"><tt class="xref docutils literal"><span class="pre">ConfigItem</span></tt></a>) - </dt>
+<dd><p class="first last">items stored in this configuration</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>info</cite> (str) - description of this</dt>
+<dd><p class="first last">configuration</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="openalea.celltissue.config.Config.add_item">
+<tt class="descname">add_item</tt><big>(</big><em>item</em>, <em>section=None</em><big>)</big><a class="headerlink" href="#openalea.celltissue.config.Config.add_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new item to this configuration</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><cite>item</cite> (<a title="openalea.celltissue.config.ConfigItem" class="reference internal" href="#openalea.celltissue.config.ConfigItem"><tt class="xref docutils literal"><span class="pre">ConfigItem</span></tt></a>) - item to add</p>
+</li>
+<li><dl class="first docutils">
+<dt><cite>section</cite> (int) - index of section in which</dt>
+<dd><p class="first last">to add the item. Default is None, the item
+is stored in the root of this configuration</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.config.Config.add_section">
+<tt class="descname">add_section</tt><big>(</big><em>section</em><big>)</big><a class="headerlink" href="#openalea.celltissue.config.Config.add_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new section</p>
+<p>Section help to group items
+into logical entities.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>section</cite> (<tt class="xref docutils literal"><span class="pre">Section</span></tt>) - the</dt>
+<dd><p class="first last">section to add</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return:</th><td class="field-body"><p class="first">index of the section</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="openalea.celltissue.config.ConfigFile">
+<em class="property">class </em><tt class="descname">ConfigFile</tt><big>(</big><em>config=None</em><big>)</big><a class="headerlink" href="#openalea.celltissue.config.ConfigFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.6)" class="reference external" href="http://docs.python.org/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<p>Read and write configuration files in xml</p>
+<p>Constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><cite>config</cite> (<a href="#id1"><span class="problematic" id="id2">:cass:`Config`</span></a>) - configuration</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="openalea.celltissue.config.ConfigFile.load">
+<tt class="descname">load</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#openalea.celltissue.config.ConfigFile.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load a configuration object from
+its string representation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>data</cite> (str) - xml representation</dt>
+<dd><p class="first last">of a configuration</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.config.ConfigFile.read">
+<tt class="descname">read</tt><big>(</big><em>data</em><big>)</big><a class="headerlink" href="#openalea.celltissue.config.ConfigFile.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and return a configuration
+initialiased with the given xml
+representation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>data</cite> (str) - xml representation</dt>
+<dd><p class="first last">of a configuration</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last"><a title="openalea.celltissue.config.Config" class="reference internal" href="#openalea.celltissue.config.Config"><tt class="xref docutils literal"><span class="pre">Config</span></tt></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.config.ConfigFile.save">
+<tt class="descname">save</tt><big>(</big><big>)</big><a class="headerlink" href="#openalea.celltissue.config.ConfigFile.save" title="Permalink to this definition">¶</a></dt>
+<dd>Return a string representation
+of the configuration object.</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="openalea.celltissue.config.ConfigFormat">
+<em class="property">class </em><tt class="descname">ConfigFormat</tt><big>(</big><em>context</em>, <em>config=None</em><big>)</big><a class="headerlink" href="#openalea.celltissue.config.ConfigFormat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.6)" class="reference external" href="http://docs.python.org/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<p>Simple class to help creating configuration files</p>
+<p>Constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><cite>context</cite> (dict) - local python env</p>
+</li>
+<li><dl class="first docutils">
+<dt><cite>config</cite> (<a title="openalea.celltissue.config.Config" class="reference internal" href="#openalea.celltissue.config.Config"><tt class="xref docutils literal"><span class="pre">Config</span></tt></a>) - configuration</dt>
+<dd><p class="first last">in which to store elements. Default is
+None, config will be created.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="openalea.celltissue.config.ConfigFormat.add">
+<tt class="descname">add</tt><big>(</big><em>name</em>, <em>unit=''</em>, <em>info=''</em><big>)</big><a class="headerlink" href="#openalea.celltissue.config.ConfigFormat.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new item in the current section</p>
+<p>Create the item using the provided infos
+and set the value of this item according
+to the value of the element with name <cite>name</cite>
+in the context provided in the constructor.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><cite>name</cite> (str) - name of the item</li>
+<li><cite>unit</cite> (str) - unit description</li>
+<li><cite>info</cite> (str) - description of the item</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a title="openalea.celltissue.config.Config.add_item" class="reference internal" href="#openalea.celltissue.config.Config.add_item"><tt class="xref docutils literal"><span class="pre">Config.add_item()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.config.ConfigFormat.add_item">
+<tt class="descname">add_item</tt><big>(</big><em>item</em><big>)</big><a class="headerlink" href="#openalea.celltissue.config.ConfigFormat.add_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an item to the current section</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><cite>item</cite> (<a title="openalea.celltissue.config.ConfigItem" class="reference internal" href="#openalea.celltissue.config.ConfigItem"><tt class="xref docutils literal"><span class="pre">ConfigItem</span></tt></a>) - item to add</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a title="openalea.celltissue.config.Config.add_item" class="reference internal" href="#openalea.celltissue.config.Config.add_item"><tt class="xref docutils literal"><span class="pre">Config.add_item()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.config.ConfigFormat.add_section">
+<tt class="descname">add_section</tt><big>(</big><em>title</em>, <em>info=''</em><big>)</big><a class="headerlink" href="#openalea.celltissue.config.ConfigFormat.add_section" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a section to the configuration</p>
+<p>The newly created section will become
+the current section in which further
+items will be added.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><cite>title</cite> (str) - name of the section</p>
+</li>
+<li><dl class="first docutils">
+<dt><cite>info</cite> ((str) - description of the</dt>
+<dd><p class="first last">section</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a title="openalea.celltissue.config.Config.add_section" class="reference internal" href="#openalea.celltissue.config.Config.add_section"><tt class="xref docutils literal"><span class="pre">Config.add_section()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.config.ConfigFormat.config">
+<tt class="descname">config</tt><big>(</big><big>)</big><a class="headerlink" href="#openalea.celltissue.config.ConfigFormat.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the constructed configuration</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><a title="openalea.celltissue.config.Config" class="reference internal" href="#openalea.celltissue.config.Config"><tt class="xref docutils literal"><span class="pre">Config</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="openalea.celltissue.config.ConfigItem">
+<em class="property">class </em><tt class="descname">ConfigItem</tt><big>(</big><em>name</em>, <em>value</em>, <em>unit=''</em>, <em>info=''</em><big>)</big><a class="headerlink" href="#openalea.celltissue.config.ConfigItem" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.6)" class="reference external" href="http://docs.python.org/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<p>Associate a value with a unit</p>
+<p>Constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><cite>name</cite> (str) - name of this item</p>
+</li>
+<li><p class="first"><cite>value</cite> (any) - actual value</p>
+</li>
+<li><dl class="first docutils">
+<dt><cite>unit</cite> (str) - string description</dt>
+<dd><p class="first last">of the unit (e.g. m, m.s-1,...)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>info</cite> (str) - description of this</dt>
+<dd><p class="first last">item</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-openalea.celltissue.serial">
+<h2><a class="toc-backref" href="#id5"><tt class="xref docutils literal"><span class="pre">openalea.celltissue.serial</span></tt> module</a><a class="headerlink" href="#module-openalea.celltissue.serial" title="Permalink to this headline">¶</a></h2>
+<p>Download the source file <a href="../_downloads/serial.py"><strong class="xref">../../src/celltissue/serial.py</strong></a>.</p>
+<p>This module defines functions to serialize a tissue</p>
+<dl class="class">
+<dt id="openalea.celltissue.serial.TissueFile">
+<em class="property">class </em><tt class="descname">TissueFile</tt><big>(</big><em>filename</em>, <em>mode='r'</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.6)" class="reference external" href="http://docs.python.org/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<p>Object used to serialize a tissue</p>
+<p>Constructor</p>
+<p>Create a tissue file that will be stored
+in a file called filename.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><dl class="first docutils">
+<dt><cite>filename</cite> (str) - name of the file in</dt>
+<dd><p class="first last">which to store or read informations</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>mode</cite> (str) - either &#8216;r&#8217; to read or</dt>
+<dd><p class="first last">&#8216;w&#8217; to write.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Do not create this object directly,
+use <a title="openalea.celltissue.serial.topen" class="reference internal" href="#openalea.celltissue.serial.topen"><tt class="xref docutils literal"><span class="pre">topen()</span></tt></a> instead.</p>
+</div>
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.chmod">
+<tt class="descname">chmod</tt><big>(</big><em>filename</em>, <em>mod=420</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.chmod" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change file permissions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><cite>filename</cite> (str) - name of the file
+whose permissions have to be modified</p>
+</li>
+<li><dl class="first docutils">
+<dt><cite>mod</cite> (int) - numerical description</dt>
+<dd><p class="first last">of the permission (linux type)</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.close" title="Permalink to this definition">¶</a></dt>
+<dd>Write everything inside the file
+and close it.</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.configs">
+<tt class="descname">configs</tt><big>(</big><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.configs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator on the name of all configurations
+stored in this archive.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body">iter of str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.external_files">
+<tt class="descname">external_files</tt><big>(</big><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.external_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator on the name of all external files
+stored in this archive.</p>
+<dl class="docutils">
+<dt>External file means that the file is:</dt>
+<dd><ul class="first last simple">
+<li>not a tissue,</li>
+<li>not a property,</li>
+<li>not a config file.</li>
+</ul>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body">iter of str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.filenames">
+<tt class="descname">filenames</tt><big>(</big><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.filenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of all files currently in the archive</p>
+<p>Iterator on all name of files actually stored
+in this tissuefile object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.properties">
+<tt class="descname">properties</tt><big>(</big><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.properties" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator on the name of all properties
+stored in this archive.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body">iter of str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.read">
+<tt class="descname">read</tt><big>(</big><em>name=None</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Magic function to read either
+the tissue if name is None or a
+property if name is given</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>name</cite> (str) - if None read the tissue</dt>
+<dd><ul class="first last simple">
+<li>else read property</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return:</th><td class="field-body"><p class="first">tissue or property, description</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last"><tt class="xref docutils literal"><span class="pre">Tissue</span></tt> or dict,str</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">- <a title="openalea.celltissue.serial.TissueFile.read_tissue" class="reference internal" href="#openalea.celltissue.serial.TissueFile.read_tissue"><tt class="xref docutils literal"><span class="pre">TissueFile.read_tissue()</span></tt></a>
+- <a title="openalea.celltissue.serial.TissueFile.read_property" class="reference internal" href="#openalea.celltissue.serial.TissueFile.read_property"><tt class="xref docutils literal"><span class="pre">TissueFile.read_property()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.read_config">
+<tt class="descname">read_config</tt><big>(</big><em>config_name</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.read_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a configuration stored in this archive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>config_name</cite> (str) - name of the configuration</dt>
+<dd><p class="first last">to read</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last"><tt class="xref docutils literal"><span class="pre">Config</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.read_dict">
+<tt class="descname">read_dict</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.read_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read previously stored dict</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><cite>filename</cite> (str) - file to read</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return:</th><td class="field-body"><p class="first">data and description</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">dict,str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.read_file">
+<tt class="descname">read_file</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.read_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a file in the archive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>filename</cite> (str) - name of the</dt>
+<dd><p class="first last">file to read</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return:</th><td class="field-body"><p class="first">a tuple:
+- data contained in the file
+- textual description of the data</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">str,str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.read_property">
+<tt class="descname">read_property</tt><big>(</big><em>property_name</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.read_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a previously stored property</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>property_name</cite> (str) - name of the</dt>
+<dd><p class="first last">property to read</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return:</th><td class="field-body"><p class="first">property and description</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">dict,str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.read_tissue">
+<tt class="descname">read_tissue</tt><big>(</big><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.read_tissue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the tissue structure stored in
+the archive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Return:</th><td class="field-body">tissue and description</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><tt class="xref docutils literal"><span class="pre">Tissue</span></tt>,str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.remove_file">
+<tt class="descname">remove_file</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.remove_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a file from the tissue archive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><dl class="first docutils">
+<dt><cite>filename</cite> (str) - name of the file to</dt>
+<dd><p class="first last">remove</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.set_compression">
+<tt class="descname">set_compression</tt><big>(</big><em>filename</em>, <em>comp=8</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.set_compression" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the type of compression of a file in the archive</p>
+<p>Default is ZIP_DEFLATED. Use this function if you
+need to change it.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.set_time">
+<tt class="descname">set_time</tt><big>(</big><em>filename</em>, <em>datetime=None</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.set_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Change the time of a stored file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><dl class="first docutils">
+<dt><cite>filename</cite> (str) - name of the file</dt>
+<dd><p class="first last">whose date has to be modified</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>datetime</cite> (int,int,int,int,int,int) - new associated time</dt>
+<dd><p class="first last">in the form (year,month,day,hour,min,sec). Default is None,
+the function will then use the actual localtime.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.write">
+<tt class="descname">write</tt><big>(</big><em>obj</em>, <em>name=None</em>, <em>description=''</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Magic function to store either a tissue
+or a property in the archive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><dl class="first docutils">
+<dt><cite>obj</cite> (<tt class="xref docutils literal"><span class="pre">Tissue</span></tt> or dict) - object</dt>
+<dd><p class="first last">to store</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>name</cite> (str) - name to use to store the object</dt>
+<dd><p class="first last">if None, assume obj is a tissue
+else assume obj is a property</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>description</cite> (str) - textual description</dt>
+<dd><p class="first last">of the object</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">- <a title="openalea.celltissue.serial.TissueFile.write_tissue" class="reference internal" href="#openalea.celltissue.serial.TissueFile.write_tissue"><tt class="xref docutils literal"><span class="pre">TissueFile.write_tissue()</span></tt></a>
+- <a title="openalea.celltissue.serial.TissueFile.write_property" class="reference internal" href="#openalea.celltissue.serial.TissueFile.write_property"><tt class="xref docutils literal"><span class="pre">TissueFile.write_property()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.write_config">
+<tt class="descname">write_config</tt><big>(</big><em>config</em>, <em>config_name</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.write_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store a configuration in the archive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><dl class="first docutils">
+<dt><cite>config</cite> (:class:Config) - configuration</dt>
+<dd><p class="first last">to store</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>config_name</cite> (str) - name to use to retrieve</dt>
+<dd><p class="first last">the configuration later</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.write_dict">
+<tt class="descname">write_dict</tt><big>(</big><em>d</em>, <em>filename</em>, <em>description=''</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.write_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store a dictionary in the archive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><cite>d</cite> (dict) - the dictionary that will be pickled</p>
+</li>
+<li><dl class="first docutils">
+<dt><cite>filename</cite> (str) - name of the file to use</dt>
+<dd><p class="first last">to later retrieve this info</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>description</cite> (str) - textual description</dt>
+<dd><p class="first last">of the data</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.write_file">
+<tt class="descname">write_file</tt><big>(</big><em>data</em>, <em>filename</em>, <em>description=''</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.write_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a file into the archive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><cite>data</cite> (str) - data to write</p>
+</li>
+<li><dl class="first docutils">
+<dt><cite>filename</cite> (str) - name of the</dt>
+<dd><p class="first last">file in which to store data</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>description</cite> (str) - textual</dt>
+<dd><p class="first last">description of the data</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.write_property">
+<tt class="descname">write_property</tt><big>(</big><em>prop</em>, <em>property_name</em>, <em>description=''</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.write_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store a property in the archive</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><p class="first"><cite>prop</cite> (dict) - the property that will be pickled</p>
+</li>
+<li><dl class="first docutils">
+<dt><cite>property_name</cite> (str) - name of the file to use</dt>
+<dd><p class="first last">to later retrieve this info</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>description</cite> (str) - textual description</dt>
+<dd><p class="first last">of the property</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.serial.TissueFile.write_tissue">
+<tt class="descname">write_tissue</tt><big>(</big><em>tissue</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.TissueFile.write_tissue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store a tissue in the archive</p>
+<p>Only one tissue can be stored, so there is no
+need to provide a name to later retrieve the
+tissue.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><cite>tissue</cite> (<tt class="xref docutils literal"><span class="pre">Tissue</span></tt>) - tissue to store</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="openalea.celltissue.serial.topen">
+<tt class="descname">topen</tt><big>(</big><em>filename</em>, <em>mode='r'</em><big>)</big><a class="headerlink" href="#openalea.celltissue.serial.topen" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a tissue file</p>
+<p>Store or read informations in
+a file depending on the mode.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><p class="first"><cite>filename</cite> (str) - name of the file</p>
+</li>
+<li><dl class="first docutils">
+<dt><cite>mode</cite> (str) - either &#8216;r&#8217; to read or</dt>
+<dd><p class="first last">&#8216;w&#8217; to store informations</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last"><a title="openalea.celltissue.serial.TissueFile" class="reference internal" href="#openalea.celltissue.serial.TissueFile"><tt class="xref docutils literal"><span class="pre">TissueFile</span></tt></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Rather use this instead of the
+constructor of <a title="openalea.celltissue.serial.TissueFile" class="reference internal" href="#openalea.celltissue.serial.TissueFile"><tt class="xref docutils literal"><span class="pre">TissueFile</span></tt></a></p>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-openalea.celltissue.tissue">
+<h2><a class="toc-backref" href="#id6"><tt class="xref docutils literal"><span class="pre">openalea.celltissue.tissue</span></tt> module</a><a class="headerlink" href="#module-openalea.celltissue.tissue" title="Permalink to this headline">¶</a></h2>
+<p>Download the source file <a href="../_downloads/tissue.py"><strong class="xref">../../src/celltissue/tissue.py</strong></a>.</p>
+<p>This module defines the main Tissue object</p>
+<dl class="exception">
+<dt id="openalea.celltissue.tissue.InvalidElement">
+<em class="property">exception </em><tt class="descname">InvalidElement</tt><a class="headerlink" href="#openalea.celltissue.tissue.InvalidElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="openalea.celltissue.tissue.TissueError" class="reference internal" href="#openalea.celltissue.tissue.TissueError"><tt class="xref docutils literal"><span class="pre">openalea.celltissue.tissue.TissueError</span></tt></a>, <a title="(in Python v2.6)" class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.KeyError"><tt class="xref docutils literal"><span class="pre">exceptions.KeyError</span></tt></a></p>
+<p>Raised when a wrong element id has been provided</p>
+<dl class="attribute">
+<dt id="openalea.celltissue.tissue.InvalidElement.args">
+<tt class="descname">args</tt><a class="headerlink" href="#openalea.celltissue.tissue.InvalidElement.args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="openalea.celltissue.tissue.InvalidElement.message">
+<tt class="descname">message</tt><a class="headerlink" href="#openalea.celltissue.tissue.InvalidElement.message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="openalea.celltissue.tissue.InvalidElementType">
+<em class="property">exception </em><tt class="descname">InvalidElementType</tt><a class="headerlink" href="#openalea.celltissue.tissue.InvalidElementType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="openalea.celltissue.tissue.TissueError" class="reference internal" href="#openalea.celltissue.tissue.TissueError"><tt class="xref docutils literal"><span class="pre">openalea.celltissue.tissue.TissueError</span></tt></a>, <a title="(in Python v2.6)" class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.KeyError"><tt class="xref docutils literal"><span class="pre">exceptions.KeyError</span></tt></a></p>
+<p>Raised when a wrong element type id has been provided</p>
+<dl class="attribute">
+<dt id="openalea.celltissue.tissue.InvalidElementType.args">
+<tt class="descname">args</tt><a class="headerlink" href="#openalea.celltissue.tissue.InvalidElementType.args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="openalea.celltissue.tissue.InvalidElementType.message">
+<tt class="descname">message</tt><a class="headerlink" href="#openalea.celltissue.tissue.InvalidElementType.message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="openalea.celltissue.tissue.InvalidRelation">
+<em class="property">exception </em><tt class="descname">InvalidRelation</tt><a class="headerlink" href="#openalea.celltissue.tissue.InvalidRelation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="openalea.celltissue.tissue.TissueError" class="reference internal" href="#openalea.celltissue.tissue.TissueError"><tt class="xref docutils literal"><span class="pre">openalea.celltissue.tissue.TissueError</span></tt></a>, <a title="(in Python v2.6)" class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.KeyError"><tt class="xref docutils literal"><span class="pre">exceptions.KeyError</span></tt></a></p>
+<p>Raised when a wrong relation id has been provided</p>
+<dl class="attribute">
+<dt id="openalea.celltissue.tissue.InvalidRelation.args">
+<tt class="descname">args</tt><a class="headerlink" href="#openalea.celltissue.tissue.InvalidRelation.args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="openalea.celltissue.tissue.InvalidRelation.message">
+<tt class="descname">message</tt><a class="headerlink" href="#openalea.celltissue.tissue.InvalidRelation.message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="openalea.celltissue.tissue.Tissue">
+<em class="property">class </em><tt class="descname">Tissue</tt><big>(</big><em>idgenerator='max'</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.6)" class="reference external" href="http://docs.python.org/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<p>Base class for all tissues</p>
+<p>A tissue is a collection of elements
+and a set of links between these elements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Examples:</th><td class="field-body"><div class="first last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tissue</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CELL</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">add_type</span><span class="p">(</span><span class="s">&quot;cell&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">WALL</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">add_type</span><span class="p">(</span><span class="s">&quot;wall&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gid</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">add_relation</span><span class="p">(</span><span class="s">&quot;graph&quot;</span><span class="p">,(</span><span class="n">CELL</span><span class="p">,</span><span class="n">WALL</span><span class="p">)</span> <span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Constructor</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><dl class="first docutils">
+<dt><cite>idgenerator</cite> (str) - specify the type of </dt>
+<dd><p class="first">generator to use to later add new elements 
+in the tissue:</p>
+<blockquote class="last">
+<ul class="simple">
+<li>&#8216;set&#8217; use a set of empty ids</li>
+<li>&#8216;list&#8217; use a list of empty ids</li>
+<li>&#8216;max&#8217; always increase the ids</li>
+</ul>
+</blockquote>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref docutils literal"><span class="pre">openalea.container.IdDict</span></tt>
+to better understand <cite>idgenerator</cite></p>
+</div>
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.add_element">
+<tt class="descname">add_element</tt><big>(</big><em>type_id</em>, <em>elm_id=None</em>, <em>safe=True</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.add_element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new element of the given type in the tissue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><p class="first"><cite>type_id</cite> (type_id) - type of element to add</p>
+</li>
+<li><dl class="first docutils">
+<dt><cite>elm_id</cite> (elm_id) - id to use to store the</dt>
+<dd><p class="first last">element. If None (default), the function
+will create a new id</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>safe</cite> (bool) - if False, allow to overwrite</dt>
+<dd><p class="first last">an existing element else raise an
+InvalidElement if the provided elm_id
+already exists.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return:</th><td class="field-body"><p class="first">id used to store the element</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">elm_id</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>type_id</cite> is of the same type
+than returned by <a title="openalea.celltissue.tissue.Tissue.add_type" class="reference internal" href="#openalea.celltissue.tissue.Tissue.add_type"><tt class="xref docutils literal"><span class="pre">Tissue.add_type()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.add_relation">
+<tt class="descname">add_relation</tt><big>(</big><em>relation_type='graph'</em>, <em>involved_types=</em><span class="optional">[</span><span class="optional">]</span>, <em>relation_id=None</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.add_relation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a relation between different type of elements</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>relation_type</cite> (str) - a textual description</dt>
+<dd><dl class="first last docutils">
+<dt>of the relation:</dt>
+<dd><ul class="first last simple">
+<li>&#8216;graph&#8217; for a directed graph</li>
+<li>&#8216;mesh&#8217; for a topomesh</li>
+<li>&#8216;relation&#8217; for a bipartite graph</li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>involved_types</cite> (list of type_id) - list the type</dt>
+<dd><p class="first last">of elements that will be involved in the relation.
+If the list contains None, a dummy type will be
+created to be used in this relation.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>relation_id</cite> (relation_id) - provide an id to use</dt>
+<dd><p class="first last">to store the relation. If None (default), an id
+will be created by the function.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return:</th><td class="field-body"><p class="first">id used to store the relation</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first">relation_id</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Examples:</th><td class="field-body"><div class="first highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tissue</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CELL</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">add_type</span><span class="p">(</span><span class="s">&quot;cell&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">WALL</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">add_type</span><span class="p">(</span><span class="s">&quot;wall&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gid</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">add_relation</span><span class="p">(</span><span class="s">&quot;graph&quot;</span><span class="p">,(</span><span class="n">CELL</span><span class="p">,</span><span class="n">WALL</span><span class="p">)</span> <span class="p">)</span>
+</pre></div>
+</div>
+<div class="last highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">Tissue</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">CELL</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">add_type</span><span class="p">(</span><span class="s">&quot;cell&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gid</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">add_relation</span><span class="p">(</span><span class="s">&quot;graph&quot;</span><span class="p">,(</span><span class="n">CELL</span><span class="p">,</span><span class="bp">None</span><span class="p">)</span> <span class="p">)</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.add_type">
+<tt class="descname">add_type</tt><big>(</big><em>name='elm'</em>, <em>type_id=None</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.add_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new type of elements in the tissue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>name</cite> (str) - provide a textual name</dt>
+<dd><p class="first last">for this type (default is &#8220;elm&#8221;)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>type_id</cite> (type_id) - use this id to store</dt>
+<dd><p class="first last">the new type. If None (default), the
+function will create a new id.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return:</th><td class="field-body"><p class="first">id used to store the new type</p>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">type_id</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.clear">
+<tt class="descname">clear</tt><big>(</big><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.clear" title="Permalink to this definition">¶</a></dt>
+<dd>Clear all elements and relations in the tissue</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.elements">
+<tt class="descname">elements</tt><big>(</big><em>type_id=None</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterator on all elements of tissue
+with a given type.</p>
+<p>if type_id is None, iterate on all elements
+whatever their type.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>type_id</cite> (type_id) - type of elements</dt>
+<dd><p class="first last">to iterate on</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">iter of elm_id</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>type_id</cite> is of the same type
+than returned by <a title="openalea.celltissue.tissue.Tissue.add_type" class="reference internal" href="#openalea.celltissue.tissue.Tissue.add_type"><tt class="xref docutils literal"><span class="pre">Tissue.add_type()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.nb_elements">
+<tt class="descname">nb_elements</tt><big>(</big><em>type_id=None</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.nb_elements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of elements of the given type</p>
+<p>Total number of elements in the tissue 
+if <cite>type_id</cite> is None.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>type_id</cite> (type_id) - type of elements</dt>
+<dd><p class="first last">to take into account</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>type_id</cite> is of the same type
+than returned by <a title="openalea.celltissue.tissue.Tissue.add_type" class="reference internal" href="#openalea.celltissue.tissue.Tissue.add_type"><tt class="xref docutils literal"><span class="pre">Tissue.add_type()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.nb_relations">
+<tt class="descname">nb_relations</tt><big>(</big><em>type_id=None</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.nb_relations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of relation involving the given type</p>
+<p>if <cite>type_id</cite> is None, return the total
+number of relations maintained by the tissue.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>type_id</cite> (type_id) - type of elements</dt>
+<dd><p class="first last">that must be involved in the relation</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>type_id</cite> is of the same type
+than returned by <a title="openalea.celltissue.tissue.Tissue.add_type" class="reference internal" href="#openalea.celltissue.tissue.Tissue.add_type"><tt class="xref docutils literal"><span class="pre">Tissue.add_type()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.relation">
+<tt class="descname">relation</tt><big>(</big><em>relation_id</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.relation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a relation maintained
+by this tissue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>relation_id</cite> (relation_id) - id of</dt>
+<dd><p class="first last">the relation you want to retrieve
+a reference on.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last"><tt class="xref docutils literal"><span class="pre">Relation</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>relation_id</cite> is of the same type
+than returned by <a title="openalea.celltissue.tissue.Tissue.add_relation" class="reference internal" href="#openalea.celltissue.tissue.Tissue.add_relation"><tt class="xref docutils literal"><span class="pre">Tissue.add_relation()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.relations">
+<tt class="descname">relations</tt><big>(</big><em>type_id=None</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.relations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate on all relations involving the given type</p>
+<p>if <cite>type_id</cite> is None, iterate on all
+relations maintained by the tissue.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>type_id</cite> (type_id) - type of elements</dt>
+<dd><p class="first last">that must be involved in the relation</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">iter of relation_id</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<ul class="last simple">
+<li><cite>type_id</cite> is of the same type
+than returned by <a title="openalea.celltissue.tissue.Tissue.add_type" class="reference internal" href="#openalea.celltissue.tissue.Tissue.add_type"><tt class="xref docutils literal"><span class="pre">Tissue.add_type()</span></tt></a></li>
+<li><cite>relation_id</cite> is of the same type
+than returned by <a title="openalea.celltissue.tissue.Tissue.add_relation" class="reference internal" href="#openalea.celltissue.tissue.Tissue.add_relation"><tt class="xref docutils literal"><span class="pre">Tissue.add_relation()</span></tt></a></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.remove_element">
+<tt class="descname">remove_element</tt><big>(</big><em>elm_id</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.remove_element" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove the given element and all links
+in all relations that points to this element</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><cite>elm_id</cite> (elm_id) - id of element to remove</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>elm_id</cite> is of the same type
+than returned by <a title="openalea.celltissue.tissue.Tissue.add_element" class="reference internal" href="#openalea.celltissue.tissue.Tissue.add_element"><tt class="xref docutils literal"><span class="pre">Tissue.add_element()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.set_type_name">
+<tt class="descname">set_type_name</tt><big>(</big><em>type_id</em>, <em>name</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.set_type_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify the name of a given type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><cite>type_id</cite> (type_id) - type of elements</li>
+<li><cite>name</cite> (str) - new name for the type</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>type_id</cite> is of the same type
+than returned by <a title="openalea.celltissue.tissue.Tissue.add_type" class="reference internal" href="#openalea.celltissue.tissue.Tissue.add_type"><tt class="xref docutils literal"><span class="pre">Tissue.add_type()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.type">
+<tt class="descname">type</tt><big>(</big><em>elm_id</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the type_id of the provided element</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>elm_id</cite> (elm_id) - id of element whose type</dt>
+<dd><p class="first last">is unknown</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">type_id</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>type_id</cite> is of the same type
+than returned by <a title="openalea.celltissue.tissue.Tissue.add_type" class="reference internal" href="#openalea.celltissue.tissue.Tissue.add_type"><tt class="xref docutils literal"><span class="pre">Tissue.add_type()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.type_name">
+<tt class="descname">type_name</tt><big>(</big><em>type_id</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.type_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the provided name for this type</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><cite>type_id</cite> (type_id) - type of elements</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>type_id</cite> is of the same type
+than returned by <a title="openalea.celltissue.tissue.Tissue.add_type" class="reference internal" href="#openalea.celltissue.tissue.Tissue.add_type"><tt class="xref docutils literal"><span class="pre">Tissue.add_type()</span></tt></a></p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissue.Tissue.types">
+<tt class="descname">types</tt><big>(</big><big>)</big><a class="headerlink" href="#openalea.celltissue.tissue.Tissue.types" title="Permalink to this definition">¶</a></dt>
+<dd><p>Iterate on all types in this tissue</p>
+<p>:Returns Type : iter of type_id</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><cite>type_id</cite> is of the same type
+than returned by <a title="openalea.celltissue.tissue.Tissue.add_type" class="reference internal" href="#openalea.celltissue.tissue.Tissue.add_type"><tt class="xref docutils literal"><span class="pre">Tissue.add_type()</span></tt></a></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="openalea.celltissue.tissue.TissueError">
+<em class="property">exception </em><tt class="descname">TissueError</tt><a class="headerlink" href="#openalea.celltissue.tissue.TissueError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.6)" class="reference external" href="http://docs.python.org/library/exceptions.html#exceptions.Exception"><tt class="xref docutils literal"><span class="pre">exceptions.Exception</span></tt></a></p>
+<p>Base class of all tissue exceptions</p>
+<dl class="attribute">
+<dt id="openalea.celltissue.tissue.TissueError.args">
+<tt class="descname">args</tt><a class="headerlink" href="#openalea.celltissue.tissue.TissueError.args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="openalea.celltissue.tissue.TissueError.message">
+<tt class="descname">message</tt><a class="headerlink" href="#openalea.celltissue.tissue.TissueError.message" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-openalea.celltissue.tissuedb">
+<h2><a class="toc-backref" href="#id7"><tt class="xref docutils literal"><span class="pre">openalea.celltissue.tissuedb</span></tt> module</a><a class="headerlink" href="#module-openalea.celltissue.tissuedb" title="Permalink to this headline">¶</a></h2>
+<p>Download the source file <a href="../_downloads/tissuedb.py"><strong class="xref">../../src/celltissue/tissuedb.py</strong></a>.</p>
+<p>Defines a database to store tissue and properties</p>
+<dl class="class">
+<dt id="openalea.celltissue.tissuedb.TissueDB">
+<em class="property">class </em><tt class="descname">TissueDB</tt><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a title="(in Python v2.6)" class="reference external" href="http://docs.python.org/library/functions.html#object"><tt class="xref docutils literal"><span class="pre">object</span></tt></a></p>
+<p>A simple container to maintain a tissue with a set
+of properties.</p>
+<p>Constructor</p>
+<p>Construct a new empty TissueDB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="openalea.celltissue.tissuedb.TissueDB.description">
+<tt class="descname">description</tt><big>(</big><em>propname</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB.description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the description associated
+to a given property.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>propname</cite> (str) - name of the property</dt>
+<dd><p class="first last">which description to retrieve</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissuedb.TissueDB.get_config">
+<tt class="descname">get_config</tt><big>(</big><em>cfgname</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB.get_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access to a given configuration</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><cite>cfgname</cite> (str) - name of the configuration</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last"><tt class="xref docutils literal"><span class="pre">Config</span></tt></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissuedb.TissueDB.get_external_data">
+<tt class="descname">get_external_data</tt><big>(</big><em>name</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB.get_external_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access to data in external format</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><cite>name</cite> (str) - name used to store the data</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">any</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissuedb.TissueDB.get_property">
+<tt class="descname">get_property</tt><big>(</big><em>propname</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB.get_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access to a given property</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>propname</cite> (str) - name of the property</dt>
+<dd><p class="first last">to retrieve</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissuedb.TissueDB.get_topology">
+<tt class="descname">get_topology</tt><big>(</big><em>toponame</em>, <em>cfg='config'</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB.get_topology" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access to a given topology</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first">
+<li><dl class="first docutils">
+<dt><cite>toponame</cite> (str) -name of the topology</dt>
+<dd><p class="first last">as defined in the configuration file</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>cfg</cite> (str) - name of the configuration</dt>
+<dd><p class="first last">file to use</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><p class="first last">:class:Relation</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissuedb.TissueDB.read">
+<tt class="descname">read</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fill this db with info from filename</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><dl class="first docutils">
+<dt><cite>filename</cite> (str) - path to the file</dt>
+<dd><p class="first last">in which informations are stored</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissuedb.TissueDB.set_config">
+<tt class="descname">set_config</tt><big>(</big><em>cfgname</em>, <em>cfg</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB.set_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store a configuration in this db</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><dl class="first docutils">
+<dt><cite>cfgname</cite> (str) - name used to store</dt>
+<dd><p class="first last">the configuration</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt><cite>cfg</cite> (<tt class="xref docutils literal"><span class="pre">Config</span></tt>) - configuration</dt>
+<dd><p class="first last">to store</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissuedb.TissueDB.set_description">
+<tt class="descname">set_description</tt><big>(</big><em>propname</em>, <em>descr</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB.set_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the description associated
+to a given property.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><cite>propname</cite> (str) - name of the property</li>
+<li><cite>descr</cite> (str) - textual description</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissuedb.TissueDB.set_external_data">
+<tt class="descname">set_external_data</tt><big>(</big><em>name</em>, <em>data</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB.set_external_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store any data in the tissue</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><cite>name</cite> (str) - name used to store the data</li>
+<li><cite>data</cite> (any) - data to store</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissuedb.TissueDB.set_property">
+<tt class="descname">set_property</tt><big>(</big><em>propname</em>, <em>prop</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB.set_property" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the given property</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><dl class="first docutils">
+<dt><cite>propname</cite> (str) - name used to store</dt>
+<dd><p class="first last">the property</p>
+</dd>
+</dl>
+</li>
+<li><p class="first"><cite>prop</cite> (dict) - property to store</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissuedb.TissueDB.set_tissue">
+<tt class="descname">set_tissue</tt><big>(</big><em>tissue</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB.set_tissue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the tissue in this db</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><cite>tissue</cite> (<tt class="xref docutils literal"><span class="pre">Tissue</span></tt>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissuedb.TissueDB.tissue">
+<tt class="descname">tissue</tt><big>(</big><big>)</big><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB.tissue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Access to raw tissue structure</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Returns type:</th><td class="field-body"><tt class="xref docutils literal"><span class="pre">Tissue</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="openalea.celltissue.tissuedb.TissueDB.write">
+<tt class="descname">write</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#openalea.celltissue.tissuedb.TissueDB.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write this db into a file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last">
+<li><dl class="first docutils">
+<dt><cite>filename</cite> (str) - path to the file</dt>
+<dd><p class="first last">in which informations will be stored</p>
+</dd>
+</dl>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="manual.html" title="User guide"
+             >previous</a> |</li>
+
+
+<li><a href="../../../../../../openalea/doc/_build/html/index.html"> Main home </a>  |&nbsp;</li>
+<li><a href="../../../../../../openalea/doc/_build/html/vplants.html"> vplants packages </a> |&nbsp;</li><li><a href="../contents.html"> Documentation </a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright None.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.3.
+    </div>
+  </body>
+</html>

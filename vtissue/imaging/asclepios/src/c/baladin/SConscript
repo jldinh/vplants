@@ -1,0 +1,32 @@
+# -*-python-*-
+
+import os
+bn = os.path.basename
+
+Import( "env" )
+
+lib_env = env.Clone()
+
+# Import/Export symbols for windows
+if lib_env['compiler'] == 'mingw':
+    LINKFLAGS=["-enable-stdcall-fixup",
+               "-enable-auto-import",
+               "-enable-runtime-pseudo-reloc",
+               "-s"]
+    lib_env.AppendUnique(LINKFLAGS=LINKFLAGS)
+
+includes= lib_env.ALEAGlob('*.h')
+sources = lib_env.ALEAGlob('*.c')
+
+# Add defines to export symbols on Windows
+#lib_env.AppendUnique(CPPDEFINES=['MESSAGE'])
+#lib_env.AppendUnique(LIBS=[''])
+
+lib_env.Append(LIBS=["basic","io"])
+
+inc= lib_env.ALEAIncludes( "baladin", includes )
+
+lib = lib_env.ALEALibrary( "baladin", 
+                           sources )
+
+#exe = lib_env.ALEAProgram('baladin', ['baladin.c',lib])

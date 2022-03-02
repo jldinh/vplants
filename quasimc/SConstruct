@@ -1,0 +1,34 @@
+# -*-python-*-
+
+import os
+from openalea.sconsx import config, environ
+
+
+ALEASolution = config.ALEASolution
+
+pj = os.path.join
+
+SConsignFile()
+
+options = Variables(['../options.py', 'options.py'], ARGUMENTS)
+options.Add(EnumVariable('QT_VERSION','Qt major version to use','4',allowed_values=('4')))
+
+# Create an environment to access qt option values
+env = Environment(options=options, tools=[])
+
+qt_env = env
+qt_version = int(qt_env['QT_VERSION'])
+
+tools = ['opengl','qt4']
+
+env = ALEASolution(options, tools)
+
+# Set build directory
+prefix = env['build_prefix']
+
+# Build stage
+#comm = SConscript(pj(prefix,"src/cpp/comm/SConscript"), exports="env")
+SConscript(pj(prefix,"src/cpp/SConscript"), exports="env")# comm")
+#SConscript(pj(prefix,"src/wrapper/SConscript"), exports="env")
+
+Default("build")

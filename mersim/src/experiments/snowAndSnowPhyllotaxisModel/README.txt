@@ -1,0 +1,1 @@
+This is examplary Snow and Snow phyllotaxis model realisation.

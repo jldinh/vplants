@@ -1,0 +1,56 @@
+# -*-python-*-
+
+from openalea.sconsx.config import BisonFlex
+
+import os
+bn = os.path.basename
+pj = os.path.join
+
+Import( "env" )
+
+lib_env = env.Clone()
+
+
+# Export/Import symbol for windows platform
+if lib_env['compiler'] == 'mingw':
+    LINKFLAGS=["-enable-stdcall-fixup",
+               "-enable-auto-import",
+               "-enable-runtime-pseudo-reloc",
+               "-s"]
+    lib_env.AppendUnique(LINKFLAGS=LINKFLAGS)
+
+# Enable Qt4 on windows for tool
+if lib_env['compiler'] in ['mingw','msvc']:
+    lib_env.EnableQt4Modules(['QtCore'])
+
+
+includes = lib_env.ALEAGlob('*.h')
+
+#############################################
+# Build the kernel library (aml object model)
+
+sources= Split("""
+readline.c
+set.cpp
+list.cpp
+fnode.cpp
+amobj.cpp
+amobjtable.cpp
+ammodel.cpp
+erroraml.cpp
+global.cpp
+release.cpp
+array.cpp
+kernel_err.cpp
+gnuplot_pipe.cpp
+date.cpp
+""")
+
+bflex = BisonFlex(lib_env, "parseraml.y", "scanneraml.l", prefix="aml")
+sources.extend(bflex)
+
+lib_env.AppendUnique(LIBS=['vptool'])
+
+inc = lib_env.ALEAIncludes("aml", includes)
+lib = lib_env.ALEALibrary("vpamlobj", sources,)
+

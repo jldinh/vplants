@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Komodo Project File - DO NOT EDIT -->
+<project id="199f8207-4406-44b2-a4db-576feb6bdc78" name="sinkModel.kpf" kpf_version="3">
+<file url="file:///home/stymek/src/mersim/trunk/lib/python/tissueSystemVisualisationPlantGL.py" idref="199f8207-4406-44b2-a4db-576feb6bdc78" id="ed2755fd-4871-4c89-aa6c-d9fa30e52947" name="tissueSystemVisualisationPlantGL.py">
+</file>
+<file url="file:///home/stymek/src/mersim/trunk/lib/python/tutorialPlantGLdemo.py" idref="199f8207-4406-44b2-a4db-576feb6bdc78" id="90f68889-96b2-4c9a-b760-377a6e9d2d30" name="tutorialPlantGLdemo.py">
+</file>
+<preference-set idref="199f8207-4406-44b2-a4db-576feb6bdc78">
+  <boolean id="import_live">1</boolean>
+</preference-set>
+</project>

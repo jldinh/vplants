@@ -1,0 +1,17 @@
+# -*-python-*-
+Import( "env" )
+
+env.EnableQt4Modules(['QtCore','QtOpenGL', 'QtGui', 'QtNetwork', 'QtSql', 'QtXml'])
+
+
+# 1. Select and install the headers
+
+includes= env.ALEAGlob('*.h')
+
+env.ALEAIncludes( "fractalysis", includes )
+
+# 2. Call other SConscript files in sub directories
+dirs= env.ALEAGlob( 'SConscript' , dir='*')
+
+SConscript( dirs, exports= { 'env' : env } )
+

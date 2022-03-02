@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <link rel="stylesheet" type="text/css" href="description_files/style.css" />
+  <link rel="stylesheet" type="text/css" href="description_files/SyntaxHighlighter.css" />
+  <title>mass spring</title>
+</head>
+<body>
+<div id="info">
+	<ul>
+	<li> version : 1.0.0 </li>
+	<li> license : Cecill-C </li>
+	<li> authors : Jerome Chopard </li>
+	<li> url : <a href="www.vplants.com/tissue/simulation/mass_spring">www.vplants.com/tissue/simulation/mass_spring</a> </li>
+	<li> institutes : INRIA </li>
+	</ul>
+</div>
+<div id="title">Mass Spring</div>
+<div id="summary">
+This package is an example package to perform a simple mass spring simulation
+</div>
+<div id="dependencies">
+Direct dependencies :
+	<ul>
+	<li svn="1000"><a href="http://matplotlib.sourceforge.net/">matplotlib</a></li>
+	<li svn="6666"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:plantgl:plantgl">plantgl</a></li>
+	<li svn="1000"><a href="http://www-sop.inria.fr/virtualplants/wiki/doku.php?id=software:physics">physics</a></li>
+	</ul>
+</div>
+<div id="description">
+	<div id="general">
+	<h1>Description</h1>
+	This package provide a minimal simulation of mass springs system to understand the mechanical integration process. It simulates a file of springs fixed at one extremity and loaded at the other one.
+	<img src="description_files/spring_representation.png" alt="spring" />
+	</div>
+	<div id="algo">
+	<h1>Algorithms</h1>
+	First, a set of ponctual masses are created and positioned along the Ox axis
+	<textarea name="code" class="python:nogutter:nocontrols">
+	from vplants.plantgl.math import Vector2
+	
+	pos = dict( (i,Vector2(i*l0,0)) for i in xrange(NB+1))
+	weights = dict( (i,1.) for i in xrange(NB+1))
+	</textarea>
+	where NB represent the number of springs in the file and l0 is the length of a spring. Then linear springs are created that connect two neighbor points.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	from openalea.physics.mechanics import LinearSpring2D
+	
+	springs = [LinearSpring2D(i,i+1,K,l0) for i in xrange(NB)]
+	</textarea>
+	where K is a constant representing the stiffness of the spring. Then the integration algorithm is created. It requiers a boundary function that explain how external points interact with the rest of the world.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	from openalea.physics.mechanics import ForwardEuler2D
+	
+	def bound (solver) :
+		solver.set_force(0,0.,0.)
+		solver.set_force(NB,solver.fx(NB)+load,solver.fy(NB))
+	
+	algo = ForwardEuler2D(weights,springs,bound)
+	
+	def deform (*args) :
+		algo.deform(pos,dt_meca,1)
+	</textarea>
+	where "load" is the force exerced on the right most point. "deform" is the function that will actually perform the modification of the positions of points according to mechanics.
+	</div>
+	<div id="exec">
+	<h1>Simulation</h1>
+	Everything is defined in a single file, launch it using :
+	<div class="command">
+	user@computer:$ python -i simu.py
+	</div>
+	The "-i" option is mandatory since you must interact to launch the simulation. To launch one round of simulation (50 steps plus one display) just call the "run" function.
+	<textarea name="code" class="python:nogutter:nocontrols">
+	>>> run()
+	</textarea>
+	A set of curves with the evolution of the strain of each spring will be displayed. Recall the "run" function a set of times to see the evolution of the system. By default the springs reach an equilibrium when their strain is equal to : load/K
+	<img src="description_files/evolution.png" alt="strain evolution" />
+	</div>
+	</div>
+	<div id="exercice">
+	<h1>Exercices</h1>
+	To go further :
+	<ul>
+		<li>try to change the number of springs (parameter NB) to see it's influence on the number of steps requiered to reach equilibrium</li>
+		<li>try to change the stiffness of the springs (parameter K) or the load (parameter load) to see the influence of the time step used to reach equilibrium. If the time step (parameter dt_meca) is too big the simulation can go into the void</li>
+	</ul>
+	</div>
+</div>
+<div id="bugs_disclaimer">
+<h1>Bugs</h1>
+If you experience bugs, feel free to report them on <a href="http://gforge.inria.fr/tracker/?atid=2598&group_id=79&func=browse">gforge</a> or send a mail to the author. Thanks
+</div>
+<div id="files">
+<h1>files</h1>
+<ul>
+	<li><a href="simu.py">simu.py</a> : main simulation file </li>
+	<li>description.html : this file </li>
+	<li>description_files dir : location of external files for this html page </li>
+</ul>
+</div>
+
+<!-- syntax highlighting -->
+<script language="JavaScript" src="description_files/shCore.js" type="text/javascript"></script>
+<script language="JavaScript" src="description_files/shBrushPython.js" type="text/javascript"></script>
+<script language="JavaScript" type="text/javascript">dp.SyntaxHighlighter.HighlightAll('code');</script>
+
+</body>
+</html>

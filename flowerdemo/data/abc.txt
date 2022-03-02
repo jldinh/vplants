@@ -1,0 +1,24 @@
+Le modèle ABC ...
+
+
+Le modèle ABC décrit le contrôle du développement floral par trois classes de gènes, les classes A, B et C. Il fut proposé en 1991 par E. Coen (UK) et E. Meyerowitz (USA). Ces deux biologistes ont déduit ce modèle à partir de l'observation de mutants de ces trois classes de gènes, c'est-à-dire de plantes dans lesquels l'un ou plusieurs de ces gènes est rendu inactif.
+
+Ces mutants présentent en effet des fleurs dans lesquelles l'identité des organes des différents verticilles est modifiée. Le modèle ABC décrit comment l'identité de chaque organe est contrôlée par un ou deux gènes des classes A, B, C, selon la règle :
+- sépales codés par les gènes A
+- pétales codés par les gènes A+B
+- étamines codées par les gènes B+C
+- carpelles codés par les gènes C
+
+De plus les gènes A et C ont un effet l'un sur l'autre : en plus de coder pour la formation des organes, chacun d'entre eux agit pour empêcher l'autre de s'exprimer !
+Les gènes peuvent donc avoir plusieurs fonctions, et se "parler". Dans ce cas, cela permet que les zones où sont exprimés ces deux gènes ne se chevauchent pas.
+
+
+Dans cette démonstration, vous pouvez simuler des mutants de ces trois gènes. 
+
+Afin de mieux comprendre le fonctionnement de ce modèle, un diagramme peut être affiché pour vous montrer où sont exprimés les gènes ABC.
+
+
+
+Vocabulaire :
+- un verticille est un des anneaux d'organes dont est formée la fleur.
+

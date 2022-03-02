@@ -1,0 +1,6 @@
+This file can be used to document future development
+
+ * Add more units tests
+ * Delete amlPy import
+ * Use TreeMatching2
+ * Change geometrics parameters merging

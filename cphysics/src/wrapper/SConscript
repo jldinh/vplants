@@ -1,0 +1,24 @@
+# -*-python-*-
+
+Import("env")
+
+py_dir = '../cphysics'
+
+# Build wrappers as shared libraries
+# First wrapper
+env1 = env.Clone()
+
+sources = ["cphysics_wrap.cpp",
+            "export_spring.cpp",
+            "export_spring_fem.cpp",
+            "export_mass_spring_solver.cpp",
+            "export_chemistry_actor.cpp",
+            "export_chemistry_solver.cpp",]
+target = "_cphysics"
+lib1 = ["cphysics"]
+
+env1.AppendUnique(LIBS=lib1)
+env1.ALEAWrapper(py_dir, target, sources)
+
+
+

@@ -1,0 +1,18 @@
+# -*-python-*-
+
+Import("env")
+
+py_dir = '../vplants/quasimc'
+
+# Build wrappers as shared libraries
+# First wrapper
+env1 = env.Clone()
+
+sources = env1.ALEAGlob('*.cpp')
+target = "_quasimc"
+lib = ["quasimc"]
+
+env1.AppendUnique(LIBS=lib)
+env1.ALEAWrapper(py_dir, target, sources)
+
+

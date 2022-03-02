@@ -1,0 +1,19 @@
+# -*-python-*-
+
+Import( "env" )
+
+py_dir = '../../plantgl/algo'
+
+# Build wrappers as shared libraries
+lib_env=env.Clone()
+
+qt_version = int(lib_env['QT_VERSION'])
+if qt_version == 4:
+    lib_env.EnableQt4Modules( [ 'QtCore', 'QtGui', 'QtOpenGL' ])
+
+sources= lib_env.ALEAGlob( '*.cpp' )
+target= "_pglalgo"
+
+lib_env.AppendUnique(LIBS= ['pglmath','pgltool','pglsg','pglalgo'])
+lib_env.ALEAWrapper( py_dir, target, sources )
+

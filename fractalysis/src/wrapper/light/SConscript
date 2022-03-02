@@ -1,0 +1,17 @@
+# -*-python-*-
+
+Import( "env" )
+
+py_dir = '../../fractalysis/light'
+
+# Build wrappers as shared libraries
+lib_env=env.Clone()
+
+#sources= lib_env.ALEAGlob( '*.cpp' )
+sources= ["msStruct_wrapper.cpp"]
+target= "_light"
+
+lib_env.AppendUnique(LIBS= ['light','pgltool','pglmath','pglsg', 'pglgui', 'pglalgo']) #for qt3 use pglgui3 instead of pglgui
+lib_env.ALEAWrapper( py_dir, target, sources )
+
+

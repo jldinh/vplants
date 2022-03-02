@@ -1,0 +1,230 @@
+from math import sqrt, pi, degrees
+from openalea.plantgl.math import *
+from copy import deepcopy
+
+# Paramaters
+# ##########
+
+# Branches attributes
+# ===================
+
+N = 10               # initial number of segments in the stem
+S_LEN   = 0.1        # in m
+S_DIAM  = 0.01       # in m
+WoodDensity = 1000   # volumic mass of wood = 0.8 kg/L
+YoungModElasticity = 10.**9   # Ex: Mapple = 10000 MPa
+fruit_mass = 0.025
+deltamass = 0.15*fruit_mass
+
+# Simulation parameters
+# =====================
+
+derivlen = 80
+eps = 0.1
+RELAX = 0.8          # relax factor for convergence
+Forward,Backward,Growth=range(3)
+mode = Forward   # can be one of FORWARD, BACKWARD, GROWTH
+
+
+# Gravity model parameters
+# ========================
+
+Gravity = Vector3(0,0,-10.0)  # in N/Kg
+
+
+# Branch segments method
+# ######################
+
+class SegmentData:
+  "data associated with a segment"
+
+  def __init__(self):
+    self.len = S_LEN
+    self.diam = S_DIAM
+    self.H = Vector3(0,1,0) # Head direction of the segment
+    self.cummass = 0 # cumulated mass borne by the distal part of the segment
+    self.cumtorque=Vector3() # cumulated torque due to the segments borne by the distal part of the segment
+
+  def getMass(self):
+    return self.len*pi*(self.diam**2)/4*WoodDensity
+  mass = property(getMass)
+
+  def getMomentOfInertia(self):
+    return pi * self.diam**4 / 64 # for a disc 
+  momentOfInertia = property(getMomentOfInertia)
+
+  def getRigidity(self):
+    return YoungModElasticity * self.momentOfInertia
+  rigidity = property(getRigidity)
+  
+  def __repr__(self):
+    return ''
+    
+# Simulation
+# ##########
+    
+# Simultation mode 
+# ================
+
+def setMode(m):
+  global mode
+  mode = m
+  # print "mode = ", mode
+  if m == Forward : forward()
+  elif m == Backward: backward()
+  elif m == Growth : forward()
+  else: print "UNKNOWN MODE !!! "
+
+def isFORWARD(): 
+  global mode
+  return mode == Forward
+  
+def isBACKWARD(): 
+  global mode
+  return mode == Backward
+
+def isGROWTH(): 
+  global mode
+  return mode == Growth
+
+def Start():
+  setMode(Growth)
+  global derivationstep
+  derivationstep = 0
+
+def StartEach ():
+  global error 
+  global derivationstep
+  derivationstep += 1
+  error = 0
+
+def EndEach ():
+  global error, mode, eps
+  if mode == Growth:
+    setMode(Backward)
+  elif mode == Backward : 
+    setMode(Forward)
+  elif mode == Forward and error >= eps : 
+    print ">>> mean error = ", error
+    setMode(Backward)
+  elif mode == Forward: 
+    print "EQUILIBRIUM REACHED: mean error = ", error, " < ", eps
+    setMode(Growth)
+    
+
+# Simulation: Physics
+# ===================
+
+def update_physic(segment, segment_next): #S(a) >> S(b)
+  segment.cummass = segment.mass + segment_next.cummass # cummass update (case segment mass growing)
+  segvec =  segment_next.H * segment_next.len
+  weightvec =  Gravity * segment_next.cummass
+  segment.cumtorque = segment_next.cumtorque + (segvec ^ weightvec)
+
+def apply_torque(segment, segment_previous):#S(c) << S(a)
+  global error
+  curvature = segment_previous.cumtorque * (1/segment.rigidity) 
+  rot = Matrix3.axisRotation((1,0,0),curvature[0]* segment.len) #in the plane
+  newH = rot * segment_previous.H
+  diff = newH - segment.H
+  error += norm(diff)
+  #print(error)
+  v = segment.H + diff * RELAX
+  segment.H = v / norm(v)
+
+    
+# L-py generation
+# ###############
+
+# Axioms
+# ======
+
+module Fruit
+
+Axiom: T(SegmentData())B(N)
+derivation length: derivlen
+
+# Rapid Information Transfert: Backward and forward computation for flexion
+# =========================================================================
+
+production:
+
+S(a) >> S(b):
+  if isBACKWARD():
+    update_physic(a,b)
+    produce S(a)
+
+T(a) >> S(b):
+  if isBACKWARD():
+    update_physic(a,b)
+    produce T(a)
+
+S(a) >> Fruit(fmass):
+  if isBACKWARD():
+    a.cummass = a.mass +fmass
+    a.cumtorque = Vector3(0,0,0)
+    produce S(a)
+
+S(c) << S(a):
+  if isFORWARD():
+    global error 
+    apply_torque(a,c)
+    produce S(a)
+
+T(c) << S(a):
+  if isFORWARD():
+    global error 
+    apply_torque(a,c)
+    produce S(a)
+    
+# L-system: growing
+# =================
+
+Fruit(b):
+  if isGROWTH():
+    print "GROWTH ------------------ GROWTH"
+    produce Fruit(b+deltamass)
+
+# L-system: production
+# ====================
+
+decomposition:
+maximum depth: 100
+
+B(n) :
+  if n>0:
+    produce S(SegmentData())B(n-1)
+  else: produce Fruit(fruit_mass) 
+
+# display
+# #######
+
+homomorphism:
+
+T(c):
+  produce _(S_DIAM*1.4)F(S_LEN*12)
+
+T(c)<S(a):
+  alpha = degrees(angle(Vector3(0,1,0),a.H,(1,0,0)))
+  produce -(90)+(alpha)f(0.1*a.len)_(a.diam)F(0.9*a.len)
+
+S(c)<S(a) :
+  alpha = degrees(angle(c.H,a.H,(1,0,0)))
+  produce +(alpha)f(0.1*a.len)_(a.diam)F(0.9*a.len)
+
+Fruit(mass):
+    produce ,(3) @O(mass)
+###### INITIALISATION ######
+
+__lpy_code_version__ = 1.1
+
+def __initialiseContext__(context):
+	import openalea.plantgl.all as pgl
+	Color_4 = pgl.Material("Color_4" , ambient = (0,0,50) , diffuse = 3.6 , )
+	Color_4.name = "Color_4"
+	context.turtle.setMaterial(4,Color_4)
+__copyright__ = 'open-source GPL'
+__references__ = '1. Jirasek, C., Prusinkiewicz, P., Moulia, B. Integrating biomechanics into developmental plant models expressed using L-systems. Proc. 3rd Biomechanics conf. Plant biomechanics 2000. P615-624.\n2. Prusinkiewicz, P., Karwowski, R, Lane, B. The L+C modelling language.J. Vos et al. Eds, Springer, p27-42, 2007\n3. Costes et al. MappleT: Simulation of apple tree development using mixed statistical and biomechanical model. FSPM07.'
+__description__ = '- Decrease the Young modulus\n\n- test different values of the relax papameter (including values closed to 1)\n\n- Grow the diameter of the internodes with time'
+__institutes__ = 'INRIA - CIRAD Virtual Plants'
+__authors__ = 'C. Godin, F. Boudon'

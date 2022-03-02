@@ -1,0 +1,9 @@
+# Dressing file for mango
+
+Geometry = ./symbol.geom
+
+#SMBModel Feuille = leaf
+
+Class F = leaf
+
+LeafClass = F

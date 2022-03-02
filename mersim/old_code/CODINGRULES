@@ -1,0 +1,364 @@
+coding rules:
+
+http://jaynes.colorado.edu/PythonGuidelines.html
+
+One-letter variable names should only occur in math functions or as loop iterators with limited scope. Limited scope covers things like for k in keys: print k, where k survives only a line or two. Loop iterators should refer to the variable that they're looping through: for k in keys, i in items, or for key in keys, item in items. If the loop is long or there are several 1-letter variables active in the same scope, rename them.
+
+Use result to store the value that will be returned from a method or function. Use data for input in cases where the function or method acts on arbitrary data (e.g. sequence data, or a list of numbers, etc.) unless a more descriptive name is appropriate.
+
+alignment 	aln 
+archaeal 	arch 
+auxillary 	aux 
+bacterial 	bact 
+citation 	cite 
+current 	curr 
+database 	db 
+dictionary 	dict 
+directory 	dir 
+end of file 	eof 
+eukaryotic 	euk 
+frequency 	freq 
+expected 	exp 
+index 	idx 
+input 	in 
+maximum 	max 
+minimum 	min 
+mitochondrial 	mt 
+number 	num 
+observed 	obs 
+original 	orig 
+output 	out 
+phylogeny 	phylo 
+previous 	prev 
+protein 	prot 
+record 	rec 
+reference 	ref 
+sequence 	seq 
+standard deviation 	stdev 
+statistics 	stats 
+string 	str 
+structure 	struct 
+temporary 	temp 
+taxonomic 	tax 
+variance 	var
+
+Type	Convention	Example
+function	action_with_underscores	find_all
+variable	noun_with_underscores	curr_index
+constant	NOUN_ALL_CAPS	ALLOWED_RNA_PAIRS
+class	MixedCaseNoun	RnaSequence
+public property	MixedCaseNoun	IsPaired
+private property	_noun_with_leading_underscore	_is_updated
+public method	mixedCaseExceptFirstWordVerb	stripDegenerate
+private method	_verb_with_leading_underscore	_check_if_paired
+really private data	__two_leading_underscores	__delegator_object_ref
+parameters that match properties	SameAsProperty	def __init__(data, Alphabet=None)
+factory function	MixedCase	InverseDict
+module	lowercase_with_underscores	unit_test
+global variables	gMixedCaseWithLeadingG	no examples in evo - should be rare!
+
+The first line of each file shoud be #!/usr/bin/env python. This makes it possible to run the file as a script invoking the interpreter implicitly, e.g. in a CGI context. 
+
+The second line should be a comment with the file name. This is a helpful reminder about what file you're in, which can be useful if you have to edit it on a machine with an unfamiliar editor or that does not put a header on the printed version. 
+
+Next should be the docstring with a description and a revision history. If the description is long, the first line should be a short summary that makes sense on its own, separated from the rest by a newline. The revision history should contain a record of when the module was first written, and any changes to the interface and/or algorithms should be documented. Even when we move to CVS, it's useful to have this information captured by automatic tools that produce documentation from docstrings. 
+
+All code, including import statements, should follow the docstring. Otherwise, the docstring will not be recognized by the interpreter, and you will not have access to it in interactive sessions (i.e. through obj.__doc__) or when generating documentation with automated tools. 
+
+Import built-in modules first, followed by third-party modules, followed by any changes to the path and your own modules. Especially, additions to the path and names of your modules are likely to change rapidly: keeping them in one place makes them easier to find. 
+
+Example of module structure: 
+#!/usr/bin/env python
+#file statistics.py
+
+"""Provides NumberList and FrequencyDistribution, classes for statistics.
+
+NumberList holds a sequence of numbers, and defines several statistical
+operations (mean, stdev, etc.) FrequencyDistribution holds a mapping from
+items (not necessarily numbers) to counts, and defines operations such as
+Shannon entropy and frequency normalization.
+
+Revision History
+
+3/2-12-03 Rob Knight: written as part of ADBAnalysis
+4/17/03 Rob Knight: NumberList now subclasses list, and
+FrequencyDistribution subclasses dict. NumberList now delegates stats
+functions to on-the-fly FrequencyDistribution objects.
+4/29/03 Rob Knight: docstrings now follow guidelines. Cleaned up
+subclassing.
+5/7/03 Rob Knight: removed [] default parameter from NumberList
+constructor.
+"""
+#history truncated for brevity in this example -- don't truncate in real code!
+
+from math import sqrt, log, e
+from random import choice, random
+from Utils import indices
+
+class NumberList(list):
+    pass    #much code deleted
+class FrequencyDistribution(dict):
+    pass    #much code deleted
+
+if __name__ == '__main__':    #code to execute if called from command-line
+    pass    #do nothing - code deleted
+#use this either for a simple example of how to use the module,
+#or when the module can meaningfully be called as a script.
+
+
+Use comments starting with #, not strings, inside blocks of code. Python ignores real comments, but must allocate storage for strings (which can be a performance disaster inside an inner loop).
+
+Every line of code must be tested. For scientific work, bugs don't just mean unhappy users who you'll never actually meet: they mean retracted publications and ended careers. It is critical that your code be fully tested before you draw conclusions from results it produces.
+
+==================================================================
+
+It took me a while to get someone still at Yahoo to find the original
+document for me. Here it is, and I've added some comments about the
+motivations behind the conventions. I apologize for its length, but
+this is all really useful stuff.
+
+>                             Python Coding Standards
+>
+>    Authors: David W. Jeske, Brandon C. Long
+>
+>    This document defines the eGroups Python coding conventions moving
+>    forward. It is based on previous standards, but clears up a few areas of
+>    confusion.
+> 
+> Rules
+> 
+>     Naming
+> 
+>      * Don't use acronyms. Spell things ouw when possible. (ex
+>        VoiceChatPage.py, not VCPage.py)
+
+Without compile-time static errors, getting names right becomes much
+more important. Therefore we used long-ish names and quasi-symbol
+completion (available in the Python emacs mode) to help avoid using
+the wrong class/variable/method names.
+
+>      * Global variables should begin with a "g", example: gUserServerPort
+>      * Constants should begin with a "k", example: kYes
+>      * Class names start with a capital letter and capitalize each word.
+>        example: FooBarCom
+> 
+>     General
+> 
+>      * Don't create "double maintaniance", see special section below!
+
+This seems like just good programming practice, but it's much more
+important in Python where forgetting to do step 2 of 5 in adding
+something won't be a compile error.
+
+>      * Don't make extraneous protcols/classes. Do your homework. Find out if
+>        something similar already exists first. One consistant (sub-optimal)
+>        way is better than five perfect ways. Fewer classes is better
+
+>      * Don't generalize too early. Code is easier to read if it only calls
+>        well-known functions or local-functions. If you have found only two
+>        unrelated parts of the system which want to use the same code snippit,
+>        it may be better off leaving that code snippit in both places.
+>           * A code snippit should only be reused if it is in one of the
+>             "library" portions of the system. (i.e. don't import a web-page
+>             to reuse it's code)
+>           * A code snippit should be in a library portion of the system only
+>             if either (a) it is used in many of different places in the
+>             software, (b) the behavior of the different places should
+>             DEFINETLY be coupled (i.e. when you change the shared code it
+>             should change in both places).
+
+While another good general rule, because it's really really hard to
+track dependencies in Python, this becomes much more important for
+code stability.
+
+>      * Don't put code in a class which does not need the class data. (i.e. it
+>        should be a function somewhere!)
+>      * Keep "public" APIs simple. Document them as such. Be sure to document
+>        the _intent_ of the API. If you don't, someone will read the code and
+>        make assumptions based on the current implementation.
+>      * If you change what a functions or method's intent is, CHANGE ITS NAME!
+
+This turned out to be one of the most important rules. It turned into:
+
+       * If you must add required arguments to a function either (a)
+         change it's name, or better still (b) make a new named
+         function and leave the old one.
+
+Even with unit testing, it's really hard to track dependencies like
+this. We would need code coverage tools and exhaustive tests, neither
+of which we had.
+
+>      * In the "new world order" we want one class per file inside a proper
+>        package directory.
+
+We originally had lots of files in a single directory, with each file
+itself being a module. However, one file is just not enough for
+expanding functionality, so we moved to (roughly) one file per class,
+and making different directories for different packages. We tried to
+use the Python "package directory" support but it turned out to be
+somewhat problematic to reorganize. Because there is no static
+compile, hunting down all the places which referenced something from
+its old location was not always easy.
+
+In my more recent Python projects we use a more "c-like" model. We
+have several directories for different functions, but we don't use the
+"package naming", instead we just put all the paths in the
+classpath. This allows us to expand a single file module into many
+files and eventually move it into its own directory without affecting
+any existing code.
+
+>     Lists
+> 
+>      * Lists should always be items of the same type.
+>      * Position information in lists should not matter.
+
+This is really important. In fact, today I would add:
+
+       * Only use tuples locally. Do not pass them around.
+
+Tracking dependencies between the places that use something and the
+places that pack something is hard. This is the same fragility that
+exists in lots of LISP software.
+
+>     Dictionaries
+> 
+>      * Avoid using dictionaries as structures. If you have a pre-defined set
+>        of attributes, use a class and access them like attributes. In other
+>        words, qualifiers for dictionaries should almost always be variables,
+>        not constants. In general, you should probably:
+> 
+>  Do this:      an_object.name
+>  Not this:     a_dict["name"]
+> 
+>  Do this:      a_dict[a_key]
+>  Not this:     value = getattr(an_object,a_key)
+
+This more sensibly works with command completion as well. Using
+strings as symbols is evil.
+
+>     Objects/Classes
+> 
+>      * Private (most) instance variables should start with an underscore.
+
+While this is worded badly, it's trying to say that most instance
+variables should be private and all private variables should start
+with an underscore. (i.e. when in doubt make it private)
+
+>      * All eGroups API methods should use the eGroups naming convention
+>        described below
+>      * Avoid accessing private instance data directly from outside an object
+
+>      * Methods (and functions) should always return items of the same type.
+>        (i.e. do not return a tuple in one case, and a number in another)
+
+This is also really important. This means that we also did NOT ever
+return "None" as a NULL pointer value for a failure case. It's just
+too hard to track down these problems in Python, so we always throw
+custom exceptions for failure cases.
+
+>      * Keyword arguments should always be optional. If the argument is
+>        required, make it a non-keyword argument, and put the argument name
+>        into the method name by using our method naming convention.
+> 
+>     Exceptions
+> 
+>      * Always include the module and class name in an error declaration.
+>      * Avoid try/except blocks for a dictionary, use .has_key() or get(,)
+>        instead.
+>      * ANY time you have an unqualified "except:" clause, you must report the
+>        error with the handleexception module. Like this:
+> 
+>  try:
+>    # do something
+>  except:
+>    import handleexception
+>    handleexception.HandleException()
+
+handleexception was a standard module which grabbed a stack backtrace
+and reported that the error occured. This allowed us to track down
+these "global exceptions" that really shouldn't happen. If something
+happens alot, it should get a custom exception handler.
+
+We also built a really nice tool which cataloged all these exceptions
+which occured on the running code for any process in the website
+service so we could browse through the real exception state and
+arguments.
+
+I would also add:
+
+    * Code should be designed to fail earlier rather than later
+    * Classes should be as "stateless" as possible. To achieve
+      this a class should be usable immediately after construction,
+      and work functions should take optional arguments instead of
+      requiring you to call state-change methods.
+
+We had some troublesome code conceptually similar to this:
+
+    foo = SomeClass()
+    foo.setState_(bar)
+    foo.setOtherState_(baz)
+    foo.doWork()
+
+As the complexity increases, it becomes hard to figure out what you
+must set to make the class "usable", and it was hard to tell the
+difference between what was state of making the class "useful"
+vs. "doing the work". This code above should be:
+
+    foo = SomeClass(bar)        # bar required to make the class "useful"
+    foo.doWork(otherState=baz)  # baz is an optional work paramater
+
+----
+
+The method naming convention below was used for most "public" parts of
+our library api. Along with the simple emacs Python symbol completion,
+this really helped make the APIs easy to use. It is sort of the
+poor-man's dynamic typed version of Intellisense.
+
+> Method Naming
+> 
+>  Public method names should:
+>    1) start with a lower-case letter
+>    2) upper-case the first letter of each word
+>    3) include a description of the required arguments it takes, each
+>       followed by an underscore.
+> 
+>  Here are some examples:
+> 
+>   def charset_(self, o)   ## takes one argument, the charset, in MessagePage.py
+> 
+>   def getPodForGroup_(self,groupname) ## takes one argument, the "Group", in DataCluster.py
+> 
+>   def getSubsForUser_(self,username) ## takes one argument, the "User", in userserv.py
+> 
+> 
+>  This is inspired by the Objective-C "descriptive" method syntax:
+> 
+>   [object method: arg1 withName1: arg2 withName2: arg3];
+> 
+>  Where you get things like:
+> 
+>   [object getPodForGroup: "stevestest" andUser: "jeske@chat.net"]
+> 
+>  Which is a hell of alot more understandable than the C/C++ ish:
+> 
+>   object->getPod("stevestest","jeske@chat.net")
+
+  (i.e. when you can't look up the symbol easily)
+
+>  In the following lisp-esq funtion, there is less strong a
+>  relationship between the name and the arguments:
+> 
+>   object.get-pod-group-user("stevestest","jeske@chat.net")
+> 
+>    (i.e. the above could mean any of:
+> 
+>       object.getPodForGroup_andUser_("stevestest","jeske@chat.net")
+>       object.getUser_inGroup_onPod_("jeske@chat.net","stevestest",1)
+>       object.getGroupsforUser_onPod_("jeske@chat.net",1)
+> 
+>    )
+
+    
+       	       	       	       	       	       	 
+-- 
+David Jeske (N9LCA) + http://www.chat.net/~jeske/ + jeske@chat.net

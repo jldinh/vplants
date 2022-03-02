@@ -1,0 +1,176 @@
+import IFTPhyllotaxisModels
+from openalea.lpy.__lpyfuture__ import *
+from openalea.plantgl.all import *
+from numpy import cos, sin, pi, sum, arange
+from time import time
+import matplotlib.pyplot as plt
+
+reload(IFTPhyllotaxisModels)
+
+inhibFieldDivAngleFig = plt.figure(1)   # The figure of the inhibition field plot as a function of absolute angle, as well as divergence angles plot
+polarInhibFieldFig = plt.figure(2)      # The figure of the inhibition field plot in a polar plot
+equipotentialsFig = plt.figure(3)      # The figure of equipotentials
+plotResults = False        # Boolean variable, if true the results are plotted when a new primordium is created
+
+m = IFTPhyllotaxisModels.HofmeisterModel(CZRadius = 1.0, R = 3.0, PInitRadius = 1./3, V_0 = 0.6, initAngle = 0, ringSize = 3600, maxDistance = 100, primordiaNb = 50, initDt = 1.0, timePrec = 0.001, addDelay = False, addGaussianNoise = False, dr = 0.01, parastichiesDistThreshold = 0.5, initialDivAngle = 120, initialDivAngleNumber = 0,  equipotentialSpaceResolution = (100, 100), drawEquipotential = True)
+
+m = IFTPhyllotaxisModels.SnowAndSnowModel(CZRadius = 1.0, R = 3.0, PInitRadius = 1./3, V_0 = 0.6, initAngle = 0, ringSize = 3600, maxDistance = 100, primordiaNb = 50, initDt = 0.1, timePrec = 0.001, addDelay = False, addGaussianNoise = False, energyThreshold = 0.5, dr = 0.01, parastichiesDistThreshold = 0.5, initialDivAngle = 120.0 , initialDivAngleNumber = 0, equipotentialSpaceResolution = (100, 100), drawEquipotential = True)
+
+def Start():
+  m.info()
+ 
+def StartEach():
+  m.stepInitialize()
+  if getGroup() in [0, 2]:
+    useGroup(1)
+  else: 
+    useGroup(2)  
+
+def ce_user(s):
+  x = min(s / m.maxDistance, 1.0)
+  return -free_cesaro_eq(x)
+
+stringDict = {"last":"", "lastMinus2":"", "lastMinus1":""}
+
+def EndEach(lstring, lscene):
+  stringDict["lastMinus2"] = stringDict["lastMinus1"]
+  stringDict["lastMinus1"] = stringDict["last"]
+  stringDict["last"] = lstring
+  if m.newPrimordiumGenerated:
+    m.resetForNextPrimordium()
+  if m.timePrecRefined and getGroup() == 1:
+    if stringDict["lastMinus2"] != "":
+      stringDict["last"] = stringDict["lastMinus2"]
+      return stringDict["lastMinus2"]
+    else:
+      stringDict["last"] = stringDict["lastMinus1"]
+      return stringDict["lastMinus1"]        
+  
+  if plotResults and m.newPrimordiumGenerated and getGroup()== 1 and getIterationNb() != 0:    
+    plt.figure(1)
+    inhibFieldDivAngleFig.clf()
+    ax1 = inhibFieldDivAngleFig.add_subplot(211)
+    ax1.set_xlim(0, 360)
+    ax1.grid(True)
+    ax1.plot(m.ringElmAngle * arange(m.ringSize), m.inhibField)
+    ax1.set_title("Inhibition field as a function of absolute anngle")
+    ax2 = inhibFieldDivAngleFig.add_subplot(212)
+    ax2.grid(True)
+    ax2.plot(m.divergenceAngles)
+    ax2.set_title("Divergence angle")
+    plt.draw()
+    plt.figure(2)
+    polarInhibFieldFig.clf()
+    ax3 = polarInhibFieldFig.add_subplot(111, polar = True)
+    ax3.plot(m.samplingPointsAngularPosition, m.CZRadius + m.inhibField)
+    argMin = m.inhibField.argmin()
+    ax3.plot(m.samplingPointsAngularPosition[argMin], m.CZRadius + m.inhibField[argMin], 'o', color='r', )
+    ax3.set_title("Inhibition field at central zone periphery")
+    plt.draw()
+    plt.figure(3)
+    equipotentialsFig.clf()
+    ax4 = equipotentialsFig.add_subplot(111)
+    Y, Z, values = m.spaceField()
+    ax4.contour(Z, Y, values, 1000)          
+    ax4.set_title("Inhibitory field contour lines")
+    plt.draw()    
+    plt.show()
+
+  if m.generatedPrimordiaNb == m.primordiaNb:
+    print "Divergence Angles = ", [int(i * 100)/100.0 for i in m.divergenceAngles]
+    #print "primordia positions", m.primordiaPositions
+    closestNeighborsList, parastichiesGraph = m.computeParastichies()
+#    m.addParastichiesToScene(lscene, parastichiesGraph, 0.8, m.primordiaPositions)
+    print "Elapsed time  = %f, Generated primordia number = %d" %(time() - m.simulationStartTime, m.generatedPrimordiaNb)
+    plastochrons = [int((m.initiationTimes[i + 1] - m.initiationTimes[i]) *1000)/1000.0 for i in xrange(len(m.initiationTimes) - 1)]
+    print "plastochrons = ", plastochrons
+    print "initiation times", m.initiationTimes   
+    Stop()
+
+module STEM, MD, CZ, PRIM
+
+Axiom: STEM MD CZ [;(3)A(0.0)]
+
+derivation length: m.maxDerivationNb  
+production:
+
+group 1:        # New primordium generation
+
+A(t):
+  m.next()
+  if m.newPrimordiumGenerated:
+    m.initiationTimes.append(t + m.dt)    
+    produce +(m.divAngle)[;(3)f(m.CZRadius)?P PRIM(m.CZRadius, m.PInitRadius, 0, m.primFieldStrength)]A(t + m.dt)
+  else:
+    produce A(t + m.dt)       
+  
+# P follows a main meridian of the revolution surface
+# s is the curvilinear abcissa on the meridian
+# a is the bending angle of the turtle at the point
+?P(p) PRIM(s, r, t, fieldStrength):
+  if s > m.maxDistance : produce
+  m.primordiumContribution2InhibField(p, t, fieldStrength)
+  produce ?P PRIM(s, r, t + m.dt, fieldStrength)
+
+group 2:        # Primordia drifting away
+?P(p) PRIM(s, r, t, fieldStrength):
+  if s > m.maxDistance : produce 
+  ds = m.speedField(p) * m.dt
+  #newS = m.CZRadius * np.exp( (m.V_0/m.CZRadius) * (t + m.dt) )
+  da = ce_user(s)        # or da = ce_user(newS)?
+  if t == 0: da += - m.initAngle 
+  produce ^(da)f(ds) ?P PRIM(s + ds, r + m.dr, t, fieldStrength)
+  #produce ^(da)f(newS - s) ?P PRIM(newS, r + m.dr, t, fieldStrength)
+
+group 0:        # If groups are used, intrepretation should be group 0
+interpretation:
+
+# Primordia have limited radius size (controlled by 
+PRIM(s, r, t, fieldStrength):
+  produce ;(3)@o(m.growthCurve(m.PInitRadius, 2, 0.3, r))
+
+CZ :
+  produce ;(2)@M(0, 0, 0)@o(m.CZRadius)    
+#STEM :
+#  produce ;(1)@M(-6,0,0)@o(STEMradius)
+
+endlsystem
+
+###### INITIALISATION ######
+
+__lpy_code_version__ = 1.1
+
+def __initialiseContext__(context):
+	import openalea.plantgl.all as pgl
+	Color_1 = pgl.Material("Color_1" , ambient = (207,143,47) , diffuse = 0.942029 , )
+	Color_1.name = "Color_1"
+	context.turtle.setMaterial(1,Color_1)
+	Color_2 = pgl.Material("Color_2" , ambient = (18,36,6) , diffuse = 7.08333 , )
+	Color_2.name = "Color_2"
+	context.turtle.setMaterial(2,Color_2)
+	Color_3 = pgl.Material("Color_3" , ambient = (190,0,0) , diffuse = 0.947368 , )
+	Color_3.name = "Color_3"
+	context.turtle.setMaterial(3,Color_3)
+	Color_5 = pgl.Material("Color_5" , ambient = (146,92,37) , diffuse = 1.73973 , )
+	Color_5.name = "Color_5"
+	context.turtle.setMaterial(5,Color_5)
+	scalars = [('R', 3, 0, 30)]
+	context["__scalars__"] = scalars
+	for n,v,mnv,mxv in scalars:
+		context[n] = v
+	import openalea.plantgl.all as pgl
+	ff = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, -0.270344, 1),(0.60276, 0.257165, 1),(0.863467, 2.48682, 1),(1, 0.0088252, 1)]) , 
+	    )
+	ff.name = "ff"
+	free_cesaro_eq = pgl.NurbsCurve2D(	
+	    ctrlPointList = pgl.Point3Array([(0, 0, 1),(0.333333, 0, 1),(0.666667, 0, 1),(1, 0, 1)]) , 
+	    )
+	free_cesaro_eq.name = "free_cesaro_eq"
+	panel_0 = ({'active': True, 'visible': False, 'name': 'Functions'},[('Function',ff),('Function',free_cesaro_eq)])
+	parameterset = [panel_0,]
+	context["__functions__"] = [('ff',ff),('free_cesaro_eq',free_cesaro_eq),]
+	context["__curves__"] = []
+	context["__parameterset__"] = parameterset
+	context["ff"] = pgl.QuantisedFunction(ff)
+	context["free_cesaro_eq"] = pgl.QuantisedFunction(free_cesaro_eq)

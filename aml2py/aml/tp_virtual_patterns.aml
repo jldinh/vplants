@@ -1,0 +1,576 @@
+amapmod_dir = "../../devlp/AMAPmod/" 
+examples_dir = amapmod_dir + "examples/MTG/VirtualPatterns/"
+databases_dir = amapmod_dir + "databases/MTGFiles/AppleTree/"
+
+
+#####################################################
+#
+#    		Adding leaves to a stem  
+#
+#####################################################
+
+
+##############################################
+##############################################
+g2  = MTG(examples_dir + "axis_2i.mtg")
+
+
+##############################################
+ Adding one leaf per entity
+##############################################
+
+Quest: Edit the dressing file axis_1.drf in the example/MTG/VirtualPatterns 
+directory and load it into AMAPmod. 
+Build up a plant representation at scale 4
+using this dressing data and plot it.
+
+--------------------------------
+dr1 = DressingData(examples_dir + "axis_1.drf")
+f1 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+lt = Plot(f1)
+--------------------------------
+
+Quest: Add to the preceding plant representation one "virtual" leaf per node
+
+--------------------------------
+g(_x) = 1
+
+leaf_color(_x) = Green
+leaves1=VirtualPattern("Leaf",PatternNumber->g, Color->leaf_color)
+
+lt = Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+--------------------------------
+
+Quest: Build an array containing the set of all vertices in the MTG at scale 4
+
+--------------------------------
+rr= Components(MTGRoot(),Scale->4)
+--------------------------------
+
+Quest: Build an array containing the set of all virtual vertices 
+
+--------------------------------
+vv = Extract(lt, Data->VirtualVertices)
+--------------------------------
+
+
+Quest: Compute the Euler angles of the geometric representation of
+these virtual leaves. Compute the principal and the secundary
+directions of these elements as well.
+
+--------------------------------
+# conversion from degrees to radians
+toRad(_x) = 2*Pi*_x/360
+
+# and reciprocally
+toDeg(_x) = If _x <= Pi Then (180/Pi) * _x Else (180/Pi) * (_x-2*Pi)
+rad_to_deg(_a) = Foreach _e In _a : toDeg(_e)
+
+euler(_x) = rad_to_deg(EulerAngles(lt,_x))
+
+dirs(_x) = [PDir(lt,_x),SDir(lt,_x)]
+
+euler_angles = Foreach _x In vv : euler(_x)
+dirs_array = Foreach _x In vv : dirs(_x)
+--------------------------------
+
+##############################################
+ Adding more than one leaf per entity
+##############################################
+
+Quest: Create two functions g and w that control respectively
+1. the total amount of leaves borne by a node
+2. the max nb of leaves on a whorl
+and use these functions to add 2 whorls of virtual leaves on each plant
+entity, such that each whorl is made up of three virtual leaves.
+
+--------------------------------
+g(_x) = 6        # change the total amount of leaves borne by a node
+w(_x) = 3        # change the max nb of leaves on a node
+
+f1 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+leaves1=VirtualPattern("Leaf",PatternNumber->g, WhorlSize -> w, Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1)
+--------------------------------
+
+##############################################
+# Changing the insertion angle (global change)
+##############################################
+
+Quest: Copy the dressing file axis_1.drf in your work directory as axis_2.drf.
+Change this dressing file so that the insertion angle of virtual elements is globally changed.
+
+
+--------------------------------
+# add the following line to axis_2.drf
+
+LeafAlpha = 160   # must be between 0 and 180
+
+dr2 = DressingData("axis_2.drf")
+f2 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr2)
+leaves1=VirtualPattern("Leaf",PatternNumber->g, WhorlSize -> w, Color->leaf_color)
+Plot(f2,VirtualLeaves->leaves1,DressingData->dr2)
+--------------------------------
+
+##############################################
+# Changing the azimuth angle (global change)
+##############################################
+
+Quest: Impose one virtual leaf per node. In axis_2.drf, change the
+azimuth angle of virtual elements so that it is globally changed 
+
+--------------------------------
+w(_x) = 1        # change the max nb of leaves on a node
+
+# add the following line to axis_2.drf
+
+LeafBeta = 90
+
+
+f1 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+leaves1=VirtualPattern("Leaf",PatternNumber->g, WhorlSize -> w, Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1)
+--------------------------------
+
+##############################################
+# Changing the insertion angle (global change)
+##############################################
+
+Quest: Copy the dressing file axis_1.drf in your work directory as axis_2.drf.
+Change this dressing file so that the insertion angle of virtual elements is globally changed.
+
+
+--------------------------------
+# add the following line to axis_2.drf
+
+dr3 = DressingData("axis_2.drf")
+f3 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr3)
+leaves1=VirtualPattern("Leaf",PatternNumber->g, WhorlSize -> w, Color->leaf_color)
+Plot(f3,VirtualLeaves->leaves1,DressingData->dr3)
+--------------------------------
+
+##########################################
+##########################################
+g30  = MTG(examples_dir + "axis_30i.mtg")
+
+##############################################
+ Whorls of virtual leaves
+##############################################
+
+Quest: Edit the dressing file axis_1.drf in the example/MTG/VirtualPatterns 
+directory and load it into AMAPmod. Build up a plant representation at scale 4
+using this dressing data and plot it.
+
+--------------------------------
+dr1 = DressingData(examples_dir + "axis_1.drf")
+f1 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+lt = Plot(f1)
+--------------------------------
+
+Quest: create whorls of virtual leaves that contain one more
+leaf every 6 nodes (starting with 0 leaves in the whorl at the bottom of the stem).
+(use dressing data axis_1.drf)
+
+--------------------------------
+g(_x) = Rank(_x) / 6
+w(_x) = g(_x)          
+leaf_color(_x) = Green
+
+f3 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+leaves3=VirtualPattern("Leaf",PatternNumber->g, WhorlSize -> w, Color->leaf_color)
+Plot(f3,VirtualLeaves->leaves3,DressingData->dr1)
+--------------------------------
+
+
+##########################################
+# adding virtual leaves on 20 internodes
+##########################################
+
+g20  = MTG(examples_dir + "axis_20i.mtg")
+
+Quest: add two virtual leaves to each node of this stem.
+(use dressing file axis_1.drf)
+
+--------------------------------
+dr1 = DressingData(examples_dir + "axis_1.drf")
+f2 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+leaf_color(_x) = Green
+
+g(_x) = 2
+leaves1=VirtualPattern("Leaf",PatternNumber->g, Color->leaf_color)
+Plot(f2,VirtualLeaves->leaves1,DressingData->dr1)
+--------------------------------
+
+##############################################
+# Changing the insertion angle (local change)
+##############################################
+
+Quest: Change the insertion angle according to the rank of the internode on the stem
+(starting with an insertion angle of 170 degrees at node 0 and sligthly increasing
+with the rank)
+
+--------------------------------
+insertion(_x) = 170 - (Rank(_x) * 180.0 / 30)
+
+f2 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+leaves3=VirtualPattern("Leaf", PatternNumber->g, Alpha -> insertion, Color->leaf_color)
+Plot(f2,VirtualLeaves->leaves3)
+--------------------------------
+
+##############################################
+# Changing the azimuth angle (local change)
+##############################################
+
+Quest: Change the azimuth angle according to the rank of the internode: the
+azimuth is increased by x degrees at each node of rank x.
+
+--------------------------------
+azimuth(_x) = If Father(_x) == Undef Then 0 Else azimuth(Father(_x)) + ToInt(_x)
+
+f2 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+leaves4=VirtualPattern("Leaf", PatternNumber->g, Beta -> azimuth, Color->leaf_color)
+Plot(f2,VirtualLeaves->leaves4,DressingData->dr1)
+--------------------------------
+
+
+#####################################################
+#
+#        Adding leaves to a  branching system 
+#
+#####################################################
+
+##############################################
+##############################################
+g  = MTG(examples_dir + "small_branching.mtg")
+
+Quest: In the following definition of virtual leaves in a branching
+system, divide the size of leaves by 2.
+
+dr1 = DressingData(examples_dir + "small_branching.drf")
+f1 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+
+ltopdia(_v)= 10
+lbotdia(_v)= 10
+llength(_v)= 10
+
+nbleaves(_v)= 1 
+verticille(_v)=1
+
+leaf_color(_v)=Green
+
+leaves1=VirtualPattern(\
+  "Leaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1)
+
+--------------------------------
+# Change the three values simultaneously to make 
+# homothetic changes
+
+ltopdia(_v)= 5
+lbotdia(_v)= 5
+llength(_v)= 5
+--------------------------------
+
+Quest: On the same example, fix the insertion angle of 
+leaves to 90 degrees.
+
+--------------------------------
+lalpha(_v)= 90     # This angle is relative to the bearer
+
+f1 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+leaves1=VirtualPattern(\
+  "Leaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  Alpha->lalpha, \
+  Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1)
+--------------------------------
+
+
+#####################################################
+#
+#          Using a small digitized tree
+#
+#####################################################
+
+#####################################################
+#####################################################
+g  = MTG(examples_dir + "small_branching_digitized.mtg")
+
+####################################################
+# Changing the azimuth with respect to the bearer
+####################################################
+
+Quest: In this example, top of internodes were digitized. 
+An allometric relation was observed between internode
+length l and leaf surface s:
+
+s = f(l) = 5.7+ (l/6)^1.2
+
+Use the following virtual pattern to plot virtual leaves 
+that have a surface corresponding to the above relationship
+(hint: The original size of the leaf s0 is given in the "properties" item
+of the "File" menu item of the viewer. (for fchene.smb, s0=0.5714)):
+
+dr1 = DressingData(examples_dir + "small_branching_digitized.drf")
+f1 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+
+ltopdia(_v)= 10
+lbotdia(_v)= 10
+llength(_v)= 10
+
+nbleaves(_v)= 1 
+verticille(_v)=1
+lalpha(_v)= 90     # This angle is relative to the bearer
+
+leaf_color(_v)=Green
+
+leaves1=VirtualPattern(\
+  "Leaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  Alpha->lalpha,\
+  Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+
+--------------------------------
+# 
+# the original surface s0 of the geometric symbol of a leaf 
+# must be multiplied by a scale factor a
+# such that s0*a=s the actual surface of the leaf. Since
+# this surface at internode l is given by an allometric relation f(l),
+# we have s0*a=f(l). Thus a=f(l)/s0
+
+f(_l) = 5.7+ (_l/6)^1.2
+
+a(_l) = f(_l)/0.5714
+
+f1 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+
+len(_v) = Length(f1,_v)
+
+ltopdia(_v)= a(len(_v))
+lbotdia(_v)= a(len(_v))
+llength(_v)= a(len(_v))
+
+leaves1=VirtualPattern(\
+  "Leaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  Alpha->lalpha,\
+  Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+--------------------------------
+
+
+####################################################
+# Controling the orientation of leaves explicitly
+####################################################
+
+Quest: How this example should be modified to control the position and
+the orientation of the leaf in space 
+
+hint: set the basis point of each leaf to the top coordinates of its
+bearing internode, and give constant euler angles to every leaf
+
+f1 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+
+xx(_x) = 0.0
+yy(_x) = 0.0
+zz(_x) = 0.0
+azimuth(_x) = 0.0
+elevation(_x) = 0.0
+roling(_x)= 0.0
+
+leaves1=VirtualPattern(\
+  "DigitizedLeaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  XX -> xx,\
+  YY -> yy,\
+  ZZ -> zz, \
+  AA -> azimuth, \
+  BB -> elevation, \
+  CC -> roling, \  
+  Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+
+--------------------------------
+f1 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+
+xx(_x) = Coord(f1, _x)@1
+yy(_x) = Coord(f1, _x)@2
+zz(_x) = Coord(f1, _x)@3
+azimuth(_x) = Pi/3     # Caution: for euler angles unit is radian !
+elevation(_x) = -Pi/6  # a positive elevation bends the leaf towards the soil
+roling(_x)= Pi/2
+
+leaves1=VirtualPattern(\
+  "DigitizedLeaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  XX -> xx,\
+  YY -> yy,\
+  ZZ -> zz, \
+  AA -> azimuth, \
+  BB -> elevation, \
+  CC -> roling, \  
+  Color->leaf_color)
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+--------------------------------
+
+
+#####################################################
+#####################################################
+g  = MTG(examples_dir + "branching.mtg")
+
+Quest: Change the coloring function so that the color of 
+virtual leaves correspond to the order of the element that 
+bear them.
+
+dr1 = DressingData(examples_dir + "branching.drf")
+f1 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+
+ltopdia(_v)= 30
+lbotdia(_v)= 30
+llength(_v)= 30
+
+nbleaves(_v)= 1 
+verticille(_v)=1
+lalpha(_v)= 90     # This angle is relative to the bearer
+
+leaf_color(_v)= Green
+
+leaves1=VirtualPattern(\
+  "Leaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  Alpha->lalpha,\
+  Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+
+--------------------------------
+f1 = PlantFrame(MTGRoot(), Scale->4, DressingData->dr1)
+
+leaf_color(_v)=\
+  Switch Order(_v)\
+    Case 0: Red \
+    Case 1: Green \
+    Case 2: Blue \
+    Default: Black 
+
+leaves1=VirtualPattern(\
+  "Leaf",\
+  WhorlSize->verticille, \
+  PatternNumber->nbleaves, \
+  TopDiameter->ltopdia, \
+  BottomDiameter->lbotdia, \
+  Length->llength, \
+  Alpha->lalpha,\
+  Color->leaf_color)
+
+Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+--------------------------------
+
+
+Quest: Copy the dressing file branching.drf in your working directory
+as branching_2.drf, and change it so that the file of appearances 
+$AMAPmod/examples/MTG/VirtualPatterns/colors.app is loaded.
+
+
+--------------------------------
+# the following line should be added in branching_2.drf
+
+Appearance = colors.app
+
+# Then the new dressing file should be loaded:
+
+dr1 = DressingData("branching_2.drf")
+
+
+
+Quest: Build a linetree using this new dressing data
+
+--------------------------------
+lt = Plot(f1,VirtualLeaves->leaves1,DressingData->dr1)
+--------------------------------
+
+Quest: Extact the set of virtual elements and find the vertex in this
+set with minimum value.
+
+--------------------------------
+vv = Extract(lt, Data->VirtualVertices)
+
+virtual_offset = Min(Foreach _i In vv : ToInt(_i))  
+--------------------------------
+
+Quest: Extact the set of  elements bearing this virtua elements
+
+--------------------------------
+rr = Extract(lt, Data->ActualVertices)
+--------------------------------
+
+Quest: Write a function bearer(_x) that returns the actual vertex
+(i.e. defined in the MTG) bearing a given virtual element _x from
+array vv.
+
+--------------------------------
+bearer(_x) = rr@Pos(vv,_x)
+--------------------------------
+
+Quest: Create a function that assigns user-define color RED3 to each
+vertex that is a virtual element and use it to plot the plant with a user
+define color on virtual elements.
+
+--------------------------------
+app(_x) = If ToInt(_x) >= virtual_offset Then RED3 Else Undef
+
+Plot(lt, Appearance->app) 
+--------------------------------
+
+Quest: Use different user-defined colors to show virtual leaves
+with different colors
+
+--------------------------------
+color_array = [GREEN1,GREEN2,GREEN3,GREEN4,GREEN5,GREEN6,GREEN7,GREEN8,\
+RED1,RED2,RED3,RED4,RED5,RED6,RED7,RED8]
+
+color_leaf(_x) = color_array@(Rank(bearer(_x))+1)
+
+app(_x) = If ToInt(_x) >= virtual_offset Then color_leaf(_x) Else Undef
+
+Plot(lt, Appearance->app) 
+--------------------------------

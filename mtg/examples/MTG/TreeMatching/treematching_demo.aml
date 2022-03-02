@@ -1,0 +1,132 @@
+#
+# Fichier de Démonstration du module TreeMatching
+#
+
+
+# Chargement de la base de données de Pommiers
+dir= AMAPMOD_DIR
+g=MTG(dir+"databases/MTGFiles/AppleTree/wij.mtg")
+
+# Définition de l'ensemble des plantes
+
+plants = VtxList(Scale->1)
+
+# Extraction des recines des plantes à comparer (ici à l'échelle 4)
+
+roots = Foreach _p In plants:Components(_p,Scale->4)@1
+# roots = Foreach _p In [plants@23,plants@30]:Components(_p,Scale->4)@1
+
+# Comparaison topologique des plantes 
+
+match=TreeMatching(roots)
+
+# match=TreeMatching(roots,MatchingType->by_topology)
+
+############################################################
+#
+#                Extraction des résultats
+#
+############################################################
+
+# Extraction de la matrice de distance
+
+d=MatchingExtract(match,ViewPoint->DistanceMatrix)
+Display(d)
+
+# Extraction des listes d'alignements
+# (ici entre la première et la deuxième plante)
+
+list= MatchingExtract(match,ViewPoint->"List",InputTree->1,ReferenceTree->2)
+
+
+############################################################
+#
+#                Analyse des résultats
+#
+############################################################
+
+# Méthode de classification sur la matrice de distance (cf module STAT)
+
+c=Clustering(d,4)
+Display(c)
+
+# Etude détaillée du clustering
+
+# Récupération de la liste des vertex de la plante initiale, qui ont une image
+
+input_vtx=list@1
+
+# Récupération de la liste des vertex de la plante initiale, qui ont une image
+
+ref_vtx=list@2
+
+# Fonction qui renvoie l'image d'un vertex si elle existe, Undef Sinon
+
+M(_v) = If (Pos(input_vtx,_v) != Undef) Then ref_vtx@(Pos(input_vtx,_v)) Else input_vtx@(Pos(ref_vtx,_v))
+
+# Fonction qui renvoie le vertex s'il n'a pas d'image, le vertex lui meme sinon et s'il appartient à la plante initiale
+# son image dans la plante finale sinon.
+
+I(_v) = If (Pos(input_vtx,_v) != Undef) Then _v Else input_vtx@(Pos(ref_vtx,_v))
+
+# Fonction de Coloration du Graphe, en fonction de l'ordre du vertex
+
+order_color(_v) = Switch Order(_v)   Case 0 : Blue \
+                                      Case 1 : Red \
+                                      Case 2 : Green\
+                                      Case 3 : Yellow \
+                                      Case 4 : Violet \
+                                      Default : LightBlue
+
+# Fonction de Coloration du Graphe, en fonction de la classe du vertex
+
+class_color(_v) = Switch Class(_v)    Case 'E' : Blue \
+                                      Case 'B' : Red \
+                                      Case 'C' : Green\
+                                      Default : LightBlue 
+
+# Fonction qui colore un vertex en fonction de son ordre s'il a une image et qu'il
+# appartient à la plante initiale, sinon en fonction de l'ordre de son image
+
+slice_color(_v)=If (I(_v)==_v) Then order_color(_v) Else order_color(I(_v))
+
+# Fonction qui colore un vertex avec la fonction précédente, s'il a une image, en noir sinon.
+
+axis_color(_v)=If(I(_v)!=Undef) Then slice_color(_v) Else Black
+
+# Reconstruction des deux plantes comparées
+
+dr=DressingData("/usr/people/ferraro/Aml/wij10.drf")
+pf = PlantFrame([plants@23,plants@30],Scale->4,DressingData->dr)
+
+# Affichage et coloriage
+Plot(pf,Color->axis_color)
+
+
+#######################################################################
+#
+#             Autres Types de Comparaison
+#
+#######################################################################
+
+# Comparaison qui minimise le nombre de composantes connexes
+
+match=TreeMatching(roots,MatchingType->by_inclusion)
+
+# Comparaison pondérée
+
+# Définition des attributs affectés aux vertex
+
+diam(_x)=Feature(_x,"diabase")
+long(_x)=Feature(_x,"longueur")
+
+funs=[diam,long]
+match=TreeMatching(roots,MatchingType->by_weights,FuncList->funs,VectorDistance->VectorDistance(.5,NUMERIC,.5,NUMERIC,Distance->QUADRATIC))
+# match=TreeMatching(roots,FuncList->funs,VectorDistance->VectorDistance(.5,NUMERIC,.5,NUMERIC,Distance->QUADRATIC))
+# match=TreeMatching(roots,FuncList->funs,VectorDistance->VectorDistance(.5,NUMERIC,.5,NUMERIC,Distance->ABSOLUTE_VALUE))
+
+# Comparaison quotientée
+
+match=TreeMatching(roots,MatchingType->test)
+
+

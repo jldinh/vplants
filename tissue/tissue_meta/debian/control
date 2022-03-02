@@ -1,0 +1,15 @@
+Source: vplants-tissue
+Maintainer: Christophe Pradal <christophe.pradal@cirad.fr>
+Section: python
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3~), python-setuptools (>= 0.6b3), debhelper (>= 7),  python-openalea.deploy
+
+
+Package: python-vplants.tissue
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-vplants.celltissue, python-vplants.genepattern, python-vplants.growth, python-vplants.tissueedit,python-vplants.tissueshape,python-vplants.tissueview,python-vplants.vmanalysis
+Provides: ${python:Provides}
+Description: Tissue packages and all its dependencies
+ Install all packages
+ mandatory to perform full tissue simulations
+ .

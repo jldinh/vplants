@@ -1,0 +1,11 @@
+SMBPath = ../../databases/SMBFiles
+
+SMBModel geom0 = nentn105
+SMBModel geom1 = pommecyl
+
+Class A = geom0
+Class B = geom0
+Class C = geom0
+
+Phyllotaxy = 120
+

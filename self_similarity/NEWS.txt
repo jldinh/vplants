@@ -1,0 +1,6 @@
+This file is used to document modifications from the last release at the user level (functional)
+
+- New example with walnut tree. Can swap.
+- New geometrics parameters computation.
+
+- Doc file ./doc/how_to.txt

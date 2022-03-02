@@ -1,0 +1,13 @@
+Source: vplants
+Maintainer: VirtualPlants team <christophe.pradal@cirad.fr>
+Section: python
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3~), python-setuptools (>= 0.6b3), python-dev, debhelper (>= 7),  python-openalea.deploy
+
+
+Package: python-vplants
+Architecture: any
+Depends: ${misc:Depends}, ${python:Depends}, python-openalea, python-vplants.treestatistic, python-vplants.fractalysis, python-vplants.weberpenn, python-vplants.lpy, python-openalea.mtg, python-openalea.container, python-vplants.treematching2, python-vplants.aml, python-vplants.aml2py
+Provides: ${python:Provides}
+Description: Virtual package to install all the VPlants components.
+

@@ -1,0 +1,31 @@
+# -*-python-*-
+
+import os
+bn = os.path.basename
+
+Import( "env" )
+
+lib_env = env.Clone()
+
+# Import/Export symbols for windows
+if lib_env['compiler'] == 'mingw':
+    LINKFLAGS=["-enable-stdcall-fixup",
+               "-enable-auto-import",
+               "-enable-runtime-pseudo-reloc",
+               "-s"]
+    lib_env.AppendUnique(LINKFLAGS=LINKFLAGS)
+
+includes = lib_env.ALEAGlob('*.h')
+includes += lib_env.ALEAGlob('templates-reech-include/*')
+
+sources = lib_env.ALEAGlob('*.c')
+sources += lib_env.ALEAGlob('templates-reech-src/*')
+
+
+# Add defines to export symbols on Windows
+#lib_env.AppendUnique(CPPDEFINES=['MESSAGE'])
+#lib_env.AppendUnique(LIBS=[''])
+#lib_env.AppendUnique(CCFLAGS= ['-g','-Wall'])
+
+inc = lib_env.ALEAIncludes( 'basic', includes )
+lib = lib_env.ALEALibrary( 'basic', sources )

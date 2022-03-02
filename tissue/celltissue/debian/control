@@ -1,0 +1,19 @@
+Source: vplants-tissue-celltissue
+Maintainer: Christophe Pradal <christophe.pradal@cirad.fr>
+Section: python
+Priority: optional
+Build-Depends: python-all (>= 2.6.6-3~), python-setuptools (>= 0.6b3), debhelper (>= 7),  python-openalea.deploy
+
+
+Package: python-vplants.celltissue
+Architecture: all
+Depends: ${misc:Depends}, ${python:Depends}, python-openalea, python-openalea.container 
+Provides: ${python:Provides}
+Description: basic elements to construct tissue models
+ .
+ celltissue contains a main structure tissue and
+ interfaces :
+ 	with physics algorithms
+ 	with graphical display
+ 	with read write files
+ .

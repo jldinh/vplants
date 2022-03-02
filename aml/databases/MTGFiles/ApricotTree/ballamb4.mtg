@@ -1,0 +1,381 @@
+# B= Branche ; U=Unité de croissance ; L= distance/ insertion sur tronc ; b= ramification"				
+# Long= longueur de U en cm ; LAB,LAC et LBC= distances en cm entre les trois piquets (constantes pour une même branche) qui définissent le plan ."				
+# LA, LB et LC= distances en mm d'un point de la branche (segments de 10 cm) au sommet de chacun des trois piquets				
+# Diamètres= en mm à la base de l' U.C, du segment et de la ramification.				
+# Zone= région d'insertion de la ramification (1=face supérieure de la branche, 2=faces latérales et 3=face inférieure) ; Poids = de la ramification, en g."				
+# 1, 2, 3 et 4= position angulaire de la mesure de DRLM (1=face supérieure ou 0°, 2=90°, 3=180° et 4=270°).				
+
+
+CODE :	FORM-A			
+
+CLASSES:				
+SYMBOL	SCALE	DECOMPOSITION	INDEXATION	DEFINITION
+$ 	0	FREE	FREE	IMPLICIT
+P	1	FREE	FREE	EXPLICIT	
+T	2	FREE	FREE	EXPLICIT
+B	2	FREE	FREE	EXPLICIT
+U 	3	FREE	FREE	EXPLICIT
+L	4	FREE	FREE	EXPLICIT
+M	5	FREE	FREE	EXPLICIT
+
+
+
+DESCRIPTION :				
+LEFT	RIGHT	RELTYPE	MAX	
+T	B	+	?	
+U	U	+	?	
+U	U	<	1	
+L	L	<	1	
+L	L	+	?	
+M	M	<	1	
+M	M	+	?	
+
+
+
+FEATURES:				
+NAME	TYPE			
+LongUC	INT
+DAB	INT
+DAC	INT
+DBC	INT
+L1	INT
+L2	INT
+L3	INT
+TopDia	INT
+position	INT
+Poids	INT
+Posang1	INT
+Posang2	INT
+Posang3	INT
+Posang4	INT
+BT1	INT
+BT2	INT
+BT3	INT								
+BT4	INT																				
+
+MTG:																		
+ENTITY-CODE				LongUC	DAB	DAC	DBC	L1	L2	L3	TopDia	position	Poids	Posang1	Posang2	Posang3	Posang4	BT1	BT2	BT3	BT4
+/P1					5050	4440	3420
+^/T1								
+	/U90			213				2494	2761	2500	
+		/L8												-142	-182	-37	-156	40	38	5	43
+		^/M1
+		^<L10						2582	2677	2473	51										
+		^/M1
+		^<M2
+		^<M3
+		^<L20						2676	2613	2452	54										
+		^/M1
+		^<M2
+		^<M3
+			
+		^<L23												-258	-220		-146	55	31	1	49
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L30						2759	2551	2437	49										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L40						2840	2502	2417	49										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L45												-230	-209	-27	-179	69	46	11	30
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L50						2916	2463	2406	52										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L54																			
+			 +B1/U1								19
+			^/L430								10	3	610								
+		^/M1
+		^<M2
+		^<M3
+				
+		^<L57															
+		^/M1
+		^<M2
+		^<M3
+					
+			 +B2/U1								14
+			^/L467								7	4	360								
+		^<L60						3002	2413	2398	46										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L63																			
+			 +B3/U1								24
+			^/L590								12	4	1335								
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L70						3094	2369	2388	41										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L73												-203		-68		48	44	9	58
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L80						3187	2328	2358	42										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L90						3285	2277	2333	41										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L100						3381	2230	2315	44										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L110						3479	2179	2303	44										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L113												-263				65	18	7	24
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L120						3579	2133	2292	46										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L121																			
+			 +B4/U1								26
+			^/L623								13	1	1655								
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L126																			
+			 +B5/U1								19
+			^/L680								10	1	965								
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L130						3686	2075	2277	35										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L132																			
+			 +B6/U1								13
+			^/L647								6	1	430								
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L139												-245		-48		36	24	13	23
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L140						3785	2020	2270	28										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L150						3883	1974	2265	27										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L160						3982	1928	2261	26										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L164												-294		-19		48	22	1	29
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L167 																			
+			 +B7/U1								13
+			^/L625								6	2	415								
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L170						4077	1892	2260	25										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L172																			
+			 +B8/U1								20
+			^/L732								10	4	1150								
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L176												-225		-45		39	16	14	10
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L180						4176	1853	2255	20										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L190						4271	1813	2259	20			-351				46	24	16	35
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L200						4365	1777	2273	20										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L207												-301				50	35	18	2
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L210						4467	1745	2300	20										
+		^/M1
+		^<M2
+		^<M3
+	
+		^<L212																			
+		^/M1
+		^<M2
+		^<M3
+		
+	 		 +B9/U1								17
+			^/L489								9	2	555								
+
+	
+		^+U91		18							16										
+		^/L216												-205							
+		^/M1
+		^<M2
+		^<M3
+
+		^<L220						4570	1716	2326	14										
+		^/M1
+		^<M2
+		^<M3
+	
+	 	^<L230						4666	1698	2357	13										
+		^/M1
+		^<M2
+		^<M3
+
+		#^<L232
+
+		^+U91		25							13										
+		^/L233												-249							
+		^/M1
+		^<M2
+		^<M3
+
+		^<L240						4757	1688	2404	13										
+		^/M1
+		^<M2
+		^<M3
+
+		^<L245												-191		-14
+		^/M1
+		^<M2
+		^<M3
+
+		^<L255						4857	1678	2457	13					
+		^/M1
+		^<M2
+		^<M3
+
+		^<L255														
+	 		 +B10/U1							7
+			^/L337								3	2	65			
+		^/M1
+		^<M2
+		^<M3
+
+		^+U92		8				
+		^/L263						4957	1686	2522	12					
+		^/M1
+		^<M2
+		^<M3
+
+		^<L263														
+	 		 +B11/U1							7
+			^/L545								3	4	105			
+		^/M1
+		^<M2
+		^<M3
+
+		^+U92		21				
+		^/L265												-155		-58
+		^/M1
+		^<M2
+		^<M3
+
+		^<L270						5040	1673	2623	8					
+		^/M1
+		^<M2
+		^<M3
+
+	 	^<L280						5105	1640	2715	7					
+		^/M1
+		^<M2
+		^<M3
+
+		^+U92		29				
+		^/L290						5167	1594	2805	6					
+		^/M1
+		^<M2
+		^<M3
+
+		^<L300						5225	1552	2895	5					
+		^/M1
+		^<M2
+		^<M3
+
+	 	^<L310						5275	1517	2990	6					
+		^/M1
+		^<M2
+		^<M3
+
+		^+U93		2				
+		^/L311						5275	1517	2990	5
+	 										
+		^/M1
+		^<M2
+		^<M3
+
+		^+U93		1				
+		^/L312						5275	1517	2990	5	
+		^/M1
+		^<M2
+		^<M3
+
+		^+U94		9				
+		^/L320						5305	1499	3090	3
+		^/M1
+		^<M2
+		^<M3
+

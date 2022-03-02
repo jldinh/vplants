@@ -1,0 +1,55 @@
+
+INC_REECH_TEMP = templates-reech-include
+SRC_REECH_TEMP = templates-reech-src
+
+REECH_FILES = reech4x4.c reech-def.c \
+	reech4x4.h reech-def.h
+
+TARGETSTOBEDONE += ${REECH_FILES}
+
+
+reech4x4.h : ${INC_REECH_TEMP}/reech4x4.begin  \
+	${INC_REECH_TEMP}/reech4x4.middle \
+	${INC_REECH_TEMP}/reech4x4.end
+	@echo "... creating $@ from templates"
+	@cp ${INC_REECH_TEMP}/reech4x4.begin $@ 
+	@sed -e "s/TYPE/u8/g"  ${INC_REECH_TEMP}/reech4x4.middle >> $@
+	@sed -e "s/TYPE/s8/g"  ${INC_REECH_TEMP}/reech4x4.middle >> $@
+	@sed -e "s/TYPE/u16/g" ${INC_REECH_TEMP}/reech4x4.middle >> $@
+	@sed -e "s/TYPE/s16/g" ${INC_REECH_TEMP}/reech4x4.middle >> $@
+	@sed -e "s/TYPE/r32/g" ${INC_REECH_TEMP}/reech4x4.middle >> $@
+	@cat ${INC_REECH_TEMP}/reech4x4.end >> $@
+
+reech-def.h : ${INC_REECH_TEMP}/reech-def.begin  \
+	${INC_REECH_TEMP}/reech-def.middle \
+	${INC_REECH_TEMP}/reech-def.end
+	@echo "... creating $@ from templates"
+	@cp ${INC_REECH_TEMP}/reech-def.begin $@ 
+	@sed -e "s/TYPE/u8/g"  ${INC_REECH_TEMP}/reech-def.middle >> $@
+	@sed -e "s/TYPE/s8/g"  ${INC_REECH_TEMP}/reech-def.middle >> $@
+	@sed -e "s/TYPE/u16/g" ${INC_REECH_TEMP}/reech-def.middle >> $@
+	@sed -e "s/TYPE/s16/g" ${INC_REECH_TEMP}/reech-def.middle >> $@
+	@sed -e "s/TYPE/r32/g" ${INC_REECH_TEMP}/reech-def.middle >> $@
+	@cat ${INC_REECH_TEMP}/reech-def.end >> $@
+
+reech4x4.c : ${SRC_REECH_TEMP}/reech4x4.begin  \
+	${SRC_REECH_TEMP}/reech4x4.middle \
+	${SRC_REECH_TEMP}/reech4x4.end
+	@echo "... creating $@ from templates"
+	@cp ${SRC_REECH_TEMP}/reech4x4.begin $@ 
+	@sed -e "s/TYPE/u8/g" -e "s/_CONVERT_/_CONVERTI_/g" ${SRC_REECH_TEMP}/reech4x4.middle >> $@
+	@sed -e "s/TYPE/s8/g" -e "s/_CONVERT_/_CONVERTI_/g" ${SRC_REECH_TEMP}/reech4x4.middle >> $@
+	@sed -e "s/TYPE/u16/g" -e "s/_CONVERT_/_CONVERTI_/g" ${SRC_REECH_TEMP}/reech4x4.middle >> $@
+	@sed -e "s/TYPE/s16/g" -e "s/_CONVERT_/_CONVERTI_/g" ${SRC_REECH_TEMP}/reech4x4.middle >> $@
+	@sed -e "s/TYPE/r32/g" -e "s/_CONVERT_/_CONVERTR_/g" ${SRC_REECH_TEMP}/reech4x4.middle >> $@
+	@cat ${SRC_REECH_TEMP}/reech4x4.end >> $@
+
+reech-def.c : ${SRC_REECH_TEMP}/reech-def.begin  \
+	${SRC_REECH_TEMP}/reech-def.middle 
+	@echo "... creating $@ from templates"
+	@cp ${SRC_REECH_TEMP}/reech-def.begin $@ 
+	@sed -e "s/TYPE/u8/g"  ${SRC_REECH_TEMP}/reech-def.middle >> $@
+	@sed -e "s/TYPE/s8/g"  ${SRC_REECH_TEMP}/reech-def.middle >> $@
+	@sed -e "s/TYPE/u16/g" ${SRC_REECH_TEMP}/reech-def.middle >> $@
+	@sed -e "s/TYPE/s16/g" ${SRC_REECH_TEMP}/reech-def.middle >> $@
+	@sed -e "s/TYPE/r32/g" ${SRC_REECH_TEMP}/reech-def.middle >> $@

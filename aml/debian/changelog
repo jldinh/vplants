@@ -1,0 +1,101 @@
+vplants-aml (1.2.0~ppa3) trusty; urgency=medium
+
+  * Add data files 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Wed, 15 Oct 2014 14:53:40 +0200
+
+vplants-aml (1.2.0~ppa2) trusty; urgency=medium
+
+  * Add bison 3 deps 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Tue, 14 Oct 2014 08:20:40 +0200
+
+vplants-aml (1.2.0~ppa1) trusty; urgency=medium
+
+  * Port to Trusty  
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Thu, 02 Oct 2014 06:35:41 +0200
+
+vplants-aml (1.0.1~ppa11) quantal; urgency=low
+
+  * Port to quantal 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Thu, 20 Dec 2012 15:40:07 +0100
+
+vplants-aml (1.0.1~ppa10) precise; urgency=low
+
+  * Merge with trunk rev 13269 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Thu, 20 Dec 2012 15:38:14 +0100
+
+vplants-aml (1.0.1~ppa9) quantal; urgency=low
+
+  *  Port to Quantal  
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Mon, 10 Dec 2012 17:17:02 +0100
+
+vplants-aml (1.0.1~ppa8) precise; urgency=low
+
+  * Rebuild with new PlantGL 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Thu, 06 Dec 2012 14:00:39 +0100
+
+vplants-aml (1.0.1~ppa2) precise; urgency=low
+
+  * Switch to dh_python2 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Wed, 12 Sep 2012 15:41:21 +0200
+
+vplants-aml (1.0.1~ppa1) precise; urgency=low
+
+  *  Release 1.0 on precise  
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Sun, 25 Mar 2012 16:33:44 +0200
+
+vplants-aml (1.0.0b2~ppa1) oneiric; urgency=low
+
+  * Fix Vplants and openalea namespace 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Fri, 06 Jan 2012 17:18:06 +0100
+
+vplants-aml (1.0.0b1~ppa2) oneiric; urgency=low
+
+  * libglut3 to freeglut3
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Tue, 06 Dec 2011 12:21:01 +0100
+
+vplants-aml (1.0.0b1~ppa1) oneiric; urgency=low
+
+  * Release
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Tue, 06 Dec 2011 10:50:09 +0100
+
+vplants-aml (0.9.0-1~ppa5) lucid; urgency=low
+
+  * fix namespace problems with PlantGL 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Mon, 27 Sep 2010 18:27:53 +0200
+
+vplants-aml (0.9.0-1~ppa4) lucid; urgency=low
+
+  * update binary deps 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Mon, 27 Sep 2010 15:14:24 +0200
+
+vplants-aml (0.9.0-1~ppa3) lucid; urgency=low
+
+  * add gnuplot as dependency 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Mon, 27 Sep 2010 14:19:20 +0200
+
+vplants-aml (0.9.0-1~ppa2) lucid; urgency=low
+
+  * update deps with libglut3-dev 
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Mon, 27 Sep 2010 12:05:55 +0200
+
+vplants-aml (0.9.0-1~ppa1) lucid; urgency=low
+
+  * source package automatically created by stdeb 0.6.0
+
+ -- Christophe Pradal <christophe.pradal@cirad.fr>  Mon, 27 Sep 2010 11:16:10 +0200

@@ -1,0 +1,41 @@
+#-----------------------------------------------------------------------#
+#
+# Author : Fred Boudon
+# Example of use of fonction related to the viewer.
+#
+#-----------------------------------------------------------------------#
+# Display Help about Viewer Module or Viewer function.
+ViewerHelp()
+ViewerHelp(StartViewer)
+
+#-----------------------------------------------------------------------#
+# Start Viewer using Thread.
+StartViewer()
+
+#-----------------------------------------------------------------------#
+# Compute A representation of an apple tree at scale of internodes.
+
+mtg_dir = AMAPMOD_DIR + "/databases/MTGFiles/AppleTree/"
+
+g = MTG( mtg_dir + "agraf.mtg")
+dr1 = DressingData( mtg_dir + "agraf.drf")
+f1 = PlantFrame(1, Scale->3, DressingData->dr1)
+lt1 = Plot(f1)
+
+#-----------------------------------------------------------------------#
+# Wait for viewer
+# If(ViewerIsRunning())Then WaitViewer(Timeout->30) Else True
+If(ViewerIsRunning())Then WaitViewer() Else True
+
+#-----------------------------------------------------------------------#
+# Get the selection from the viewer
+Selection = ViewerSelection()
+
+Display(Selection)
+
+#-----------------------------------------------------------------------#
+# Stop the viewer
+If(ViewerIsRunning())Then StopViewer() Else True
+
+#-----------------------------------------------------------------------#
+

@@ -1,0 +1,4 @@
+26/Nov./2008: 
+  * remove yywrap method  lsystemToMtg_scanner.l 
+  * add "%option noyywrap"
+  * so as to compile under linux (fedora 9) with the new flex library

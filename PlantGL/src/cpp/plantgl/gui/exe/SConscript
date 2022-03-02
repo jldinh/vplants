@@ -1,0 +1,32 @@
+# -*-python-*-
+
+import os
+from openalea.sconsx.config import *
+
+pj= os.path.join
+
+Import( "env" )
+
+exe_env= env.Clone()
+exe_env.EnableQt4Modules([ 'QtOpenGL', 'QtCore', 'QtGui', 'QtNetwork' ])
+
+source= ["mainviewer.cpp"]
+
+LIBRARIES = list( exe_env['LIBS'] )
+LIBRARIES.extend( ['pglgui', 'pglalgo', 'pgltool', 'pglmath','pglsg'] )
+
+exe_env.Append( CPPPATH = '#/share/plantgl/pixmap')
+
+if isinstance( platform, Win32 ):
+    # We limit the cpppath to the pixmap to prevent a bug in windres 
+    # with MinGW 5.4.3
+    res=exe_env.RES('icon.rc', CPPPATH = '#/share/plantgl/pixmap')
+    source.append(res)
+
+LINKFLAGS = list( exe_env['LINKFLAGS'] )
+if env['compiler'] == 'mingw':
+    LINKFLAGS.extend(['-mwindows'])
+
+exe_env.ALEAProgram( "pglviewer", source, LIBS = LIBRARIES, LINKFLAGS=LINKFLAGS )
+
+
